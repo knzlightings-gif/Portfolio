@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Edit2, Trash2, X, Image as ImageIcon, Upload, Loader2, Save } from "lucide-react";
+import { Plus, Edit2, Trash2, X, Image as ImageIcon, Upload, Loader2, Save, ExternalLink, KeyRound } from "lucide-react";
 
 type Project = {
   id: string;
@@ -12,6 +12,8 @@ type Project = {
   modules: string[];
   tech: string[];
   image: string;
+  demoUrl?: string;
+  demoCredentials?: string;
   hasCaseStudy?: boolean;
   order?: number;
 };
@@ -28,7 +30,7 @@ export default function ProjectsAdmin() {
 
   const emptyForm: Partial<Project> = {
     title: "", category: "", problem: "", solution: "",
-    modules: [], tech: [], image: "", hasCaseStudy: false,
+    modules: [], tech: [], image: "", demoUrl: "", demoCredentials: "", hasCaseStudy: false,
   };
   const [formData, setFormData] = useState<Partial<Project>>(emptyForm);
 
@@ -44,7 +46,11 @@ export default function ProjectsAdmin() {
   const handleOpenModal = (project?: Project) => {
     if (project) {
       setEditingProject(project);
-      setFormData(project);
+      setFormData({
+        ...project,
+        demoUrl: project.demoUrl || "",
+        demoCredentials: project.demoCredentials || "",
+      });
       setImagePreview(project.image || null);
     } else {
       setEditingProject(null);
@@ -99,22 +105,23 @@ export default function ProjectsAdmin() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const result = await res.json();
 
       if (res.ok) {
+        const savedProject = await res.json();
         if (editingProject) {
           setProjectList((prev) =>
-            prev.map((p) => (p.id === editingProject.id ? { ...p, ...formData } as Project : p))
+            prev.map((p) =>
+              p.id === editingProject.id
+                ? ({ ...p, ...formData, id: editingProject.id, order: editingProject.order ?? 0 } as Project)
+                : p
+            )
           );
         } else {
-          setProjectList((prev) => [
-            { ...formData, id: result.id, hasCaseStudy: false } as Project,
-            ...prev,
-          ]);
+          setProjectList((prev) => [...prev, savedProject]);
         }
         handleCloseModal();
       } else {
-        alert("Failed to save project: " + result.error);
+        alert("Failed to save project. Please try again.");
       }
     } catch (err: any) {
       alert("Save error: " + err.message);
@@ -124,8 +131,9 @@ export default function ProjectsAdmin() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this project permanently?")) return;
+    if (!confirm("Are you sure you want to delete this project?")) return;
     setDeletingId(id);
+
     try {
       const res = await fetch(`/api/projects/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -133,8 +141,8 @@ export default function ProjectsAdmin() {
       } else {
         alert("Failed to delete project.");
       }
-    } catch {
-      alert("Delete error.");
+    } catch (err: any) {
+      alert("Delete error: " + err.message);
     } finally {
       setDeletingId(null);
     }
@@ -152,12 +160,12 @@ export default function ProjectsAdmin() {
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
       <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-3xl font-bold text-brand-text mb-2">Manage Projects</h1>
-          <p className="text-brand-text-muted">Add, edit, or remove portfolio projects. Changes go live instantly.</p>
+          <h1 className="text-3xl font-bold text-brand-text mb-2">Manage Projects & Live Demos</h1>
+          <p className="text-brand-text-muted">Add, edit, or remove portfolio ERP projects and live demo links.</p>
         </div>
         <button
           onClick={() => handleOpenModal()}
-          className="px-6 py-2.5 bg-brand-cyan text-brand-bg font-bold rounded-lg hover:bg-brand-cyan/90 transition-all flex items-center gap-2"
+          className="px-6 py-2.5 bg-brand-cyan text-brand-bg font-bold rounded-lg hover:bg-brand-cyan/90 transition-all flex items-center gap-2 shadow-lg"
         >
           <Plus className="w-5 h-5" /> Add New Project
         </button>
@@ -170,7 +178,7 @@ export default function ProjectsAdmin() {
               <tr>
                 <th className="px-6 py-4 font-medium text-brand-text-muted text-sm">Project Name</th>
                 <th className="px-6 py-4 font-medium text-brand-text-muted text-sm">Category</th>
-                <th className="px-6 py-4 font-medium text-brand-text-muted text-sm hidden md:table-cell">Tech Stack</th>
+                <th className="px-6 py-4 font-medium text-brand-text-muted text-sm hidden md:table-cell">Live Demo Link</th>
                 <th className="px-6 py-4 font-medium text-brand-text-muted text-sm text-right">Actions</th>
               </tr>
             </thead>
@@ -191,29 +199,35 @@ export default function ProjectsAdmin() {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="px-3 py-1 bg-brand-bg border border-brand-border rounded-full text-xs text-brand-text">
+                    <span className="px-3 py-1 bg-brand-bg border border-brand-border rounded-full text-xs text-brand-text font-medium">
                       {project.category}
                     </span>
                   </td>
                   <td className="px-6 py-4 hidden md:table-cell">
-                    <div className="flex gap-1 flex-wrap max-w-[200px]">
-                      {project.tech?.slice(0, 2).map((tag) => (
-                        <span key={tag} className="text-xs text-brand-text-muted bg-brand-bg px-2 py-0.5 rounded border border-brand-border/50">{tag}</span>
-                      ))}
-                      {project.tech && project.tech.length > 2 && (
-                        <span className="text-xs text-brand-text-muted">+{project.tech.length - 2}</span>
-                      )}
-                    </div>
+                    {project.demoUrl ? (
+                      <a
+                        href={project.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan text-xs font-semibold hover:underline"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        Live Demo Active
+                      </a>
+                    ) : (
+                      <span className="text-xs text-brand-text-muted">No demo link</span>
+                    )}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-3">
-                      <button onClick={() => handleOpenModal(project)} className="p-2 text-brand-text-muted hover:text-brand-purple transition-colors">
+                      <button onClick={() => handleOpenModal(project)} className="p-2 text-brand-text-muted hover:text-brand-cyan transition-colors" title="Edit project">
                         <Edit2 className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(project.id)}
                         disabled={deletingId === project.id}
                         className="p-2 text-brand-text-muted hover:text-red-500 transition-colors disabled:opacity-50"
+                        title="Delete project"
                       >
                         {deletingId === project.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
                       </button>
@@ -224,7 +238,7 @@ export default function ProjectsAdmin() {
               {projectList.length === 0 && (
                 <tr>
                   <td colSpan={4} className="px-6 py-12 text-center text-brand-text-muted">
-                    No projects yet. Click "Add New Project" to get started.
+                    No projects yet. Click &quot;Add New Project&quot; to get started.
                   </td>
                 </tr>
               )}
@@ -239,7 +253,7 @@ export default function ProjectsAdmin() {
           <div className="bg-brand-card border border-brand-border w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl">
             <div className="sticky top-0 bg-brand-card border-b border-brand-border p-6 flex justify-between items-center z-10">
               <h2 className="text-2xl font-bold text-brand-text">
-                {editingProject ? "Edit Project" : "Add New Project"}
+                {editingProject ? "Edit Project & Demo Link" : "Add New Project"}
               </h2>
               <button onClick={handleCloseModal} className="p-2 text-brand-text-muted hover:text-brand-text rounded-full hover:bg-brand-bg transition-colors">
                 <X className="w-6 h-6" />
@@ -249,7 +263,7 @@ export default function ProjectsAdmin() {
             <form onSubmit={handleSave} className="p-6 space-y-6">
               {/* Image Upload */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-brand-text-muted">Project Image</label>
+                <label className="text-sm font-medium text-brand-text-muted">Project Image / Screenshot</label>
                 <div className="flex items-center gap-6">
                   <div className="w-32 h-32 rounded-xl border-2 border-dashed border-brand-border bg-brand-bg flex items-center justify-center overflow-hidden">
                     {imagePreview ? (
@@ -283,6 +297,40 @@ export default function ProjectsAdmin() {
                     onChange={(e) => setFormData((p) => ({ ...p, category: e.target.value }))}
                     className="px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan"
                     placeholder="e.g. ERP / Manufacturing" />
+                </div>
+              </div>
+
+              {/* Live Demo Fields */}
+              <div className="p-5 rounded-xl bg-brand-bg/80 border border-brand-border/80 space-y-4">
+                <div className="flex items-center gap-2 text-brand-cyan font-bold text-sm">
+                  <ExternalLink className="w-4 h-4" />
+                  Live Demo & Credentials Settings
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-brand-text-muted">Live Demo URL</label>
+                    <input
+                      type="url"
+                      value={formData.demoUrl || ""}
+                      onChange={(e) => setFormData((p) => ({ ...p, demoUrl: e.target.value }))}
+                      className="px-3.5 py-2.5 bg-brand-card border border-brand-border rounded-lg text-brand-text text-sm focus:outline-none focus:border-brand-cyan"
+                      placeholder="https://demo-erp.vercel.app"
+                    />
+                    <span className="text-[11px] text-brand-text-muted">Leave blank if no live demo is available yet.</span>
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-brand-text-muted">Demo Credentials (Optional Note)</label>
+                    <input
+                      type="text"
+                      value={formData.demoCredentials || ""}
+                      onChange={(e) => setFormData((p) => ({ ...p, demoCredentials: e.target.value }))}
+                      className="px-3.5 py-2.5 bg-brand-card border border-brand-border rounded-lg text-brand-text text-sm focus:outline-none focus:border-brand-cyan"
+                      placeholder="e.g. Email: demo@company.com | Pass: demo123"
+                    />
+                    <span className="text-[11px] text-brand-text-muted">Helps prospective clients login instantly.</span>
+                  </div>
                 </div>
               </div>
 
