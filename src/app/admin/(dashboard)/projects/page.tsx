@@ -81,40 +81,95 @@ export default function ProjectsAdmin() {
     setUploadMessage(null);
   };
 
+  // Client-side image compressor & Base64 encoder for 100% Vercel compatibility
+  const compressImage = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+          const maxDim = 1200;
+
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            resolve(e.target?.result as string);
+            return;
+          }
+          ctx.drawImage(img, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.78);
+          resolve(dataUrl);
+        };
+        img.onerror = () => reject(new Error("Failed to load image"));
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = (err) => reject(err);
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleMultiImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
     setIsUploading(true);
-    setUploadMessage(`Uploading ${files.length} image(s)...`);
-    const fd = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      fd.append("files", files[i]);
-    }
+    setUploadMessage(`Processing ${files.length} image(s)...`);
 
     try {
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
-      const data = await res.json();
-      if (res.ok && Array.isArray(data.urls) && data.urls.length > 0) {
-        setFormData((prev) => {
-          const currentGallery = prev.gallery || [];
-          const combined = [...currentGallery, ...data.urls];
-          const primaryImg = prev.image || combined[0] || "";
-          return {
-            ...prev,
-            gallery: combined,
-            image: primaryImg,
-          };
-        });
-        setUploadMessage(`Successfully added ${data.urls.length} picture(s)!`);
-      } else {
-        alert("Upload failed: " + (data.error || "Unknown error"));
+      const newUrls: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const compressed = await compressImage(files[i]);
+        newUrls.push(compressed);
       }
+
+      setFormData((prev) => {
+        const currentGallery = prev.gallery || [];
+        const combined = [...currentGallery, ...newUrls];
+        const primaryImg = prev.image || combined[0] || "";
+        return {
+          ...prev,
+          gallery: combined,
+          image: primaryImg,
+        };
+      });
+
+      setUploadMessage(`Successfully added ${newUrls.length} picture(s)!`);
     } catch (err: any) {
-      alert("Upload error: " + err.message);
+      alert("Image processing error: " + err.message);
     } finally {
       setIsUploading(false);
     }
+  };
+
+  const handleAddExternalUrl = () => {
+    const url = prompt("Enter Image URL (https://...):");
+    if (!url || !url.trim()) return;
+    const cleanUrl = url.trim();
+
+    setFormData((prev) => {
+      const currentGallery = prev.gallery || [];
+      const combined = [...currentGallery, cleanUrl];
+      const primaryImg = prev.image || combined[0] || "";
+      return {
+        ...prev,
+        gallery: combined,
+        image: primaryImg,
+      };
+    });
   };
 
   const handleSetPrimaryThumbnail = (url: string) => {
@@ -356,11 +411,20 @@ export default function ProjectsAdmin() {
                       Upload 8+ screenshots (Dashboard, Inventory, Invoices, Reports). Click &quot;Set as Thumbnail&quot; to pick the main cover.
                     </p>
                   </div>
-                  <label className="cursor-pointer inline-flex items-center justify-center gap-2 px-4 py-2 bg-brand-cyan text-brand-bg font-bold text-xs rounded-lg hover:bg-brand-cyan/90 transition-all shadow-md shrink-0">
-                    {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                    <span>{isUploading ? "Uploading..." : "+ Upload Screenshots (Multiple)"}</span>
-                    <input type="file" accept="image/*" multiple className="hidden" onChange={handleMultiImageChange} disabled={isUploading} />
-                  </label>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={handleAddExternalUrl}
+                      className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-brand-card border border-brand-border text-brand-text font-semibold text-xs rounded-lg hover:border-brand-cyan hover:text-brand-cyan transition-all"
+                    >
+                      <span>+ Add Image URL</span>
+                    </button>
+                    <label className="cursor-pointer inline-flex items-center justify-center gap-2 px-4 py-2 bg-brand-cyan text-brand-bg font-bold text-xs rounded-lg hover:bg-brand-cyan/90 transition-all shadow-md">
+                      {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                      <span>{isUploading ? "Processing..." : "+ Upload Screenshots"}</span>
+                      <input type="file" accept="image/*" multiple className="hidden" onChange={handleMultiImageChange} disabled={isUploading} />
+                    </label>
+                  </div>
                 </div>
 
                 {uploadMessage && (
