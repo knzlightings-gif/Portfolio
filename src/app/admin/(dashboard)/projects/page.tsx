@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Edit2, Trash2, X, Image as ImageIcon, Upload, Loader2, Save, ExternalLink, KeyRound } from "lucide-react";
+import { Plus, Edit2, Trash2, X, Image as ImageIcon, Upload, Loader2, Save, ExternalLink, KeyRound, Star, CheckCircle, Eye, Images } from "lucide-react";
 
 type Project = {
   id: string;
@@ -12,6 +12,7 @@ type Project = {
   modules: string[];
   tech: string[];
   image: string;
+  gallery?: string[];
   demoUrl?: string;
   demoCredentials?: string;
   hasCaseStudy?: boolean;
@@ -25,12 +26,21 @@ export default function ProjectsAdmin() {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState<string | null>(null);
 
   const emptyForm: Partial<Project> = {
-    title: "", category: "", problem: "", solution: "",
-    modules: [], tech: [], image: "", demoUrl: "", demoCredentials: "", hasCaseStudy: false,
+    title: "",
+    category: "",
+    problem: "",
+    solution: "",
+    modules: [],
+    tech: [],
+    image: "",
+    gallery: [],
+    demoUrl: "",
+    demoCredentials: "",
+    hasCaseStudy: false,
   };
   const [formData, setFormData] = useState<Partial<Project>>(emptyForm);
 
@@ -46,39 +56,57 @@ export default function ProjectsAdmin() {
   const handleOpenModal = (project?: Project) => {
     if (project) {
       setEditingProject(project);
+      const galleryList = Array.isArray(project.gallery) && project.gallery.length > 0
+        ? project.gallery
+        : (project.image ? [project.image] : []);
+
       setFormData({
         ...project,
+        image: project.image || galleryList[0] || "",
+        gallery: galleryList,
         demoUrl: project.demoUrl || "",
         demoCredentials: project.demoCredentials || "",
       });
-      setImagePreview(project.image || null);
     } else {
       setEditingProject(null);
       setFormData(emptyForm);
-      setImagePreview(null);
     }
+    setUploadMessage(null);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingProject(null);
+    setUploadMessage(null);
   };
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleMultiImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setIsUploading(true);
+    setUploadMessage(`Uploading ${files.length} image(s)...`);
     const fd = new FormData();
-    fd.append("file", file);
+    for (let i = 0; i < files.length; i++) {
+      fd.append("files", files[i]);
+    }
 
     try {
       const res = await fetch("/api/upload", { method: "POST", body: fd });
       const data = await res.json();
-      if (res.ok && data.url) {
-        setImagePreview(data.url);
-        setFormData((prev) => ({ ...prev, image: data.url }));
+      if (res.ok && Array.isArray(data.urls) && data.urls.length > 0) {
+        setFormData((prev) => {
+          const currentGallery = prev.gallery || [];
+          const combined = [...currentGallery, ...data.urls];
+          const primaryImg = prev.image || combined[0] || "";
+          return {
+            ...prev,
+            gallery: combined,
+            image: primaryImg,
+          };
+        });
+        setUploadMessage(`Successfully added ${data.urls.length} picture(s)!`);
       } else {
         alert("Upload failed: " + (data.error || "Unknown error"));
       }
@@ -89,12 +117,39 @@ export default function ProjectsAdmin() {
     }
   };
 
+  const handleSetPrimaryThumbnail = (url: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      image: url,
+    }));
+  };
+
+  const handleRemoveGalleryImage = (indexToRemove: number) => {
+    setFormData((prev) => {
+      const updatedGallery = (prev.gallery || []).filter((_, i) => i !== indexToRemove);
+      let newPrimary = prev.image;
+      if (prev.image === prev.gallery?.[indexToRemove]) {
+        newPrimary = updatedGallery[0] || "";
+      }
+      return {
+        ...prev,
+        gallery: updatedGallery,
+        image: newPrimary,
+      };
+    });
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
 
+    const gallery = formData.gallery || [];
+    const primaryImage = formData.image || gallery[0] || "";
+
     const payload = {
       ...formData,
+      image: primaryImage,
+      gallery: gallery,
       id: editingProject?.id,
       order: editingProject?.order ?? projectList.length,
     };
@@ -112,7 +167,7 @@ export default function ProjectsAdmin() {
           setProjectList((prev) =>
             prev.map((p) =>
               p.id === editingProject.id
-                ? ({ ...p, ...formData, id: editingProject.id, order: editingProject.order ?? 0 } as Project)
+                ? ({ ...p, ...payload, id: editingProject.id, order: editingProject.order ?? 0 } as Project)
                 : p
             )
           );
@@ -131,7 +186,7 @@ export default function ProjectsAdmin() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this project?")) return;
+    if (!confirm("Are you sure you want to delete this project permanently?")) return;
     setDeletingId(id);
 
     try {
@@ -158,14 +213,14 @@ export default function ProjectsAdmin() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-brand-text mb-2">Manage Projects & Live Demos</h1>
-          <p className="text-brand-text-muted">Add, edit, or remove portfolio ERP projects and live demo links.</p>
+          <h1 className="text-3xl font-bold text-brand-text mb-2">Manage ERP Projects & Galleries</h1>
+          <p className="text-brand-text-muted">Upload 8+ screenshots per project, set primary thumbnails, and configure live demos.</p>
         </div>
         <button
           onClick={() => handleOpenModal()}
-          className="px-6 py-2.5 bg-brand-cyan text-brand-bg font-bold rounded-lg hover:bg-brand-cyan/90 transition-all flex items-center gap-2 shadow-lg"
+          className="px-6 py-2.5 bg-brand-cyan text-brand-bg font-bold rounded-lg hover:bg-brand-cyan/90 transition-all flex items-center justify-center gap-2 shadow-lg shrink-0"
         >
           <Plus className="w-5 h-5" /> Add New Project
         </button>
@@ -176,68 +231,91 @@ export default function ProjectsAdmin() {
           <table className="w-full text-left">
             <thead className="bg-brand-bg border-b border-brand-border">
               <tr>
-                <th className="px-6 py-4 font-medium text-brand-text-muted text-sm">Project Name</th>
+                <th className="px-6 py-4 font-medium text-brand-text-muted text-sm">Project & Thumbnail</th>
                 <th className="px-6 py-4 font-medium text-brand-text-muted text-sm">Category</th>
+                <th className="px-6 py-4 font-medium text-brand-text-muted text-sm">Screenshots</th>
                 <th className="px-6 py-4 font-medium text-brand-text-muted text-sm hidden md:table-cell">Live Demo Link</th>
                 <th className="px-6 py-4 font-medium text-brand-text-muted text-sm text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-brand-border/50">
-              {projectList.map((project) => (
-                <tr key={project.id} className="hover:bg-brand-bg/50 transition-colors">
-                  <td className="px-6 py-4 flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-brand-bg border border-brand-border overflow-hidden shrink-0 flex items-center justify-center">
-                      {project.image ? (
-                        <img src={project.image} alt={project.title} className="w-full h-full object-cover opacity-80" />
+              {projectList.map((project) => {
+                const galleryCount = (project.gallery && project.gallery.length > 0)
+                  ? project.gallery.length
+                  : (project.image ? 1 : 0);
+
+                return (
+                  <tr key={project.id} className="hover:bg-brand-bg/50 transition-colors">
+                    <td className="px-6 py-4 flex items-center gap-4">
+                      <div className="w-14 h-14 rounded-lg bg-brand-bg border border-brand-border overflow-hidden shrink-0 flex items-center justify-center relative">
+                        {project.image ? (
+                          <img
+                            src={project.image}
+                            alt={project.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = "none";
+                            }}
+                          />
+                        ) : (
+                          <ImageIcon className="w-6 h-6 text-brand-text-muted" />
+                        )}
+                        <span className="absolute bottom-0 right-0 bg-brand-cyan/90 text-[9px] font-bold text-brand-bg px-1 rounded-tl">
+                          Cover
+                        </span>
+                      </div>
+                      <div>
+                        <div className="font-bold text-brand-text text-base">{project.title}</div>
+                        <div className="text-xs text-brand-text-muted truncate max-w-[220px]">{project.problem}</div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="px-3 py-1 bg-brand-bg border border-brand-border rounded-full text-xs text-brand-text font-medium">
+                        {project.category}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-bg border border-brand-border rounded-full text-xs font-semibold text-brand-cyan">
+                        <Images className="w-3.5 h-3.5" />
+                        {galleryCount} Picture{galleryCount === 1 ? "" : "s"}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 hidden md:table-cell">
+                      {project.demoUrl ? (
+                        <a
+                          href={project.demoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan text-xs font-semibold hover:underline"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                          Live Demo Active
+                        </a>
                       ) : (
-                        <ImageIcon className="w-5 h-5 text-brand-text-muted" />
+                        <span className="text-xs text-brand-text-muted">No demo link</span>
                       )}
-                    </div>
-                    <div>
-                      <div className="font-bold text-brand-text">{project.title}</div>
-                      <div className="text-xs text-brand-text-muted truncate max-w-[200px]">{project.problem}</div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="px-3 py-1 bg-brand-bg border border-brand-border rounded-full text-xs text-brand-text font-medium">
-                      {project.category}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 hidden md:table-cell">
-                    {project.demoUrl ? (
-                      <a
-                        href={project.demoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan text-xs font-semibold hover:underline"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                        Live Demo Active
-                      </a>
-                    ) : (
-                      <span className="text-xs text-brand-text-muted">No demo link</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center justify-end gap-3">
-                      <button onClick={() => handleOpenModal(project)} className="p-2 text-brand-text-muted hover:text-brand-cyan transition-colors" title="Edit project">
-                        <Edit2 className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(project.id)}
-                        disabled={deletingId === project.id}
-                        className="p-2 text-brand-text-muted hover:text-red-500 transition-colors disabled:opacity-50"
-                        title="Delete project"
-                      >
-                        {deletingId === project.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center justify-end gap-3">
+                        <button onClick={() => handleOpenModal(project)} className="p-2 text-brand-text-muted hover:text-brand-cyan transition-colors" title="Edit project">
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(project.id)}
+                          disabled={deletingId === project.id}
+                          className="p-2 text-brand-text-muted hover:text-red-500 transition-colors disabled:opacity-50"
+                          title="Delete project"
+                        >
+                          {deletingId === project.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
               {projectList.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-6 py-12 text-center text-brand-text-muted">
+                  <td colSpan={5} className="px-6 py-12 text-center text-brand-text-muted">
                     No projects yet. Click &quot;Add New Project&quot; to get started.
                   </td>
                 </tr>
@@ -249,40 +327,117 @@ export default function ProjectsAdmin() {
 
       {/* ADD / EDIT MODAL */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-brand-card border border-brand-border w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl">
-            <div className="sticky top-0 bg-brand-card border-b border-brand-border p-6 flex justify-between items-center z-10">
-              <h2 className="text-2xl font-bold text-brand-text">
-                {editingProject ? "Edit Project & Demo Link" : "Add New Project"}
-              </h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4">
+          <div className="bg-brand-card border border-brand-border w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-2xl shadow-2xl">
+            <div className="sticky top-0 bg-brand-card/95 backdrop-blur-md border-b border-brand-border p-6 flex justify-between items-center z-20">
+              <div>
+                <h2 className="text-2xl font-bold text-brand-text">
+                  {editingProject ? `Edit: ${editingProject.title}` : "Add New ERP Project"}
+                </h2>
+                <p className="text-xs text-brand-text-muted mt-0.5">
+                  Upload multiple ERP screenshots (8+) and choose your primary front-page thumbnail.
+                </p>
+              </div>
               <button onClick={handleCloseModal} className="p-2 text-brand-text-muted hover:text-brand-text rounded-full hover:bg-brand-bg transition-colors">
                 <X className="w-6 h-6" />
               </button>
             </div>
 
-            <form onSubmit={handleSave} className="p-6 space-y-6">
-              {/* Image Upload */}
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-brand-text-muted">Project Image / Screenshot</label>
-                <div className="flex items-center gap-6">
-                  <div className="w-32 h-32 rounded-xl border-2 border-dashed border-brand-border bg-brand-bg flex items-center justify-center overflow-hidden">
-                    {imagePreview ? (
-                      <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-                    ) : (
-                      <ImageIcon className="w-8 h-8 text-brand-text-muted" />
-                    )}
+            <form onSubmit={handleSave} className="p-6 space-y-7">
+              {/* MULTI-PICTURE GALLERY UPLOADER */}
+              <div className="p-5 rounded-2xl bg-brand-bg/80 border border-brand-border space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-brand-border/60 pb-3">
+                  <div>
+                    <div className="flex items-center gap-2 text-brand-cyan font-bold text-sm">
+                      <Images className="w-4 h-4" />
+                      ERP Screenshots & Multi-Picture Gallery
+                    </div>
+                    <p className="text-xs text-brand-text-muted mt-0.5">
+                      Upload 8+ screenshots (Dashboard, Inventory, Invoices, Reports). Click &quot;Set as Thumbnail&quot; to pick the main cover.
+                    </p>
                   </div>
-                  <div className="flex-1 space-y-2">
-                    <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-brand-bg border border-brand-border rounded-lg text-brand-text hover:border-brand-cyan transition-colors">
-                      {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                      <span>{isUploading ? "Uploading..." : "Upload Image"}</span>
-                      <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} disabled={isUploading} />
-                    </label>
-                    <p className="text-xs text-brand-text-muted">High resolution (Recommended: 1200x800px)</p>
+                  <label className="cursor-pointer inline-flex items-center justify-center gap-2 px-4 py-2 bg-brand-cyan text-brand-bg font-bold text-xs rounded-lg hover:bg-brand-cyan/90 transition-all shadow-md shrink-0">
+                    {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                    <span>{isUploading ? "Uploading..." : "+ Upload Screenshots (Multiple)"}</span>
+                    <input type="file" accept="image/*" multiple className="hidden" onChange={handleMultiImageChange} disabled={isUploading} />
+                  </label>
+                </div>
+
+                {uploadMessage && (
+                  <div className="p-3 rounded-lg bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-medium flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4" />
+                    {uploadMessage}
                   </div>
+                )}
+
+                {/* Gallery Grid */}
+                {formData.gallery && formData.gallery.length > 0 ? (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    {formData.gallery.map((imgUrl, idx) => {
+                      const isThumbnail = formData.image === imgUrl || (!formData.image && idx === 0);
+
+                      return (
+                        <div
+                          key={idx}
+                          className={`relative group rounded-xl overflow-hidden border-2 bg-brand-card transition-all aspect-video flex flex-col ${
+                            isThumbnail ? "border-brand-cyan shadow-[0_0_15px_rgba(0,240,255,0.3)]" : "border-brand-border hover:border-brand-text-muted"
+                          }`}
+                        >
+                          <img
+                            src={imgUrl}
+                            alt={`Screenshot ${idx + 1}`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = "none";
+                            }}
+                          />
+
+                          {/* Primary Thumbnail Badge */}
+                          {isThumbnail && (
+                            <span className="absolute top-2 left-2 px-2 py-0.5 bg-brand-cyan text-brand-bg text-[10px] font-extrabold rounded shadow-md flex items-center gap-1">
+                              <Star className="w-3 h-3 fill-brand-bg" /> Cover Thumbnail
+                            </span>
+                          )}
+
+                          {/* Hover Controls */}
+                          <div className="absolute inset-0 bg-brand-bg/85 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2 backdrop-blur-xs">
+                            {!isThumbnail && (
+                              <button
+                                type="button"
+                                onClick={() => handleSetPrimaryThumbnail(imgUrl)}
+                                className="px-2.5 py-1 bg-brand-cyan text-brand-bg text-[11px] font-bold rounded hover:bg-brand-cyan/90 transition-all flex items-center gap-1 shadow"
+                              >
+                                <Star className="w-3 h-3" /> Set as Thumbnail
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveGalleryImage(idx)}
+                              className="px-2.5 py-1 bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[11px] font-bold rounded hover:bg-rose-500 hover:text-white transition-all flex items-center gap-1"
+                            >
+                              <Trash2 className="w-3 h-3" /> Delete
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="border-2 border-dashed border-brand-border rounded-xl p-8 text-center bg-brand-card/40">
+                    <Images className="w-10 h-10 text-brand-text-muted mx-auto mb-2 opacity-50" />
+                    <p className="text-sm font-semibold text-brand-text">No ERP Screenshots Added Yet</p>
+                    <p className="text-xs text-brand-text-muted mt-1">
+                      Click the &quot;Upload Screenshots&quot; button above to select at least 8 pictures of your ERP system.
+                    </p>
+                  </div>
+                )}
+                <div className="text-[11px] text-brand-text-muted flex justify-between items-center">
+                  <span>Total Screenshots: <strong>{formData.gallery?.length || 0}</strong></span>
+                  <span>Recommended: 8 to 12 clear screenshots for maximum client trust.</span>
                 </div>
               </div>
 
+              {/* Title & Category */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-medium text-brand-text-muted">Project Title</label>
@@ -301,7 +456,7 @@ export default function ProjectsAdmin() {
               </div>
 
               {/* Live Demo Fields */}
-              <div className="p-5 rounded-xl bg-brand-bg/80 border border-brand-border/80 space-y-4">
+              <div className="p-5 rounded-xl bg-brand-bg/80 border border-brand-border space-y-4">
                 <div className="flex items-center gap-2 text-brand-cyan font-bold text-sm">
                   <ExternalLink className="w-4 h-4" />
                   Live Demo & Credentials Settings
@@ -334,6 +489,7 @@ export default function ProjectsAdmin() {
                 </div>
               </div>
 
+              {/* Problem & Solution */}
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium text-brand-text-muted">The Problem</label>
                 <textarea required rows={2} value={formData.problem || ""}
@@ -350,20 +506,21 @@ export default function ProjectsAdmin() {
                   placeholder="Describe how your software fixed the problem..." />
               </div>
 
+              {/* Modules & Tech Stack */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-medium text-brand-text-muted">Key Modules (Comma separated)</label>
                   <input value={formData.modules?.join(", ") || ""}
                     onChange={(e) => setFormData((p) => ({ ...p, modules: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) }))}
                     className="px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan"
-                    placeholder="Sales, Inventory, HR" />
+                    placeholder="Sales, Inventory, Invoices, Production, Accounts, Reports" />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-medium text-brand-text-muted">Tech Stack (Comma separated)</label>
                   <input value={formData.tech?.join(", ") || ""}
                     onChange={(e) => setFormData((p) => ({ ...p, tech: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) }))}
                     className="px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan"
-                    placeholder="React, Node.js, Firebase" />
+                    placeholder="React, Next.js, Node.js, Firebase" />
                 </div>
               </div>
 
@@ -372,8 +529,8 @@ export default function ProjectsAdmin() {
                   className="px-6 py-2.5 bg-brand-bg text-brand-text border border-brand-border font-medium rounded-lg hover:bg-brand-border transition-colors">
                   Cancel
                 </button>
-                <button type="submit" disabled={isSaving}
-                  className="px-6 py-2.5 bg-brand-cyan text-brand-bg font-bold rounded-lg hover:bg-brand-cyan/90 transition-colors flex items-center gap-2 disabled:opacity-70">
+                <button type="submit" disabled={isSaving || isUploading}
+                  className="px-6 py-2.5 bg-brand-cyan text-brand-bg font-bold rounded-lg hover:bg-brand-cyan/90 transition-colors flex items-center gap-2 disabled:opacity-70 shadow-lg">
                   {isSaving ? <><Loader2 className="w-4 h-4 animate-spin" /> Saving...</> : <><Save className="w-4 h-4" /> {editingProject ? "Update Project" : "Save Project"}</>}
                 </button>
               </div>
@@ -384,3 +541,4 @@ export default function ProjectsAdmin() {
     </div>
   );
 }
+
