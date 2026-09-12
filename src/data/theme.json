@@ -1,0 +1,13 @@
+{
+  "id": "midnight-indigo",
+  "name": "Midnight Indigo",
+  "description": "Deep enterprise indigo with neon ultraviolet flair",
+  "primary": "#4F46E5",
+  "secondary": "#818CF8",
+  "mode": "light",
+  "bg": "#EEF2FF",
+  "card": "#FFFFFF",
+  "border": "#E0E7FF",
+  "text": "#312E81",
+  "textMuted": "#3730A3"
+}
