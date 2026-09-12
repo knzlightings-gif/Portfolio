@@ -1,5 +1,8 @@
 import Sidebar from "@/components/admin/Sidebar";
 
+// Force dynamic rendering — admin pages use cookies and Firebase Auth
+export const dynamic = "force-dynamic";
+
 export default function AdminDashboardLayout({
   children,
 }: {

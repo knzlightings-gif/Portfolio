@@ -21,8 +21,10 @@ export default function Sidebar() {
 
   const handleLogout = async () => {
     try {
-      // Sign out from Firebase
-      await signOut(auth);
+      // Sign out from Firebase (auth may be null during build)
+      if (auth) {
+        await signOut(auth);
+      }
       // Clear the session cookie via API
       await fetch("/api/auth/session", { method: "DELETE" });
     } catch (err) {

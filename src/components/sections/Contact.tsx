@@ -21,6 +21,9 @@ export default function Contact() {
     const data = Object.fromEntries(formData.entries());
 
     try {
+      if (!db) {
+        throw new Error("Service unavailable. Please try WhatsApp or Email.");
+      }
       // Save message to Firestore "messages" collection
       await addDoc(collection(db, "messages"), {
         name: data.name || "",

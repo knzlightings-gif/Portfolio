@@ -19,6 +19,9 @@ export default function AdminLogin() {
     setError("");
 
     try {
+      if (!auth) {
+        throw new Error("Firebase is not configured. Please try again later.");
+      }
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const idToken = await userCredential.user.getIdToken();
 

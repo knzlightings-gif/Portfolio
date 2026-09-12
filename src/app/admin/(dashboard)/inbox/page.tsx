@@ -33,6 +33,10 @@ export default function InboxAdmin() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!db) {
+      setIsLoading(false);
+      return;
+    }
     // Real-time listener — auto-updates when new messages arrive
     const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(
@@ -55,6 +59,7 @@ export default function InboxAdmin() {
   }, []);
 
   const markAsRead = async (id: string) => {
+    if (!db) return;
     try {
       await updateDoc(doc(db, "messages", id), { read: true });
     } catch (err) {
@@ -63,6 +68,7 @@ export default function InboxAdmin() {
   };
 
   const deleteMessage = async (id: string) => {
+    if (!db) return;
     setDeletingId(id);
     try {
       await deleteDoc(doc(db, "messages", id));
