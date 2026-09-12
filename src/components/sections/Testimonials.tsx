@@ -1,60 +1,78 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { testimonials } from "@/data/content";
+import { testimonials as defaultTestimonials } from "@/data/content";
 import { Quote, Star, Loader2, CheckCircle2, MessageSquarePlus, Sparkles } from "lucide-react";
-import { db } from "@/lib/firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+
+type Testimonial = {
+  id: string;
+  name: string;
+  role: string;
+  text: string;
+  rating?: number;
+  image?: string;
+};
 
 export default function Testimonials() {
+  const [items, setItems] = useState<Testimonial[]>(defaultTestimonials);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
 
+  // Fetch live reviews from Firestore API
+  useEffect(() => {
+    fetch("/api/reviews")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setItems(data);
+        }
+      })
+      .catch((err) => console.error("Error loading reviews:", err));
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
-    const name = formData.get("name") as string;
-    const role = formData.get("role") as string;
-    const review = formData.get("review") as string;
+    const name = (formData.get("name") as string)?.trim();
+    const role = (formData.get("role") as string)?.trim() || "Client";
+    const review = (formData.get("review") as string)?.trim();
 
     try {
-      if (db) {
-        await addDoc(collection(db, "reviews"), {
-          name,
-          role,
-          review,
-          rating,
-          createdAt: serverTimestamp(),
-          approved: false,
-        });
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, role, review, rating }),
+      });
+
+      const json = await res.json();
+      if (res.ok && json.data) {
+        // Instantly prepend the new review to the live marquee list
+        setItems((prev) => [json.data, ...prev]);
+        setIsSuccess(true);
+        (e.target as HTMLFormElement).reset();
+        setRating(5);
+        setTimeout(() => {
+          setIsSuccess(false);
+          setShowForm(false);
+        }, 4000);
+      } else {
+        alert(json.error || "Failed to post review. Please try again.");
       }
-      setIsSuccess(true);
-      (e.target as HTMLFormElement).reset();
-      setRating(5);
-      setTimeout(() => {
-        setIsSuccess(false);
-        setShowForm(false);
-      }, 4000);
     } catch {
-      // Fallback local feedback
-      setIsSuccess(true);
-      setTimeout(() => {
-        setIsSuccess(false);
-        setShowForm(false);
-      }, 4000);
+      alert("Error submitting review. Please check your connection.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Duplicate the list 3 times to make a seamless infinite ticker
-  const duplicatedTestimonials = [...testimonials, ...testimonials, ...testimonials];
+  // Duplicate items for seamless continuous infinite ticker
+  const duplicatedTestimonials = items.length > 0 ? [...items, ...items, ...items] : [];
 
   return (
     <section id="testimonials" className="py-24 bg-brand-bg relative overflow-hidden">
@@ -131,7 +149,7 @@ export default function Testimonials() {
               <div className="flex items-center justify-center gap-3 py-6 text-center bg-emerald-500/10 border border-emerald-500/20 rounded-2xl">
                 <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
                 <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-                  Thank you! Your review has been submitted successfully.
+                  Thank you! Your review has been submitted and is now live!
                 </p>
               </div>
             ) : showForm ? (
@@ -253,9 +271,9 @@ export default function Testimonials() {
               <Quote className="absolute top-6 right-6 w-8 h-8 text-brand-border/60 group-hover:text-brand-cyan/30 transition-colors duration-300 pointer-events-none" />
 
               <div>
-                {/* 5 Stars */}
+                {/* Rating Stars */}
                 <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
+                  {[...Array(testimonial.rating || 5)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
