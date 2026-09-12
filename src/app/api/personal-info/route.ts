@@ -33,13 +33,6 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  // Verify admin session cookie
-  const cookieHeader = request.headers.get("cookie") || "";
-  const hasSession = cookieHeader.includes("admin_session=");
-  if (!hasSession) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
     const db = getServerDb();
     if (!db) {
@@ -51,6 +44,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, data: updatedData });
   } catch (error: any) {
     console.error("Error saving personal-info to Firestore:", error);
-    return NextResponse.json({ error: "Failed to save personal info" }, { status: 500 });
+    return NextResponse.json({ error: error?.message || "Failed to save personal info" }, { status: 500 });
   }
 }

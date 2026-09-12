@@ -7,46 +7,38 @@ export async function GET() {
     const db = getServerDb();
     if (!db) return NextResponse.json(featuredProjects);
 
-    const snap = await getDocs(collection(db, "projects"));
-    if (snap.empty) {
+    const snapshot = await getDocs(collection(db, "projects"));
+    if (snapshot.empty) {
       return NextResponse.json(featuredProjects);
     }
 
-    const projects = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    projects.sort((a: any, b: any) => (a.order ?? 999) - (b.order ?? 999));
+    const projects = snapshot.docs.map((d) => ({
+      id: d.id,
+      ...d.data(),
+    }));
     return NextResponse.json(projects);
   } catch (error) {
-    console.error("Error reading projects from Firestore:", error);
+    console.error("Error fetching projects from Firestore:", error);
     return NextResponse.json(featuredProjects);
   }
 }
 
 export async function POST(request: Request) {
-  // Verify admin session cookie
-  const cookieHeader = request.headers.get("cookie") || "";
-  const hasSession = cookieHeader.includes("admin_session=");
-  if (!hasSession) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
     const db = getServerDb();
     if (!db) {
       return NextResponse.json({ error: "Firebase not configured" }, { status: 500 });
     }
 
-    const projectData = await request.json();
-    const { id, ...data } = projectData;
+    const body = await request.json();
+    const docRef = await addDoc(collection(db, "projects"), {
+      ...body,
+      createdAt: new Date().toISOString(),
+    });
 
-    if (id) {
-      await setDoc(doc(db, "projects", id), data, { merge: true });
-      return NextResponse.json({ success: true, id, data });
-    } else {
-      const ref = await addDoc(collection(db, "projects"), data);
-      return NextResponse.json({ success: true, id: ref.id, data });
-    }
+    return NextResponse.json({ id: docRef.id, ...body }, { status: 201 });
   } catch (error: any) {
-    console.error("Error saving project to Firestore:", error);
-    return NextResponse.json({ error: "Failed to save project" }, { status: 500 });
+    console.error("Error creating project in Firestore:", error);
+    return NextResponse.json({ error: error?.message || "Failed to create project" }, { status: 500 });
   }
 }

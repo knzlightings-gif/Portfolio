@@ -9,7 +9,9 @@ export async function GET() {
     const db = getServerDb();
     if (!db) return NextResponse.json(defaultAbout);
 
-    const snap = await getDoc(doc(db, DOC_PATH.collection, DOC_PATH.doc));
+    const docRef = doc(db, DOC_PATH.collection, DOC_PATH.doc);
+    const snap = await getDoc(docRef);
+
     if (snap.exists()) {
       return NextResponse.json(snap.data());
     }
@@ -21,13 +23,6 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  // Verify admin session cookie
-  const cookieHeader = request.headers.get("cookie") || "";
-  const hasSession = cookieHeader.includes("admin_session=");
-  if (!hasSession) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
     const db = getServerDb();
     if (!db) {
@@ -35,10 +30,12 @@ export async function POST(request: Request) {
     }
 
     const updatedData = await request.json();
-    await setDoc(doc(db, DOC_PATH.collection, DOC_PATH.doc), updatedData);
+    const docRef = doc(db, DOC_PATH.collection, DOC_PATH.doc);
+    await setDoc(docRef, updatedData);
+
     return NextResponse.json({ success: true, data: updatedData });
   } catch (error: any) {
     console.error("Error saving about to Firestore:", error);
-    return NextResponse.json({ error: "Failed to save about configuration" }, { status: 500 });
+    return NextResponse.json({ error: error?.message || "Failed to save about data" }, { status: 500 });
   }
 }

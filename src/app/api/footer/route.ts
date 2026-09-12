@@ -4,22 +4,28 @@ import { getServerDb, doc, getDoc, setDoc } from "@/lib/firebase-server";
 const defaultFooter = {
   ctaHeading1: "Let's build something",
   ctaHeading2: "extraordinary.",
-  ctaSubtext: "Ready to transform your business with custom software tailored to your workflow?",
-  ctaButtonText: "Start",
-  brandDescription:
-    "I build practical ERP systems, business web applications and custom digital solutions for small and growing businesses.",
+  ctaSubtext: "Ready to streamline your business operations, automate workflows, or launch a custom web platform? Let's discuss your requirements.",
+  primaryButtonText: "Schedule a Discovery Call",
+  primaryButtonLink: "https://calendly.com",
+  secondaryButtonText: "Start a Conversation",
+  secondaryButtonLink: "https://wa.me/1234567890",
+  tagline: "Building scalable ERP & web solutions that drive business efficiency and growth.",
   quickLinks: [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
-    { name: "Projects", href: "#projects" },
-    { name: "Testimonials", href: "#testimonials" },
+    { label: "Home", href: "#home" },
+    { label: "About Me", href: "#about" },
+    { label: "Services", href: "#services" },
+    { label: "Featured Work", href: "#work" },
+    { label: "Testimonials", href: "#testimonials" },
+    { label: "Contact", href: "#contact" },
   ],
-  servicesLinks: [
-    { name: "ERP Development", href: "#services" },
-    { name: "Web Applications", href: "#services" },
-    { name: "Business Automation", href: "#services" },
-    { name: "API Integrations", href: "#services" },
-  ],
+  socialLinks: {
+    github: "https://github.com",
+    linkedin: "https://linkedin.com",
+    twitter: "https://twitter.com",
+    whatsapp: "https://wa.me/1234567890",
+  },
+  copyright: "© 2026 ERP & Web Developer. All rights reserved.",
+  statusText: "Open for Q1/Q2 Projects",
 };
 
 export async function GET() {
@@ -39,13 +45,6 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  // Verify admin session cookie
-  const cookieHeader = request.headers.get("cookie") || "";
-  const hasSession = cookieHeader.includes("admin_session=");
-  if (!hasSession) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
     const db = getServerDb();
     if (!db) {
@@ -57,6 +56,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, data: updatedData });
   } catch (error: any) {
     console.error("Error saving footer to Firestore:", error);
-    return NextResponse.json({ error: "Failed to save footer settings" }, { status: 500 });
+    return NextResponse.json({ error: error?.message || "Failed to save footer" }, { status: 500 });
   }
 }
