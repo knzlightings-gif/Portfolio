@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerDb, doc, getDoc, setDoc } from "@/lib/firebase-server";
 
-// Default personal info fallback
 const defaultPersonalInfo = {
   name: "[YOUR NAME]",
   tagline: "I Build Smart Business Software That Actually Works.",
@@ -34,6 +33,13 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  // Verify admin session cookie
+  const cookieHeader = request.headers.get("cookie") || "";
+  const hasSession = cookieHeader.includes("admin_session=");
+  if (!hasSession) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const db = getServerDb();
     if (!db) {

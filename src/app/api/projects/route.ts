@@ -9,12 +9,10 @@ export async function GET() {
 
     const snap = await getDocs(collection(db, "projects"));
     if (snap.empty) {
-      // First time — return defaults from content.ts
       return NextResponse.json(featuredProjects);
     }
 
     const projects = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    // Sort by order field if exists, else by title
     projects.sort((a: any, b: any) => (a.order ?? 999) - (b.order ?? 999));
     return NextResponse.json(projects);
   } catch (error) {
@@ -24,6 +22,13 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  // Verify admin session cookie
+  const cookieHeader = request.headers.get("cookie") || "";
+  const hasSession = cookieHeader.includes("admin_session=");
+  if (!hasSession) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const db = getServerDb();
     if (!db) {
@@ -34,11 +39,9 @@ export async function POST(request: Request) {
     const { id, ...data } = projectData;
 
     if (id) {
-      // Update existing project
       await setDoc(doc(db, "projects", id), data, { merge: true });
       return NextResponse.json({ success: true, id, data });
     } else {
-      // Create new project
       const ref = await addDoc(collection(db, "projects"), data);
       return NextResponse.json({ success: true, id: ref.id, data });
     }

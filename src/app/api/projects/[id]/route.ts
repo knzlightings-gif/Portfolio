@@ -1,10 +1,19 @@
 import { NextResponse } from "next/server";
 import { getServerDb, doc, deleteDoc, setDoc } from "@/lib/firebase-server";
 
+function isAuthenticated(request: Request): boolean {
+  const cookieHeader = request.headers.get("cookie") || "";
+  return cookieHeader.includes("admin_session=");
+}
+
 export async function DELETE(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!isAuthenticated(request)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const { id } = await params;
     const db = getServerDb();
@@ -24,6 +33,10 @@ export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!isAuthenticated(request)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const { id } = await params;
     const db = getServerDb();

@@ -13,7 +13,6 @@ export async function GET() {
     if (snap.exists()) {
       return NextResponse.json(snap.data());
     }
-    // First time — return defaults
     return NextResponse.json(defaultAbout);
   } catch (error) {
     console.error("Error reading about from Firestore:", error);
@@ -22,6 +21,13 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  // Verify admin session cookie
+  const cookieHeader = request.headers.get("cookie") || "";
+  const hasSession = cookieHeader.includes("admin_session=");
+  if (!hasSession) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const db = getServerDb();
     if (!db) {
