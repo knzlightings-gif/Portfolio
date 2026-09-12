@@ -25,7 +25,7 @@ export default function Projects() {
   const [projects, setProjects] = useState<Project[]>(defaultProjects as Project[]);
 
   useEffect(() => {
-    fetch("/api/projects")
+    fetch("/api/projects", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {

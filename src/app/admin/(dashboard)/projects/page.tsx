@@ -36,7 +36,7 @@ export default function ProjectsAdmin() {
 
   // Load projects from Firestore
   useEffect(() => {
-    fetch("/api/projects")
+    fetch("/api/projects", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => setProjectList(Array.isArray(data) ? data : []))
       .catch((err) => console.error("Error loading projects:", err))
