@@ -12,12 +12,27 @@ export default function About() {
     fetch("/api/about")
       .then((res) => res.json())
       .then((res) => {
-        if (res && res.headline) {
-          setData(res);
+        if (res && typeof res === "object") {
+          setData((prev) => ({
+            ...prev,
+            ...res,
+            paragraphs: Array.isArray(res.paragraphs) && res.paragraphs.length > 0 ? res.paragraphs : prev.paragraphs,
+            stats: Array.isArray(res.stats) && res.stats.length > 0 ? res.stats : prev.stats,
+            techStack: {
+              frontend: res.techStack?.frontend || prev.techStack?.frontend || [],
+              backend: res.techStack?.backend || prev.techStack?.backend || [],
+              tools: res.techStack?.tools || prev.techStack?.tools || [],
+            },
+          }));
         }
       })
       .catch((err) => console.error("Error loading about data:", err));
   }, []);
+
+  const paragraphs = data?.paragraphs || defaultAbout.paragraphs;
+  const stats = data?.stats || defaultAbout.stats;
+  const photoCaption = data?.photoCaption || "";
+  const techStack = data?.techStack || defaultAbout.techStack;
 
   return (
     <section id="about" className="py-24 bg-brand-card border-t border-brand-border relative overflow-hidden">
@@ -30,7 +45,7 @@ export default function About() {
           
           {/* Left Column: About & Stats */}
           <div className="w-full lg:w-1/2">
-            {data.badge && (
+            {data?.badge && (
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -48,11 +63,11 @@ export default function About() {
               viewport={{ once: true }}
               className="text-3xl md:text-5xl font-extrabold text-brand-text mb-8 tracking-tight leading-tight"
             >
-              {data.headline}
+              {data?.headline || defaultAbout.headline}
             </motion.h2>
 
             <div className="flex flex-col gap-6 mb-12">
-              {data.paragraphs.map((paragraph, index) => (
+              {paragraphs.map((paragraph, index) => (
                 <motion.p
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
@@ -60,7 +75,7 @@ export default function About() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   className={`text-lg leading-relaxed ${
-                    index === data.paragraphs.length - 1
+                    index === paragraphs.length - 1
                       ? "text-brand-cyan font-semibold text-xl"
                       : "text-brand-text-muted"
                   }`}
@@ -72,7 +87,7 @@ export default function About() {
 
             {/* Stats */}
             <div className="grid grid-cols-2 gap-6">
-              {data.stats.map((stat, index) => (
+              {stats.map((stat, index) => (
                 <motion.div
                   key={stat.label + index}
                   initial={{ opacity: 0, y: 20 }}
@@ -101,11 +116,11 @@ export default function About() {
               viewport={{ once: true }}
               className="relative w-full rounded-3xl overflow-hidden bg-brand-bg border border-brand-border shadow-2xl group"
             >
-              {data.photoUrl ? (
+              {data?.photoUrl ? (
                 <div className="relative aspect-[4/3] md:aspect-[16/11] w-full overflow-hidden">
                   <img
                     src={data.photoUrl}
-                    alt={data.photoCaption || "Developer Portrait"}
+                    alt={photoCaption || "Developer Portrait"}
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
@@ -123,13 +138,13 @@ export default function About() {
                     <div>
                       <div className="flex items-center gap-2">
                         <h4 className="font-bold text-lg text-white">
-                          {data.photoCaption.split("•")[0]?.trim() || data.photoCaption}
+                          {photoCaption.split("•")[0]?.trim() || photoCaption}
                         </h4>
                         <CheckCircle2 className="w-4 h-4 text-brand-cyan" />
                       </div>
-                      {data.photoCaption.includes("•") && (
+                      {photoCaption.includes("•") && (
                         <p className="text-xs text-white/80 font-medium">
-                          {data.photoCaption.split("•")[1]?.trim()}
+                          {photoCaption.split("•")[1]?.trim()}
                         </p>
                       )}
                     </div>
@@ -143,10 +158,10 @@ export default function About() {
                     <User className="w-12 h-12 text-brand-cyan" />
                   </div>
                   <h4 className="text-lg font-bold text-brand-text relative z-10 mb-1">
-                    {data.photoCaption || "Professional Developer Portrait"}
+                    {photoCaption || "Professional Developer Portrait"}
                   </h4>
                   <p className="text-xs text-brand-text-muted max-w-sm relative z-10 mb-4">
-                    {data.experienceBadge || "Upload your real high-resolution photo from the Admin Panel to display here."}
+                    {data?.experienceBadge || "Upload your real high-resolution photo from the Admin Panel to display here."}
                   </p>
                   <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/30">
                     <Sparkles className="w-3 h-3" /> Admin Studio Ready
@@ -168,13 +183,13 @@ export default function About() {
               </h3>
 
               <div className="space-y-6">
-                {data.techStack.frontend && data.techStack.frontend.length > 0 && (
+                {techStack?.frontend && techStack.frontend.length > 0 && (
                   <div>
                     <h4 className="text-xs font-bold text-brand-text-muted uppercase tracking-wider mb-3">
                       Frontend
                     </h4>
                     <div className="flex flex-wrap gap-2">
-                      {data.techStack.frontend.map((tech) => (
+                      {techStack.frontend.map((tech: string) => (
                         <span
                           key={tech}
                           className="px-3.5 py-1.5 bg-brand-card hover:bg-brand-cyan/10 hover:border-brand-cyan/40 border border-brand-border rounded-xl text-xs font-semibold text-brand-text transition-colors duration-200"
@@ -186,13 +201,13 @@ export default function About() {
                   </div>
                 )}
 
-                {data.techStack.backend && data.techStack.backend.length > 0 && (
+                {techStack?.backend && techStack.backend.length > 0 && (
                   <div>
                     <h4 className="text-xs font-bold text-brand-text-muted uppercase tracking-wider mb-3">
                       Backend & Database
                     </h4>
                     <div className="flex flex-wrap gap-2">
-                      {data.techStack.backend.map((tech) => (
+                      {techStack.backend.map((tech: string) => (
                         <span
                           key={tech}
                           className="px-3.5 py-1.5 bg-brand-card hover:bg-brand-purple/10 hover:border-brand-purple/40 border border-brand-border rounded-xl text-xs font-semibold text-brand-text transition-colors duration-200"
@@ -204,13 +219,13 @@ export default function About() {
                   </div>
                 )}
 
-                {data.techStack.tools && data.techStack.tools.length > 0 && (
+                {techStack?.tools && techStack.tools.length > 0 && (
                   <div>
                     <h4 className="text-xs font-bold text-brand-text-muted uppercase tracking-wider mb-3">
                       DevOps & Productivity
                     </h4>
                     <div className="flex flex-wrap gap-2">
-                      {data.techStack.tools.map((tech) => (
+                      {techStack.tools.map((tech: string) => (
                         <span
                           key={tech}
                           className="px-3.5 py-1.5 bg-brand-card hover:border-brand-cyan/40 border border-brand-border rounded-xl text-xs font-semibold text-brand-text transition-colors duration-200"
@@ -237,4 +252,3 @@ export default function About() {
     </section>
   );
 }
-

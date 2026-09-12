@@ -1,32 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerDb, doc, getDoc, setDoc } from "@/lib/firebase-server";
-
-const defaultFooter = {
-  ctaHeading1: "Let's build something",
-  ctaHeading2: "extraordinary.",
-  ctaSubtext: "Ready to streamline your business operations, automate workflows, or launch a custom web platform? Let's discuss your requirements.",
-  primaryButtonText: "Schedule a Discovery Call",
-  primaryButtonLink: "https://calendly.com",
-  secondaryButtonText: "Start a Conversation",
-  secondaryButtonLink: "https://wa.me/1234567890",
-  tagline: "Building scalable ERP & web solutions that drive business efficiency and growth.",
-  quickLinks: [
-    { label: "Home", href: "#home" },
-    { label: "About Me", href: "#about" },
-    { label: "Services", href: "#services" },
-    { label: "Featured Work", href: "#work" },
-    { label: "Testimonials", href: "#testimonials" },
-    { label: "Contact", href: "#contact" },
-  ],
-  socialLinks: {
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
-    twitter: "https://twitter.com",
-    whatsapp: "https://wa.me/1234567890",
-  },
-  copyright: "© 2026 ERP & Web Developer. All rights reserved.",
-  statusText: "Open for Q1/Q2 Projects",
-};
+import { footerContent as defaultFooter } from "@/data/content";
 
 export async function GET() {
   try {
@@ -35,7 +9,10 @@ export async function GET() {
 
     const snap = await getDoc(doc(db, "settings", "footer"));
     if (snap.exists()) {
-      return NextResponse.json(snap.data());
+      return NextResponse.json({
+        ...defaultFooter,
+        ...snap.data(),
+      });
     }
     return NextResponse.json(defaultFooter);
   } catch (error) {

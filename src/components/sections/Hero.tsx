@@ -105,7 +105,7 @@ export default function Hero() {
               className="mb-4"
             >
               <span className="text-brand-cyan font-bold tracking-wider uppercase text-sm md:text-base">
-                {personalInfo.roleDescriptor}
+                {personalInfo?.roleDescriptor || defaultPersonalInfo.roleDescriptor}
               </span>
             </motion.div>
 
@@ -115,10 +115,20 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6"
             >
-              {personalInfo.tagline.split(" ").slice(0, 3).join(" ")} <br className="hidden lg:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-brand-cyan to-brand-purple">
-                {personalInfo.tagline.split(" ").slice(3).join(" ")}
-              </span>
+              {(() => {
+                const tag = personalInfo?.tagline || defaultPersonalInfo.tagline;
+                const words = tag.split(" ");
+                const firstPart = words.slice(0, 3).join(" ");
+                const secondPart = words.slice(3).join(" ");
+                return (
+                  <>
+                    {firstPart} <br className="hidden lg:block" />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-brand-cyan to-brand-purple">
+                      {secondPart}
+                    </span>
+                  </>
+                );
+              })()}
             </motion.h1>
 
             <motion.p
@@ -127,7 +137,7 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-lg md:text-xl text-slate-600 mb-10 max-w-lg leading-relaxed"
             >
-              {personalInfo.description}
+              {personalInfo?.description || defaultPersonalInfo.description}
             </motion.p>
 
             <motion.div
