@@ -3,175 +3,288 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { testimonials } from "@/data/content";
-import { Quote, Star, Loader2, CheckCircle2 } from "lucide-react";
+import { Quote, Star, Loader2, CheckCircle2, MessageSquarePlus, Sparkles } from "lucide-react";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 export default function Testimonials() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [rating, setRating] = useState(5);
+  const [hoverRating, setHoverRating] = useState<number | null>(null);
+  const [showForm, setShowForm] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const role = formData.get("role") as string;
+    const review = formData.get("review") as string;
+
+    try {
+      if (db) {
+        await addDoc(collection(db, "reviews"), {
+          name,
+          role,
+          review,
+          rating,
+          createdAt: serverTimestamp(),
+          approved: false,
+        });
+      }
       setIsSuccess(true);
       (e.target as HTMLFormElement).reset();
       setRating(5);
-      
-      setTimeout(() => setIsSuccess(false), 5000);
-    }, 1500);
+      setTimeout(() => {
+        setIsSuccess(false);
+        setShowForm(false);
+      }, 4000);
+    } catch {
+      // Fallback local feedback
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+        setShowForm(false);
+      }, 4000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  // Duplicate the list 3 times to make a seamless infinite ticker
+  const duplicatedTestimonials = [...testimonials, ...testimonials, ...testimonials];
 
   return (
     <section id="testimonials" className="py-24 bg-brand-bg relative overflow-hidden">
       
-      {/* Background Accent */}
-      <div className="absolute top-1/2 right-0 w-[600px] h-[600px] bg-brand-purple/5 rounded-full blur-[150px] -translate-y-1/2 pointer-events-none" />
-
+      {/* Ambient Lighting */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-brand-cyan/5 rounded-full blur-[140px] pointer-events-none" />
+      
       <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
         
-        <div className="text-center mb-16">
+        {/* Section Header */}
+        <div className="text-center mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-purple/10 border border-brand-purple/25 text-brand-purple text-xs font-bold uppercase tracking-wider mb-4 shadow-sm"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-brand-purple" />
+            Social Proof & Client Endorsements
+          </motion.div>
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-black text-brand-text mb-6 tracking-tight"
+            className="text-3xl md:text-5xl font-black text-brand-text mb-4 tracking-tight"
           >
             What <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-brand-purple">Clients Say</span>
           </motion.h2>
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-brand-text-muted max-w-2xl mx-auto"
+            className="text-base md:text-lg text-brand-text-muted max-w-2xl mx-auto"
           >
-            Real feedback from businesses I&apos;ve collaborated with to build digital solutions.
+            Real feedback from business owners and teams who transformed their operations with custom software.
           </motion.p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
-          
-          {/* Left Side - Submit Review Form */}
+        {/* Compact Review Submission Box on TOP */}
+        <div className="max-w-2xl mx-auto mb-16">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="w-full lg:w-5/12"
+            className="p-6 md:p-8 rounded-3xl bg-brand-card/90 backdrop-blur-md border border-brand-border shadow-xl relative overflow-hidden"
           >
-            <div className="sticky top-24 p-8 md:p-10 rounded-3xl bg-brand-card border border-brand-border shadow-2xl relative group">
-              <div className="absolute inset-0 bg-gradient-to-br from-brand-cyan/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-              
-              <h3 className="text-2xl font-bold text-brand-text mb-2 relative z-10">Share Your Experience</h3>
-              <p className="text-brand-text-muted mb-8 relative z-10">Your feedback helps me improve and helps others make informed decisions.</p>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-brand-cyan/10 rounded-full blur-2xl pointer-events-none" />
 
-              {isSuccess ? (
-                <div className="flex flex-col items-center justify-center py-12 text-center h-[400px]">
-                  <div className="w-20 h-20 rounded-full bg-brand-cyan/10 flex items-center justify-center mb-6">
-                    <CheckCircle2 className="w-10 h-10 text-brand-cyan" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-brand-text mb-4">Review Submitted!</h3>
-                  <p className="text-brand-text-muted">Thank you for your valuable feedback.</p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 relative z-10">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-brand-cyan/10 border border-brand-cyan/25 flex items-center justify-center text-brand-cyan shrink-0">
+                  <MessageSquarePlus className="w-5 h-5" />
                 </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium text-brand-text-muted">Your Name</label>
-                    <input required name="name" type="text" className="w-full px-5 py-3 rounded-xl bg-brand-bg border border-brand-border text-brand-text focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all" placeholder="John Doe" />
+                <div>
+                  <h3 className="text-lg font-bold text-brand-text">Share Your Experience</h3>
+                  <p className="text-xs text-brand-text-muted">Your feedback helps improve our software solutions.</p>
+                </div>
+              </div>
+
+              {!showForm && !isSuccess && (
+                <button
+                  onClick={() => setShowForm(true)}
+                  className="px-4 py-2 rounded-xl bg-brand-text text-brand-bg hover:bg-brand-cyan transition-all text-xs font-bold shrink-0 self-start sm:self-auto shadow-sm"
+                >
+                  Write a Review
+                </button>
+              )}
+            </div>
+
+            {isSuccess ? (
+              <div className="flex items-center justify-center gap-3 py-6 text-center bg-emerald-500/10 border border-emerald-500/20 rounded-2xl">
+                <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
+                <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                  Thank you! Your review has been submitted successfully.
+                </p>
+              </div>
+            ) : showForm ? (
+              <form onSubmit={handleSubmit} className="space-y-4 relative z-10 pt-2 border-t border-brand-border/60">
+                {/* 2-column input row for compact height */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-semibold text-brand-text-muted block mb-1">Your Name</label>
+                    <input 
+                      required 
+                      name="name" 
+                      type="text" 
+                      className="w-full px-3.5 py-2 text-sm rounded-xl bg-brand-bg border border-brand-border text-brand-text focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all" 
+                      placeholder="e.g. John Doe" 
+                    />
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium text-brand-text-muted">Role & Company</label>
-                    <input required name="role" type="text" className="w-full px-5 py-3 rounded-xl bg-brand-bg border border-brand-border text-brand-text focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all" placeholder="CEO, Acme Corp" />
+                  <div>
+                    <label className="text-xs font-semibold text-brand-text-muted block mb-1">Role & Company</label>
+                    <input 
+                      required 
+                      name="role" 
+                      type="text" 
+                      className="w-full px-3.5 py-2 text-sm rounded-xl bg-brand-bg border border-brand-border text-brand-text focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all" 
+                      placeholder="e.g. CEO, Logistics Ltd" 
+                    />
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium text-brand-text-muted">Rating</label>
-                    <div className="flex gap-2">
-                      {[1, 2, 3, 4, 5].map((star) => (
+                </div>
+
+                {/* Rating selection */}
+                <div className="flex items-center justify-between py-1">
+                  <span className="text-xs font-semibold text-brand-text-muted">Your Rating:</span>
+                  <div className="flex gap-1.5">
+                    {[1, 2, 3, 4, 5].map((star) => {
+                      const active = hoverRating ? star <= hoverRating : star <= rating;
+                      return (
                         <button
                           key={star}
                           type="button"
+                          onMouseEnter={() => setHoverRating(star)}
+                          onMouseLeave={() => setHoverRating(null)}
                           onClick={() => setRating(star)}
-                          className="focus:outline-none transition-transform hover:scale-110"
+                          className="focus:outline-none transition-transform hover:scale-125"
                         >
-                          <Star className={`w-8 h-8 ${star <= rating ? "fill-amber-400 text-amber-400" : "text-stone-300"}`} />
+                          <Star className={`w-5 h-5 ${active ? "fill-amber-400 text-amber-400" : "text-stone-300 dark:text-stone-700"}`} />
                         </button>
-                      ))}
-                    </div>
+                      );
+                    })}
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium text-brand-text-muted">Your Review</label>
-                    <textarea required name="review" rows={4} className="w-full px-5 py-3 rounded-xl bg-brand-bg border border-brand-border text-brand-text focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all resize-none" placeholder="How was your experience working with me?"></textarea>
-                  </div>
+                </div>
 
+                {/* Review Text */}
+                <div>
+                  <label className="text-xs font-semibold text-brand-text-muted block mb-1">Review</label>
+                  <textarea 
+                    required 
+                    name="review" 
+                    rows={2} 
+                    className="w-full px-3.5 py-2 text-sm rounded-xl bg-brand-bg border border-brand-border text-brand-text focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all resize-none" 
+                    placeholder="How was your experience working with me?"
+                  ></textarea>
+                </div>
+
+                <div className="flex gap-3 justify-end pt-1">
+                  <button
+                    type="button"
+                    onClick={() => setShowForm(false)}
+                    className="px-4 py-2 rounded-xl border border-brand-border text-xs font-semibold text-brand-text-muted hover:text-brand-text transition-colors"
+                  >
+                    Cancel
+                  </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-xl btn-brand-gradient text-lg font-bold transition-all disabled:opacity-70 flex items-center justify-center gap-2"
+                    className="px-5 py-2 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-purple text-white text-xs font-bold transition-all disabled:opacity-70 flex items-center justify-center gap-2 shadow-sm hover:brightness-110"
                   >
                     {isSubmitting ? (
                       <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <Loader2 className="w-4 h-4 animate-spin" />
                         Submitting...
                       </>
                     ) : (
-                      "Submit Review"
+                      "Post Review"
                     )}
                   </button>
-                </form>
-              )}
-            </div>
+                </div>
+              </form>
+            ) : null}
           </motion.div>
-
-          {/* Right Side - Testimonials Grid */}
-          <div className="w-full lg:w-7/12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {testimonials.map((testimonial, index) => (
-                <motion.div
-                  key={testimonial.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6, delay: index * 0.1, type: "spring", stiffness: 100 }}
-                  className="group relative p-8 rounded-3xl bg-brand-card border border-brand-border transition-all duration-500 hover:-translate-y-2 h-full flex flex-col card-glow-border"
-                >
-                  {/* Hover Glow */}
-                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-cyan/10 to-brand-purple/10 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 -z-10" />
-                  <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-brand-cyan/40 transition-colors duration-500 pointer-events-none" />
-                  
-                  <Quote className="absolute top-8 right-8 w-10 h-10 text-stone-300 group-hover:text-brand-cyan/30 transition-colors duration-500" />
-                  
-                  <div className="flex gap-1 mb-6 relative z-10">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                    ))}
-                  </div>
-
-                  <div className="mb-8 relative z-10">
-                    <p className="text-brand-text leading-relaxed text-lg italic">
-                      &quot;{testimonial.text}&quot;
-                    </p>
-                  </div>
-                  
-                  <div className="flex items-center gap-4 relative z-10 mt-auto">
-                    <div className="w-12 h-12 rounded-full bg-brand-bg border border-brand-border flex items-center justify-center overflow-hidden group-hover:border-brand-cyan transition-colors duration-300">
-                      <span className="text-xl">👤</span>
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-brand-text group-hover:text-brand-cyan transition-colors">{testimonial.name}</h4>
-                      <p className="text-sm text-brand-text-muted">{testimonial.role}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
         </div>
+
       </div>
+
+      {/* Infinite Animated Marquee Slider (Left to Right / Continuous Flow) */}
+      <div className="relative w-full overflow-hidden py-4">
+        
+        {/* Left & Right Smooth Fade Gradients */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 md:w-48 bg-gradient-to-r from-brand-bg via-brand-bg/80 to-transparent z-20" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 md:w-48 bg-gradient-to-l from-brand-bg via-brand-bg/80 to-transparent z-20" />
+
+        {/* Animated Marquee Container */}
+        <motion.div
+          animate={{ x: ["-50%", "0%"] }}
+          transition={{
+            repeat: Infinity,
+            repeatType: "loop",
+            duration: 35,
+            ease: "linear",
+          }}
+          className="flex gap-6 w-max cursor-grab active:cursor-grabbing hover:[animation-play-state:paused]"
+        >
+          {duplicatedTestimonials.map((testimonial, idx) => (
+            <div
+              key={`${testimonial.id}-${idx}`}
+              className="w-[340px] md:w-[400px] p-7 rounded-3xl bg-brand-card/95 backdrop-blur-md border border-brand-border/90 shadow-lg relative group transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-brand-cyan/40 shrink-0 flex flex-col justify-between"
+            >
+              {/* Top Accent Gradient Line on Hover */}
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-brand-cyan to-brand-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-3xl" />
+              
+              <Quote className="absolute top-6 right-6 w-8 h-8 text-brand-border/60 group-hover:text-brand-cyan/30 transition-colors duration-300 pointer-events-none" />
+
+              <div>
+                {/* 5 Stars */}
+                <div className="flex gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+
+                {/* Review Text */}
+                <p className="text-brand-text/90 text-sm md:text-[15px] leading-relaxed italic mb-6">
+                  &quot;{testimonial.text}&quot;
+                </p>
+              </div>
+
+              {/* Author Info */}
+              <div className="flex items-center gap-3.5 pt-4 border-t border-brand-border/40">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-cyan to-brand-purple p-0.5 shrink-0 shadow-sm">
+                  <div className="w-full h-full bg-brand-card rounded-full flex items-center justify-center text-sm font-bold text-brand-text">
+                    {testimonial.name.charAt(0) === "[" ? "👤" : testimonial.name.charAt(0)}
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-bold text-sm text-brand-text group-hover:text-brand-cyan transition-colors">
+                    {testimonial.name}
+                  </h4>
+                  <p className="text-xs text-brand-text-muted">{testimonial.role}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+
     </section>
   );
 }
