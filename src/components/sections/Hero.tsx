@@ -1,10 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { personalInfo } from "@/data/content";
+import { personalInfo as defaultPersonalInfo } from "@/data/content";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+
 
 // Curated high quality images related to ERP, Web Apps, Dashboards, and Coding
 const heroSlides = [
@@ -39,6 +40,23 @@ export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [personalInfo, setPersonalInfo] = useState(defaultPersonalInfo);
+
+  // Load personal info from Firestore via API
+  useEffect(() => {
+    fetch("/api/personal-info")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.name) {
+          setPersonalInfo({
+            ...defaultPersonalInfo,
+            ...data,
+            contact: data.contact || defaultPersonalInfo.contact,
+          });
+        }
+      })
+      .catch((err) => console.error("Error loading personal info:", err));
+  }, []);
 
   // Auto slide when hovered (and periodic gentle shift when not hovered)
   useEffect(() => {

@@ -1,12 +1,38 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { featuredProjects } from "@/data/content";
+import { useState, useEffect } from "react";
+import { featuredProjects as defaultProjects } from "@/data/content";
 import DashboardMockup from "@/components/ui/DashboardMockup";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
+type Project = {
+  id: string;
+  title: string;
+  category: string;
+  problem: string;
+  solution: string;
+  modules: string[];
+  tech: string[];
+  image: string;
+  hasCaseStudy?: boolean;
+};
+
 export default function Projects() {
+  const [projects, setProjects] = useState<Project[]>(defaultProjects as Project[]);
+
+  useEffect(() => {
+    fetch("/api/projects")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setProjects(data);
+        }
+      })
+      .catch((err) => console.error("Error loading projects:", err));
+  }, []);
+
   return (
     <section id="projects" className="py-24 bg-brand-bg">
       <div className="container mx-auto px-6 max-w-[1600px]">
@@ -31,7 +57,7 @@ export default function Projects() {
         </div>
 
         <div className="flex flex-col gap-12 md:gap-24">
-          {featuredProjects.map((project, index) => (
+          {projects.map((project, index) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, y: 40 }}
@@ -44,13 +70,18 @@ export default function Projects() {
             >
               {/* Project Visual */}
               <div className="w-full lg:w-1/2 aspect-[4/3] sm:aspect-video lg:aspect-[4/3] rounded-2xl bg-brand-card border border-brand-border overflow-hidden shadow-2xl relative group">
-                {/* Fallback to Mockup if Image is missing/placeholder */}
-                <DashboardMockup
-                  title={project.title}
-                  themeColor={index % 2 === 0 ? "cyan" : "purple"}
-                />
-                
-                {/* Overlay on hover */}
+                {project.image && !project.image.includes("placeholder") ? (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <DashboardMockup
+                    title={project.title}
+                    themeColor={index % 2 === 0 ? "cyan" : "purple"}
+                  />
+                )}
                 <div className="absolute inset-0 bg-brand-bg/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
                   {project.hasCaseStudy ? (
                     <Link
@@ -78,29 +109,20 @@ export default function Projects() {
 
                 <div className="space-y-6 mb-8 w-full">
                   <div className="bg-brand-card/50 border border-brand-border rounded-xl p-5">
-                    <h4 className="text-sm font-semibold text-brand-text-muted uppercase mb-2">
-                      The Problem
-                    </h4>
+                    <h4 className="text-sm font-semibold text-brand-text-muted uppercase mb-2">The Problem</h4>
                     <p className="text-brand-text">{project.problem}</p>
                   </div>
                   <div className="bg-brand-card/50 border border-brand-border rounded-xl p-5">
-                    <h4 className="text-sm font-semibold text-brand-text-muted uppercase mb-2">
-                      The Solution
-                    </h4>
+                    <h4 className="text-sm font-semibold text-brand-text-muted uppercase mb-2">The Solution</h4>
                     <p className="text-brand-text">{project.solution}</p>
                   </div>
                 </div>
 
                 <div className="mb-8">
-                  <h4 className="text-sm font-semibold text-brand-text-muted uppercase mb-3">
-                    Key Modules
-                  </h4>
+                  <h4 className="text-sm font-semibold text-brand-text-muted uppercase mb-3">Key Modules</h4>
                   <div className="flex flex-wrap gap-2">
-                    {project.modules.map((m) => (
-                      <span
-                        key={m}
-                        className="flex items-center gap-1.5 px-3 py-1 bg-brand-card border border-brand-border rounded-full text-xs font-medium text-brand-text-muted"
-                      >
+                    {project.modules?.map((m) => (
+                      <span key={m} className="flex items-center gap-1.5 px-3 py-1 bg-brand-card border border-brand-border rounded-full text-xs font-medium text-brand-text-muted">
                         <CheckCircle2 className="w-3 h-3 text-brand-cyan" />
                         {m}
                       </span>
@@ -109,11 +131,8 @@ export default function Projects() {
                 </div>
 
                 <div className="flex flex-wrap gap-3">
-                  {project.tech.map((t) => (
-                    <span
-                      key={t}
-                      className="text-xs font-mono px-2 py-1 bg-brand-bg border border-brand-border/50 text-brand-text-muted rounded"
-                    >
+                  {project.tech?.map((t) => (
+                    <span key={t} className="text-xs font-mono px-2 py-1 bg-brand-bg border border-brand-border/50 text-brand-text-muted rounded">
                       {t}
                     </span>
                   ))}

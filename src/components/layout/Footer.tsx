@@ -1,9 +1,38 @@
+"use client";
+
 import Link from "next/link";
-import { personalInfo, footerContent } from "@/data/content";
+import { personalInfo as defaultPersonalInfo, footerContent as defaultFooter } from "@/data/content";
 import { Mail, Phone, ArrowUpRight } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [personalInfo, setPersonalInfo] = useState(defaultPersonalInfo);
+  const [footerContent, setFooterContent] = useState(defaultFooter);
+
+  useEffect(() => {
+    // Load personal info
+    fetch("/api/personal-info")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.name) {
+          setPersonalInfo((prev) => ({
+            ...prev,
+            ...data,
+            contact: data.contact || prev.contact,
+          }));
+        }
+      })
+      .catch(() => {});
+
+    // Load footer content
+    fetch("/api/footer")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.ctaHeading1) setFooterContent(data);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <footer className="bg-brand-card border-t border-brand-border relative overflow-hidden pt-20 pb-10">

@@ -1,32 +1,38 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { getServerDb, doc, getDoc, setDoc } from "@/lib/firebase-server";
 import defaultAbout from "@/data/about.json";
 
-const ABOUT_FILE_PATH = path.join(process.cwd(), "src", "data", "about.json");
+const DOC_PATH = { collection: "settings", doc: "about" };
 
 export async function GET() {
   try {
-    if (fs.existsSync(ABOUT_FILE_PATH)) {
-      const fileData = fs.readFileSync(ABOUT_FILE_PATH, "utf-8");
-      const data = JSON.parse(fileData);
-      return NextResponse.json(data);
+    const db = getServerDb();
+    if (!db) return NextResponse.json(defaultAbout);
+
+    const snap = await getDoc(doc(db, DOC_PATH.collection, DOC_PATH.doc));
+    if (snap.exists()) {
+      return NextResponse.json(snap.data());
     }
+    // First time — return defaults
     return NextResponse.json(defaultAbout);
   } catch (error) {
-    console.error("Error reading about.json:", error);
+    console.error("Error reading about from Firestore:", error);
     return NextResponse.json(defaultAbout);
   }
 }
 
 export async function POST(request: Request) {
   try {
-    const updatedData = await request.json();
+    const db = getServerDb();
+    if (!db) {
+      return NextResponse.json({ error: "Firebase not configured" }, { status: 500 });
+    }
 
-    fs.writeFileSync(ABOUT_FILE_PATH, JSON.stringify(updatedData, null, 2), "utf-8");
+    const updatedData = await request.json();
+    await setDoc(doc(db, DOC_PATH.collection, DOC_PATH.doc), updatedData);
     return NextResponse.json({ success: true, data: updatedData });
   } catch (error: any) {
-    console.error("Error saving about.json:", error);
+    console.error("Error saving about to Firestore:", error);
     return NextResponse.json({ error: "Failed to save about configuration" }, { status: 500 });
   }
 }
