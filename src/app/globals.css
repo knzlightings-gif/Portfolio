@@ -111,7 +111,7 @@ html {
 .marquee-track-pills {
   display: flex;
   width: max-content;
-  animation: marquee-left 20s linear infinite;
+  animation: marquee-ltr 20s linear infinite;
   will-change: transform;
 }
 
