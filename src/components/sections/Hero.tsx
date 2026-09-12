@@ -77,7 +77,7 @@ export default function Hero() {
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
 
   return (
-    <section id="home" className="pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden relative min-h-[90vh] flex items-center">
+    <section id="home" className="pt-24 pb-16 md:pt-28 md:pb-24 overflow-hidden relative flex items-center">
       
       {/* Animated Background Accent Block on the Right */}
       <motion.div 
@@ -94,10 +94,10 @@ export default function Hero() {
       />
 
       <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-12">
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-12">
           
           {/* Left Column - Content */}
-          <div className="w-full lg:w-[50%] flex flex-col items-start pt-8">
+          <div className="w-full lg:w-[50%] flex flex-col items-start">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

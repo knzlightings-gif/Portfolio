@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="flex-grow pt-16">
+      <main className="flex-grow">
         <Hero />
         <QuickIntro />
         <WhatIDo />
