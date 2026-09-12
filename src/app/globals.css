@@ -98,15 +98,31 @@ html {
 }
 
 /* ─── Marquee / Ticker ──────────────────────────────────────── */
+@keyframes marquee-left {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
 @keyframes marquee-ltr {
   0%   { transform: translateX(-50%); }
   100% { transform: translateX(0%); }
 }
 
+.marquee-track-pills {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 20s linear infinite;
+  will-change: transform;
+}
+
+.marquee-track-pills:hover {
+  animation-play-state: paused;
+}
+
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee-ltr 40s linear infinite;
+  animation: marquee-ltr 30s linear infinite;
   will-change: transform;
 }
 
