@@ -242,33 +242,27 @@ export default function Testimonials() {
 
       </div>
 
-      {/* Infinite Animated Marquee Slider (Left to Right / Continuous Flow) */}
-      <div className="relative w-full overflow-hidden py-4">
+      {/* Infinite Animated Marquee Slider with Pause-On-Hover and Zoom */}
+      <div className="relative w-full overflow-hidden py-6 marquee-container">
         
         {/* Left & Right Smooth Fade Gradients */}
         <div className="pointer-events-none absolute inset-y-0 left-0 w-24 md:w-48 bg-gradient-to-r from-brand-bg via-brand-bg/80 to-transparent z-20" />
         <div className="pointer-events-none absolute inset-y-0 right-0 w-24 md:w-48 bg-gradient-to-l from-brand-bg via-brand-bg/80 to-transparent z-20" />
 
         {/* Animated Marquee Container */}
-        <motion.div
-          animate={{ x: ["-50%", "0%"] }}
-          transition={{
-            repeat: Infinity,
-            repeatType: "loop",
-            duration: 35,
-            ease: "linear",
-          }}
-          className="flex gap-6 w-max cursor-grab active:cursor-grabbing hover:[animation-play-state:paused]"
-        >
+        <div className="marquee-track flex gap-6">
           {duplicatedTestimonials.map((testimonial, idx) => (
             <div
               key={`${testimonial.id}-${idx}`}
-              className="w-[340px] md:w-[400px] p-7 rounded-3xl bg-brand-card/95 backdrop-blur-md border border-brand-border/90 shadow-lg relative group transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-brand-cyan/40 shrink-0 flex flex-col justify-between"
+              className="w-[340px] md:w-[420px] p-8 rounded-3xl bg-brand-card/95 backdrop-blur-md border border-brand-border/90 shadow-md relative group transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl hover:border-brand-cyan hover:z-30 shrink-0 flex flex-col justify-between select-none cursor-pointer"
             >
               {/* Top Accent Gradient Line on Hover */}
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-brand-cyan to-brand-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-3xl" />
+              <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-brand-cyan to-brand-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-3xl" />
               
-              <Quote className="absolute top-6 right-6 w-8 h-8 text-brand-border/60 group-hover:text-brand-cyan/30 transition-colors duration-300 pointer-events-none" />
+              {/* Subtle Glowing Aura on Hover */}
+              <div className="absolute inset-0 rounded-3xl bg-brand-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none -z-10" />
+
+              <Quote className="absolute top-6 right-6 w-8 h-8 text-brand-border/60 group-hover:text-brand-cyan/40 group-hover:scale-110 transition-all duration-300 pointer-events-none" />
 
               <div>
                 {/* Rating Stars */}
@@ -279,14 +273,14 @@ export default function Testimonials() {
                 </div>
 
                 {/* Review Text */}
-                <p className="text-brand-text/90 text-sm md:text-[15px] leading-relaxed italic mb-6">
+                <p className="text-brand-text leading-relaxed text-[15px] italic mb-6">
                   &quot;{testimonial.text}&quot;
                 </p>
               </div>
 
               {/* Author Info */}
               <div className="flex items-center gap-3.5 pt-4 border-t border-brand-border/40">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-cyan to-brand-purple p-0.5 shrink-0 shadow-sm">
+                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-brand-cyan to-brand-purple p-0.5 shrink-0 shadow-sm group-hover:scale-110 transition-transform duration-300">
                   <div className="w-full h-full bg-brand-card rounded-full flex items-center justify-center text-sm font-bold text-brand-text">
                     {testimonial.name.charAt(0) === "[" ? "👤" : testimonial.name.charAt(0)}
                   </div>
@@ -300,7 +294,7 @@ export default function Testimonials() {
               </div>
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
 
     </section>
