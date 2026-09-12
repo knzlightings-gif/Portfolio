@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { personalInfo } from "@/data/content";
+import { personalInfo as defaultPersonalInfo } from "@/data/content";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/utils/cn";
@@ -20,12 +20,26 @@ const navLinks = [
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [personalInfo, setPersonalInfo] = useState(defaultPersonalInfo);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
+
+    fetch("/api/personal-info")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.name) {
+          setPersonalInfo((prev) => ({
+            ...prev,
+            ...data,
+          }));
+        }
+      })
+      .catch(() => {});
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -98,7 +112,7 @@ export default function Navbar() {
             className="md:hidden p-2 text-brand-text"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMobileMenuOpen ? <X /> : <Menu />}
           </button>
         </div>
       </div>
@@ -107,30 +121,28 @@ export default function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 right-0 bg-brand-card border-b border-brand-border shadow-xl md:hidden"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-brand-bg/95 border-b border-brand-border px-6 py-4 flex flex-col gap-4"
           >
-            <nav className="flex flex-col p-6 gap-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-lg text-brand-text-muted hover:text-brand-cyan font-medium py-2 border-b border-brand-border/50"
-                >
-                  {link.name}
-                </Link>
-              ))}
+            {navLinks.map((link) => (
               <Link
-                href="#contact"
+                key={link.name}
+                href={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="mt-4 w-full text-center px-5 py-3 bg-brand-cyan text-brand-bg font-semibold rounded-lg"
+                className="text-brand-text font-medium py-2 hover:text-brand-cyan"
               >
-                Let&apos;s Work Together
+                {link.name}
               </Link>
-            </nav>
+            ))}
+            <Link
+              href="#contact"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="px-5 py-2.5 rounded-full font-bold text-sm text-center text-white bg-gradient-to-r from-brand-cyan to-brand-purple"
+            >
+              Let&apos;s Work Together
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>

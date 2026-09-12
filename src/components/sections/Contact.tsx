@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { personalInfo, contactContent } from "@/data/content";
+import { personalInfo as defaultPersonalInfo, contactContent } from "@/data/content";
 import { Mail, MessageCircle, Globe, Loader2, CheckCircle2 } from "lucide-react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -11,6 +11,26 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [personalInfo, setPersonalInfo] = useState(defaultPersonalInfo);
+
+  useEffect(() => {
+    fetch("/api/personal-info")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.name) {
+          setPersonalInfo((prev) => ({
+            ...prev,
+            ...data,
+            contact: {
+              email: data.contact?.email ?? data.email ?? prev.contact?.email ?? "",
+              whatsapp: data.contact?.whatsapp ?? data.whatsapp ?? prev.contact?.whatsapp ?? "",
+              linkedin: data.contact?.linkedin ?? data.linkedin ?? prev.contact?.linkedin ?? "",
+            },
+          }));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
