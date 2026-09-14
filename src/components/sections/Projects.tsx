@@ -4,8 +4,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { featuredProjects as defaultProjects } from "@/data/content";
 import DashboardMockup from "@/components/ui/DashboardMockup";
-import { ArrowRight, CheckCircle2, ExternalLink, KeyRound, Sparkles, Eye, Images, ChevronLeft, ChevronRight, X, ZoomIn, Play } from "lucide-react";
+import { ArrowRight, CheckCircle2, ExternalLink, KeyRound, Sparkles, Eye, Images, ChevronLeft, ChevronRight, X, ZoomIn, Play, Layers } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/utils/cn";
 
 type Project = {
   id: string;
@@ -37,6 +38,7 @@ export function getYouTubeEmbedUrl(url?: string): string | null {
 
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>(defaultProjects as Project[]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All Projects");
 
   // Lightbox Modal State
   const [activeLightbox, setActiveLightbox] = useState<{
@@ -98,7 +100,7 @@ export default function Projects() {
       <div className="absolute bottom-1/4 -right-64 w-96 h-96 bg-brand-purple/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
-        <div className="mb-16">
+        <div className="mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan text-xs font-semibold uppercase tracking-wider mb-3">
             <Sparkles className="w-3.5 h-3.5" />
             Tested & Proven Systems
@@ -116,17 +118,83 @@ export default function Projects() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-brand-text-muted max-w-2xl"
+            className="text-lg text-brand-text-muted max-w-2xl mb-8"
           >
-            Real-world enterprise systems designed to eliminate manual delays and scale business operations.
+            Real-world enterprise systems designed to eliminate manual delays and scale business operations. Filter by category to explore your solution.
           </motion.p>
+
+          {/* Interactive Category Filter Tabs */}
+          {(() => {
+            const predefined = ["All Projects", "ERP Systems", "Web Applications", "Mobile Applications", "Business Automation"];
+            const dynamic = Array.from(new Set(projects.map((p) => p.category).filter(Boolean)));
+            const allCats = Array.from(new Set([...predefined, ...dynamic]));
+
+            return (
+              <div className="flex items-center gap-2.5 overflow-x-auto pb-3 pt-1 no-scrollbar">
+                {allCats.map((cat) => {
+                  const isActive = selectedCategory === cat;
+                  const count = cat === "All Projects"
+                    ? projects.length
+                    : projects.filter((p) => (p.category || "").toLowerCase().includes(cat.toLowerCase()) || cat.toLowerCase().includes((p.category || "").toLowerCase())).length;
+
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setSelectedCategory(cat)}
+                      className={cn(
+                        "relative px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-2 shrink-0 border select-none cursor-pointer",
+                        isActive
+                          ? "bg-gradient-to-r from-brand-cyan to-brand-purple text-white border-transparent shadow-[0_4px_20px_var(--theme-primary-glow,rgba(0,112,243,0.4))]"
+                          : "bg-brand-card/80 border-brand-border/80 text-brand-text-muted hover:text-brand-text hover:border-brand-cyan/50"
+                      )}
+                    >
+                      <Layers className={cn("w-3.5 h-3.5", isActive ? "text-white" : "text-brand-cyan")} />
+                      <span>{cat}</span>
+                      <span className={cn(
+                        "text-[11px] px-2 py-0.5 rounded-full font-mono font-semibold",
+                        isActive ? "bg-white/25 text-white" : "bg-brand-bg text-brand-text-muted"
+                      )}>
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </div>
 
-        <div className="flex flex-col gap-16 md:gap-28">
-          {projects.map((project, index) => {
-            const projectImages = getProjectImages(project);
-            const coverImage = project.image || projectImages[0] || "";
-            const videoEmbedUrl = getYouTubeEmbedUrl(project.videoUrl) || (project.demoUrl ? getYouTubeEmbedUrl(project.demoUrl) : null);
+        {/* Filtered Projects Grid / List */}
+        {(() => {
+          const filteredProjects = selectedCategory === "All Projects"
+            ? projects
+            : projects.filter((p) => (p.category || "").toLowerCase().includes(selectedCategory.toLowerCase()) || selectedCategory.toLowerCase().includes((p.category || "").toLowerCase()));
+
+          if (filteredProjects.length === 0) {
+            return (
+              <div className="py-16 text-center bg-brand-card/40 border border-brand-border rounded-2xl p-8">
+                <Layers className="w-12 h-12 text-brand-cyan mx-auto mb-3 opacity-50" />
+                <h3 className="text-xl font-bold text-brand-text mb-2">No projects found in {selectedCategory}</h3>
+                <p className="text-brand-text-muted text-sm max-w-md mx-auto mb-6">
+                  We are continuously building new systems. Click below to view all projects or contact us for custom development.
+                </p>
+                <button
+                  onClick={() => setSelectedCategory("All Projects")}
+                  className="px-6 py-2.5 bg-brand-cyan text-brand-bg font-bold rounded-full text-sm hover:bg-brand-cyan/90 transition-all shadow-md"
+                >
+                  View All Projects ({projects.length})
+                </button>
+              </div>
+            );
+          }
+
+          return (
+            <div className="flex flex-col gap-16 md:gap-28">
+              {filteredProjects.map((project, index) => {
+                const projectImages = getProjectImages(project);
+                const coverImage = project.image || projectImages[0] || "";
+                const videoEmbedUrl = getYouTubeEmbedUrl(project.videoUrl) || (project.demoUrl ? getYouTubeEmbedUrl(project.demoUrl) : null);
 
             return (
               <motion.div
@@ -268,9 +336,14 @@ export default function Projects() {
                 {/* Project Info Column */}
                 <div className="w-full lg:w-1/2 flex flex-col items-start">
                   <div className="flex flex-wrap items-center gap-2.5 mb-2">
-                    <span className="text-brand-cyan font-semibold text-xs tracking-wider uppercase px-3 py-1 bg-brand-cyan/10 border border-brand-cyan/20 rounded-full">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedCategory(project.category)}
+                      className="text-brand-cyan font-semibold text-xs tracking-wider uppercase px-3 py-1 bg-brand-cyan/10 border border-brand-cyan/20 rounded-full hover:bg-brand-cyan/20 transition-all cursor-pointer"
+                      title={`Filter by ${project.category}`}
+                    >
                       {project.category}
-                    </span>
+                    </button>
                     {projectImages.length > 1 && (
                       <span className="text-brand-text-muted font-medium text-xs px-2.5 py-0.5 bg-brand-card border border-brand-border rounded-full flex items-center gap-1.5">
                         <Images className="w-3 h-3 text-brand-cyan" />
@@ -383,7 +456,9 @@ export default function Projects() {
             );
           })}
         </div>
-      </div>
+      );
+    })()}
+  </div>
 
       {/* FULL-SCREEN GLASSMORPHIC SCREENSHOT LIGHTBOX MODAL */}
       <AnimatePresence>

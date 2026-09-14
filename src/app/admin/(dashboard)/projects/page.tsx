@@ -587,11 +587,32 @@ export default function ProjectsAdmin() {
                     placeholder="e.g. Manufacturing ERP" />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-medium text-brand-text-muted">Category</label>
-                  <input required value={formData.category || ""}
-                    onChange={(e) => setFormData((p) => ({ ...p, category: e.target.value }))}
-                    className="px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan"
-                    placeholder="e.g. ERP / Manufacturing" />
+                  <label className="text-sm font-medium text-brand-text-muted">Project Category</label>
+                  <div className="flex items-center gap-2">
+                    <select
+                      value={["ERP Systems", "Web Applications", "Mobile Applications", "Business Automation"].includes(formData.category || "") ? formData.category : "Custom"}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val !== "Custom") {
+                          setFormData((p) => ({ ...p, category: val }));
+                        }
+                      }}
+                      className="px-3 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan text-sm font-medium shrink-0"
+                    >
+                      <option value="ERP Systems">ERP Systems</option>
+                      <option value="Web Applications">Web Applications</option>
+                      <option value="Mobile Applications">Mobile Applications</option>
+                      <option value="Business Automation">Business Automation</option>
+                      <option value="Custom">Custom Category...</option>
+                    </select>
+                    <input
+                      required
+                      value={formData.category || ""}
+                      onChange={(e) => setFormData((p) => ({ ...p, category: e.target.value }))}
+                      className="flex-1 px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan text-sm"
+                      placeholder="Type or select category..."
+                    />
+                  </div>
                 </div>
               </div>
 

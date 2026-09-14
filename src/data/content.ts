@@ -66,7 +66,7 @@ export const featuredProjects = [
   {
     id: "manufacturing-erp",
     title: "Manufacturing ERP",
-    category: "ERP / Manufacturing",
+    category: "ERP Systems",
     problem: "Manual production, inventory and business records create delays and make reporting difficult.",
     solution: "A centralized ERP system designed to manage business operations digitally.",
     modules: ["Sales", "Purchase", "Inventory", "Production", "Accounts", "Reports"],
@@ -78,7 +78,7 @@ export const featuredProjects = [
   {
     id: "madrasa-management",
     title: "Educational / Madrasa Management System",
-    category: "Education Management",
+    category: "Web Applications",
     problem: "Complicated record keeping for students and financial records.",
     solution: "Simple and user-friendly management for educational organizations.",
     modules: ["Student management", "Attendance", "Educational reports", "Financial records", "Administration"],
@@ -90,11 +90,11 @@ export const featuredProjects = [
   {
     id: "transport-management",
     title: "Transport / Bus Management System",
-    category: "Transportation",
+    category: "Mobile Applications",
     problem: "Difficulty in tracking bookings, routes and bus staff operations.",
     solution: "A streamlined digital platform for managing transport operations.",
     modules: ["Booking", "Routes", "Bus staff", "Operations", "Administration", "Reporting"],
-    tech: ["React", "Modern DB"],
+    tech: ["React Native", "Firebase", "Modern DB"],
     image: "/assets/placeholders/project-3.jpg",
     videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     hasCaseStudy: false
@@ -102,7 +102,7 @@ export const featuredProjects = [
   {
     id: "business-erp",
     title: "Business Management ERP",
-    category: "ERP / Business Management",
+    category: "ERP Systems",
     problem: "Data scattered across different files and manual sales records.",
     solution: "A unified ERP for managing overall business health.",
     modules: ["Sales", "Purchase", "Accounts", "Receivables", "Payables", "Expenses", "Reports"],
