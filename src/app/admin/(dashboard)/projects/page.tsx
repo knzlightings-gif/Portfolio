@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Edit2, Trash2, X, Image as ImageIcon, Upload, Loader2, Save, ExternalLink, KeyRound, Star, CheckCircle, Eye, Images } from "lucide-react";
+import { Plus, Edit2, Trash2, X, Image as ImageIcon, Upload, Loader2, Save, ExternalLink, KeyRound, Star, CheckCircle, Eye, Images, Clipboard } from "lucide-react";
 
 type Project = {
   id: string;
@@ -125,8 +125,7 @@ export default function ProjectsAdmin() {
     });
   };
 
-  const handleMultiImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+  const processImageFiles = async (files: File[]) => {
     if (!files || files.length === 0) return;
 
     setIsUploading(true);
@@ -135,26 +134,91 @@ export default function ProjectsAdmin() {
     try {
       const newUrls: string[] = [];
       for (let i = 0; i < files.length; i++) {
-        const compressed = await compressImage(files[i]);
-        newUrls.push(compressed);
+        if (files[i].type.startsWith("image/")) {
+          const compressed = await compressImage(files[i]);
+          newUrls.push(compressed);
+        }
       }
 
-      setFormData((prev) => {
-        const currentGallery = prev.gallery || [];
-        const combined = [...currentGallery, ...newUrls];
-        const primaryImg = prev.image || combined[0] || "";
-        return {
-          ...prev,
-          gallery: combined,
-          image: primaryImg,
-        };
-      });
-
-      setUploadMessage(`Successfully added ${newUrls.length} picture(s)!`);
+      if (newUrls.length > 0) {
+        setFormData((prev) => {
+          const currentGallery = prev.gallery || [];
+          const combined = [...currentGallery, ...newUrls];
+          const primaryImg = prev.image || combined[0] || "";
+          return {
+            ...prev,
+            gallery: combined,
+            image: primaryImg,
+          };
+        });
+        setUploadMessage(`Successfully added ${newUrls.length} screenshot(s) from clipboard/files!`);
+      } else {
+        setUploadMessage("No valid image found in clipboard.");
+      }
     } catch (err: any) {
       alert("Image processing error: " + err.message);
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  // Clipboard Ctrl+V Paste Listener when modal is open
+  useEffect(() => {
+    if (!isModalOpen) return;
+
+    const handlePaste = (e: ClipboardEvent) => {
+      const clipboardItems = e.clipboardData?.items;
+      if (!clipboardItems) return;
+
+      const imageFiles: File[] = [];
+      for (let i = 0; i < clipboardItems.length; i++) {
+        const item = clipboardItems[i];
+        if (item.type.indexOf("image") !== -1) {
+          const file = item.getAsFile();
+          if (file) imageFiles.push(file);
+        }
+      }
+
+      if (imageFiles.length > 0) {
+        e.preventDefault();
+        processImageFiles(imageFiles);
+      }
+    };
+
+    window.addEventListener("paste", handlePaste);
+    return () => window.removeEventListener("paste", handlePaste);
+  }, [isModalOpen]);
+
+  const handleMultiImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    await processImageFiles(Array.from(files));
+  };
+
+  const handlePasteFromClipboard = async () => {
+    try {
+      if (!navigator.clipboard || !navigator.clipboard.read) {
+        alert("Please press Ctrl + V on your keyboard to paste your copied screenshot!");
+        return;
+      }
+      const items = await navigator.clipboard.read();
+      const imageFiles: File[] = [];
+      for (const item of items) {
+        for (const type of item.types) {
+          if (type.startsWith("image/")) {
+            const blob = await item.getType(type);
+            const file = new File([blob], `screenshot_${Date.now()}.png`, { type });
+            imageFiles.push(file);
+          }
+        }
+      }
+      if (imageFiles.length > 0) {
+        processImageFiles(imageFiles);
+      } else {
+        alert("No image found in clipboard! Copy a screenshot first (Snipping Tool / Win+Shift+S) and try again.");
+      }
+    } catch (err) {
+      alert("Tip: Press Ctrl + V directly on your keyboard to paste your screenshot!");
     }
   };
 
@@ -414,7 +478,16 @@ export default function ProjectsAdmin() {
                       Upload 8+ screenshots (Dashboard, Inventory, Invoices, Reports). Click &quot;Set as Thumbnail&quot; to pick the main cover.
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex flex-wrap items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={handlePasteFromClipboard}
+                      className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-brand-cyan/15 border border-brand-cyan/30 text-brand-cyan font-bold text-xs rounded-lg hover:bg-brand-cyan hover:text-brand-bg transition-all shadow-sm"
+                      title="Paste screenshot copied to clipboard (Ctrl+V)"
+                    >
+                      <Clipboard className="w-3.5 h-3.5" />
+                      <span>Paste Clipboard (Ctrl+V)</span>
+                    </button>
                     <button
                       type="button"
                       onClick={handleAddExternalUrl}
