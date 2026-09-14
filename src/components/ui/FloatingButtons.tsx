@@ -82,18 +82,18 @@ export default function FloatingButtons() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={btn.label}
-            className="group flex items-center justify-end w-12 hover:w-40 transition-all duration-300 ease-out rounded-l-full overflow-hidden shadow-lg hover:shadow-2xl"
+            className="group relative flex items-center justify-end w-10 hover:w-40 transition-all duration-300 ease-out rounded-l-full overflow-hidden shadow-md hover:shadow-xl z-10 hover:z-20"
             style={{
-              boxShadow: `0 4px 18px ${btn.glow}`,
+              boxShadow: `0 4px 16px ${btn.glow}`,
             }}
           >
-            <div className={`flex items-center gap-2.5 bg-gradient-to-r ${btn.gradient} px-2.5 py-3 w-full h-full justify-end`}>
+            <div className={`flex items-center gap-2 bg-gradient-to-r ${btn.gradient} p-1.5 w-full h-full justify-end rounded-l-full`}>
               {/* Label — hidden when collapsed */}
-              <span className="text-xs font-bold text-white whitespace-nowrap overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-75 pointer-events-none">
+              <span className="text-xs font-bold text-white whitespace-nowrap overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                 {btn.label}
               </span>
               {/* Icon */}
-              <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0">
                 <Icon className="w-4 h-4 text-white" />
               </div>
             </div>
@@ -106,7 +106,7 @@ export default function FloatingButtons() {
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label="Scroll to top"
-          className="flex items-center justify-center w-12 h-12 rounded-l-full bg-gradient-to-r from-brand-cyan to-brand-purple shadow-[0_4px_18px_var(--theme-primary-glow,rgba(0,112,243,0.4))] hover:scale-110 transition-transform duration-300"
+          className="flex items-center justify-center w-10 h-10 rounded-l-full bg-gradient-to-r from-brand-cyan to-brand-purple shadow-[0_4px_16px_var(--theme-primary-glow,rgba(0,112,243,0.4))] hover:scale-110 transition-transform duration-300"
         >
           <ArrowUp className="w-4 h-4 text-white" />
         </button>
