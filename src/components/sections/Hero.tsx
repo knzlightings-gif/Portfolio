@@ -159,7 +159,7 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="relative w-full max-w-2xl z-10"
+              className="relative w-full max-w-2xl z-10 my-6 sm:my-8"
             >
               {/* Outer Ambient Glow Aura */}
               <div className="absolute -inset-2 bg-gradient-to-r from-brand-cyan/25 via-blue-600/20 to-brand-purple/25 rounded-[32px] blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
@@ -267,7 +267,7 @@ export default function Hero() {
               <motion.div 
                 animate={{ y: [0, -6, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -bottom-5 -left-4 sm:left-4 p-3.5 sm:p-4 rounded-2xl bg-brand-card/95 backdrop-blur-xl border border-brand-border/90 shadow-2xl z-20 flex items-center gap-3.5"
+                className="absolute -bottom-7 -left-3 sm:-bottom-8 sm:-left-6 p-3.5 sm:p-4 rounded-2xl bg-brand-card/95 backdrop-blur-xl border border-brand-border/90 shadow-2xl z-30 flex items-center gap-3.5"
               >
                 <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-400 p-0.5 shrink-0 shadow-md">
                   <div className="w-full h-full bg-brand-card rounded-[10px] flex items-center justify-center text-emerald-500">
@@ -286,7 +286,7 @@ export default function Hero() {
               <motion.div 
                 animate={{ y: [0, 6, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                className="absolute -top-4 -right-3 sm:right-3 p-3.5 sm:p-4 rounded-2xl bg-brand-card/95 backdrop-blur-xl border border-brand-border/90 shadow-2xl z-20 flex items-center gap-3.5 hidden sm:flex"
+                className="absolute -top-7 -right-3 sm:-top-8 sm:-right-6 p-3.5 sm:p-4 rounded-2xl bg-brand-card/95 backdrop-blur-xl border border-brand-border/90 shadow-2xl z-30 flex items-center gap-3.5 hidden sm:flex"
               >
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-cyan to-blue-600 p-0.5 shrink-0 shadow-md">
                   <div className="w-full h-full bg-brand-card rounded-[10px] flex items-center justify-center text-brand-cyan">
