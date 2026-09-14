@@ -72,6 +72,7 @@ export const featuredProjects = [
     modules: ["Sales", "Purchase", "Inventory", "Production", "Accounts", "Reports"],
     tech: ["React", "Firebase", "Modern Web Technologies", "AI-Assisted Development"],
     image: "/assets/placeholders/project-1.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     hasCaseStudy: false
   },
   {
@@ -83,6 +84,7 @@ export const featuredProjects = [
     modules: ["Student management", "Attendance", "Educational reports", "Financial records", "Administration"],
     tech: ["React", "Node.js"],
     image: "/assets/placeholders/project-2.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     hasCaseStudy: false
   },
   {
@@ -94,6 +96,7 @@ export const featuredProjects = [
     modules: ["Booking", "Routes", "Bus staff", "Operations", "Administration", "Reporting"],
     tech: ["React", "Modern DB"],
     image: "/assets/placeholders/project-3.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     hasCaseStudy: false
   },
   {
@@ -105,6 +108,7 @@ export const featuredProjects = [
     modules: ["Sales", "Purchase", "Accounts", "Receivables", "Payables", "Expenses", "Reports"],
     tech: ["React", "Firebase"],
     image: "/assets/placeholders/project-4.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     hasCaseStudy: false
   }
 ];
