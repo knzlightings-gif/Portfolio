@@ -126,6 +126,7 @@ export default function Projects() {
           {projects.map((project, index) => {
             const projectImages = getProjectImages(project);
             const coverImage = project.image || projectImages[0] || "";
+            const videoEmbedUrl = getYouTubeEmbedUrl(project.videoUrl) || (project.demoUrl ? getYouTubeEmbedUrl(project.demoUrl) : null);
 
             return (
               <motion.div
@@ -163,15 +164,28 @@ export default function Projects() {
                       />
                     )}
 
-                    {/* Live Demo Status Pill if active */}
-                    {project.demoUrl && (
-                      <div className="absolute top-4 left-4 z-20">
+                    {/* Top Badges: Live Demo & Video Demo */}
+                    <div className="absolute top-4 left-4 z-20 flex flex-wrap items-center gap-2">
+                      {videoEmbedUrl && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveVideo({ project, embedUrl: videoEmbedUrl });
+                          }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-lg shadow-rose-600/40 hover:scale-105 transition-all border border-white/20 cursor-pointer"
+                        >
+                          <Play className="w-3.5 h-3.5 fill-white animate-pulse" />
+                          <span>▶ Watch Demo Video</span>
+                        </button>
+                      )}
+                      {project.demoUrl && !getYouTubeEmbedUrl(project.demoUrl) && (
                         <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 backdrop-blur-md border border-emerald-500/40 text-emerald-400 text-xs font-bold tracking-wide shadow-lg">
                           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                           Live Demo Active
                         </span>
-                      </div>
-                    )}
+                      )}
+                    </div>
 
                     {/* Screenshot Count Badge */}
                     {projectImages.length > 1 && (
@@ -187,13 +201,10 @@ export default function Projects() {
                     <div className="absolute inset-0 bg-brand-bg/85 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 p-6 backdrop-blur-sm z-20"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      {project.videoUrl && getYouTubeEmbedUrl(project.videoUrl) && (
+                      {videoEmbedUrl && (
                         <button
                           type="button"
-                          onClick={() => {
-                            const embed = getYouTubeEmbedUrl(project.videoUrl);
-                            if (embed) setActiveVideo({ project, embedUrl: embed });
-                          }}
+                          onClick={() => setActiveVideo({ project, embedUrl: videoEmbedUrl })}
                           className="px-6 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-full hover:scale-105 transition-all flex items-center gap-2 shadow-xl text-sm"
                         >
                           <Play className="w-4 h-4 fill-white" />
@@ -332,17 +343,14 @@ export default function Projects() {
                       <span>Screenshots ({projectImages.length || 1})</span>
                     </button>
 
-                    {project.videoUrl && getYouTubeEmbedUrl(project.videoUrl) && (
+                    {videoEmbedUrl && (
                       <button
                         type="button"
-                        onClick={() => {
-                          const embed = getYouTubeEmbedUrl(project.videoUrl);
-                          if (embed) setActiveVideo({ project, embedUrl: embed });
-                        }}
-                        className="px-5 py-2.5 bg-rose-600/90 hover:bg-rose-600 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-md hover:shadow-rose-600/30"
+                        onClick={() => setActiveVideo({ project, embedUrl: videoEmbedUrl })}
+                        className="px-5 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-md shadow-rose-600/30 hover:scale-105"
                       >
                         <Play className="w-4 h-4 fill-white" />
-                        <span>Demo Video</span>
+                        <span>▶ Watch Demo Video</span>
                       </button>
                     )}
 
