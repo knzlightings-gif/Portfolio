@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, User, Briefcase, Settings, LogOut, Mailbox, UserCheck, Sparkles } from "lucide-react";
+import { LayoutDashboard, User, Briefcase, Layers, Settings, LogOut, Mailbox, UserCheck, Sparkles } from "lucide-react";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
@@ -11,6 +11,7 @@ const navItems = [
   { name: "About & Portrait", href: "/admin/about", icon: UserCheck },
   { name: "Personal Info", href: "/admin/personal-info", icon: User },
   { name: "Philosophy / Why Me", href: "/admin/philosophy", icon: Sparkles },
+  { name: "Services (What I Do)", href: "/admin/services", icon: Layers },
   { name: "Projects", href: "/admin/projects", icon: Briefcase },
   { name: "Inbox", href: "/admin/inbox", icon: Mailbox },
   { name: "Footer Settings", href: "/admin/footer", icon: LayoutDashboard },
