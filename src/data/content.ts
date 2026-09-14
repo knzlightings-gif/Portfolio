@@ -1,5 +1,6 @@
 export const personalInfo = {
   name: "E For ERP",
+  logoUrl: "",
   tagline: "I Build Smart Business Software That Actually Works.",
   description:
     "I build practical ERP systems, business web applications and custom digital solutions for small and growing businesses — combining real-world business understanding with modern development technologies.",

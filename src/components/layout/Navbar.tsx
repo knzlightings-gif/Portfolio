@@ -56,13 +56,24 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-6 max-w-[1600px] flex items-center justify-between">
         {/* Brand */}
-        <Link href="/" className="flex flex-col group">
-          <span className="text-xl font-bold tracking-tight text-brand-text group-hover:text-brand-cyan transition-colors">
-            {personalInfo.name}
-          </span>
-          <span className="text-xs font-semibold text-brand-text-muted tracking-widest uppercase mt-0.5">
-            {personalInfo.roleDescriptor}
-          </span>
+        <Link href="/" className="flex items-center gap-3 group">
+          {personalInfo.logoUrl && (
+            <div className="w-10 h-10 rounded-xl bg-brand-card/90 border border-brand-border/80 p-1.5 flex items-center justify-center shrink-0 shadow-sm group-hover:border-brand-cyan/60 group-hover:scale-105 transition-all">
+              <img
+                src={personalInfo.logoUrl}
+                alt={personalInfo.name}
+                className="w-full h-full object-contain"
+              />
+            </div>
+          )}
+          <div className="flex flex-col">
+            <span className="text-xl font-bold tracking-tight text-brand-text group-hover:text-brand-cyan transition-colors">
+              {personalInfo.name}
+            </span>
+            <span className="text-xs font-semibold text-brand-text-muted tracking-widest uppercase mt-0.5">
+              {personalInfo.roleDescriptor}
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}
