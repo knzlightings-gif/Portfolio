@@ -37,7 +37,8 @@ export function getYouTubeEmbedUrl(url?: string): string | null {
 }
 
 export default function Projects() {
-  const [projects, setProjects] = useState<Project[]>(defaultProjects as Project[]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("All Projects");
 
   // Lightbox Modal State
@@ -53,14 +54,16 @@ export default function Projects() {
   } | null>(null);
 
   useEffect(() => {
+    setIsLoading(true);
     fetch("/api/projects", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           setProjects(data);
         }
       })
-      .catch((err) => console.error("Error loading projects:", err));
+      .catch((err) => console.error("Error loading projects:", err))
+      .finally(() => setIsLoading(false));
   }, []);
 
   // Keyboard navigation for Lightbox
@@ -167,6 +170,24 @@ export default function Projects() {
 
         {/* Filtered Projects Grid / List */}
         {(() => {
+          if (isLoading) {
+            return (
+              <div className="flex flex-col gap-12">
+                {[1, 2].map((i) => (
+                  <div key={i} className="flex flex-col lg:flex-row gap-8 items-center animate-pulse">
+                    <div className="w-full lg:w-1/2 aspect-video bg-brand-card/60 rounded-2xl border border-brand-border/60" />
+                    <div className="w-full lg:w-1/2 space-y-4">
+                      <div className="w-32 h-6 bg-brand-card rounded-full" />
+                      <div className="w-3/4 h-10 bg-brand-card rounded-xl" />
+                      <div className="w-full h-24 bg-brand-card/80 rounded-xl" />
+                      <div className="w-1/2 h-10 bg-brand-card rounded-xl" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            );
+          }
+
           const filteredProjects = selectedCategory === "All Projects"
             ? projects
             : projects.filter((p) => (p.category || "").toLowerCase().includes(selectedCategory.toLowerCase()) || selectedCategory.toLowerCase().includes((p.category || "").toLowerCase()));
