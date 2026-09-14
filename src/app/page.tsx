@@ -1,7 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
 import QuickIntro from "@/components/sections/QuickIntro";
-import WhatIDo from "@/components/sections/WhatIDo";
 import Projects from "@/components/sections/Projects";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/layout/Footer";
@@ -14,7 +13,6 @@ export default function Home() {
       <main className="flex-grow">
         <Hero />
         <QuickIntro />
-        <WhatIDo />
         <Projects />
         <Contact />
       </main>
