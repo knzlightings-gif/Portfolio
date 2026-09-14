@@ -72,7 +72,7 @@ export default function FloatingButtons() {
   ];
 
   return (
-    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3 pr-0">
+    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2.5 items-end select-none">
       {buttons.map((btn) => {
         const Icon = btn.icon;
         return (
@@ -82,24 +82,14 @@ export default function FloatingButtons() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={btn.label}
-            className="group flex items-center justify-end overflow-hidden rounded-l-full transition-all duration-400 ease-in-out"
+            className="group flex items-center justify-end w-12 hover:w-40 transition-all duration-300 ease-out rounded-l-full overflow-hidden shadow-lg hover:shadow-2xl"
             style={{
-              width: "52px",
-              transition: "width 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s",
-              boxShadow: `0 4px 20px ${btn.glow}`,
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.width = "160px";
-              (e.currentTarget as HTMLElement).style.boxShadow = `0 6px 30px ${btn.glow}`;
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.width = "52px";
-              (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 20px ${btn.glow}`;
+              boxShadow: `0 4px 18px ${btn.glow}`,
             }}
           >
-            <div className={`flex items-center gap-3 bg-gradient-to-r ${btn.gradient} px-3 py-3.5 w-full`}>
+            <div className={`flex items-center gap-2.5 bg-gradient-to-r ${btn.gradient} px-2.5 py-3 w-full h-full justify-end`}>
               {/* Label — hidden when collapsed */}
-              <span className="flex-1 text-sm font-bold text-white/90 whitespace-nowrap overflow-hidden text-right pr-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-100">
+              <span className="text-xs font-bold text-white whitespace-nowrap overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-75 pointer-events-none">
                 {btn.label}
               </span>
               {/* Icon */}
@@ -116,9 +106,9 @@ export default function FloatingButtons() {
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label="Scroll to top"
-          className="ml-auto flex items-center justify-center w-[52px] h-[52px] rounded-l-full bg-gradient-to-r from-brand-cyan to-brand-purple shadow-[0_4px_20px_var(--theme-primary-glow,rgba(0,112,243,0.4))] hover:scale-110 transition-transform duration-300"
+          className="flex items-center justify-center w-12 h-12 rounded-l-full bg-gradient-to-r from-brand-cyan to-brand-purple shadow-[0_4px_18px_var(--theme-primary-glow,rgba(0,112,243,0.4))] hover:scale-110 transition-transform duration-300"
         >
-          <ArrowUp className="w-5 h-5 text-white" />
+          <ArrowUp className="w-4 h-4 text-white" />
         </button>
       )}
     </div>
