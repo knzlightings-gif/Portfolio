@@ -156,4 +156,17 @@ export const THEME_PRESETS: ThemeConfig[] = [
     text: "#F9FAFB",
     textMuted: "#9CA3AF",
   },
+  {
+    id: "solar-orange",
+    name: "Solar Orange",
+    description: "Vibrant energetic orange paired with golden amber highlights",
+    primary: "#FF6B00",
+    secondary: "#F59E0B",
+    mode: "light",
+    bg: "#FFF7ED",
+    card: "#FFFFFF",
+    border: "#FFEDD5",
+    text: "#7C2D12",
+    textMuted: "#9A3412",
+  },
 ];
