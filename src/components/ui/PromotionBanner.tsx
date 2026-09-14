@@ -13,13 +13,6 @@ export default function PromotionBanner() {
   const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
 
   useEffect(() => {
-    // Check if dismissed in session
-    const isDismissed = sessionStorage.getItem("promo_banner_dismissed");
-    if (isDismissed) {
-      setDismissed(true);
-      return;
-    }
-
     async function loadActivePromotion() {
       try {
         const res = await fetch("/api/promotions?public=true");
@@ -63,8 +56,8 @@ export default function PromotionBanner() {
   }, [promotion]);
 
   const handleDismiss = () => {
+    // Hide temporarily for current view; reappears on page refresh
     setDismissed(true);
-    sessionStorage.setItem("promo_banner_dismissed", "true");
   };
 
   const handleCopyCode = (code: string) => {
