@@ -2,11 +2,11 @@ import { NextResponse } from "next/server";
 import { getServerDb, doc, getDoc, setDoc } from "@/lib/firebase-server";
 
 const defaultPersonalInfo = {
-  name: "[YOUR NAME]",
+  name: "E For ERP",
   logoUrl: "",
-  tagline: "I Build Smart Business Software That Actually Works.",
+  tagline: "We Build Smart Business Software That Actually Works.",
   description:
-    "I build practical ERP systems, business web applications and custom digital solutions for small and growing businesses — combining real-world business understanding with modern development technologies.",
+    "We build practical ERP systems, business web applications and custom digital solutions for small and growing businesses — combining real-world business understanding with modern development technologies.",
   availability: "Available for Selected Projects",
   roleDescriptor: "ERP Developer • Web Applications • Business Solutions",
   aboutHeadline: "From Business Operations to Software Development",

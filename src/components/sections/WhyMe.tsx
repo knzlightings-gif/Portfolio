@@ -63,19 +63,19 @@ const defaultPhilosophy = {
   badge: "Core Engineering Philosophy",
   headingPart1: "Technology Is Only Useful When",
   headingPart2: "It Solves Real Problems.",
-  description: "I combine deep domain comprehension with modern development standards to deliver software that drives efficiency, eliminates chaos, and fuels measurable growth.",
+  description: "We combine deep domain comprehension with modern development standards to deliver software that drives efficiency, eliminates chaos, and fuels measurable growth.",
   principles: [
     {
       num: "01",
       tag: "Foundation",
       title: "Business Understanding",
-      description: "I focus on understanding how your business actually operates — workflows, bottlenecks, and KPIs — before writing a single line of code.",
+      description: "We focus on understanding how your business actually operates — workflows, bottlenecks, and KPIs — before writing a single line of code.",
     },
     {
       num: "02",
       tag: "Execution",
       title: "Practical Solutions",
-      description: "No unnecessary over-engineering. I build lean, high-impact features that directly solve operational friction and deliver tangible ROI.",
+      description: "No unnecessary over-engineering. We build lean, high-impact features that directly solve operational friction and deliver tangible ROI.",
     },
     {
       num: "03",

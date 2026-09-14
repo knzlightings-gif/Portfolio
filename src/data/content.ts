@@ -1,17 +1,17 @@
 export const personalInfo = {
   name: "E For ERP",
   logoUrl: "",
-  tagline: "I Build Smart Business Software That Actually Works.",
+  tagline: "We Build Smart Business Software That Actually Works.",
   description:
-    "I build practical ERP systems, business web applications and custom digital solutions for small and growing businesses — combining real-world business understanding with modern development technologies.",
+    "We build practical ERP systems, business web applications and custom digital solutions for small and growing businesses — combining real-world business understanding with modern development technologies.",
   availability: "Available for Selected Projects",
   roleDescriptor: "ERP Developer • Web Applications • Business Solutions",
   aboutHeadline: "From Business Operations to Software Development",
   aboutText: [
-    "My journey started with business operations, where I experienced firsthand how businesses struggle with manual processes, scattered information and complicated software.",
-    "Instead of only using software, I started learning how to build it.",
-    "Today, I combine business understanding, ERP knowledge and modern AI-assisted development to create practical software solutions for small and growing businesses.",
-    "My focus is simple: Understand the problem. Build the right solution. Keep it practical."
+    "Our journey started with business operations, where we experienced firsthand how businesses struggle with manual processes, scattered information and complicated software.",
+    "Instead of only using software, we started learning how to build it.",
+    "Today, we combine business understanding, ERP knowledge and modern AI-assisted development to create practical software solutions for small and growing businesses.",
+    "Our focus is simple: Understand the problem. Build the right solution. Keep it practical."
   ],
   stats: [
     { value: "10+", label: "Projects Built" },
@@ -249,7 +249,7 @@ export const footerContent = {
   ctaHeading2: "extraordinary.",
   ctaSubtext: "Ready to transform your business with custom software tailored to your workflow?",
   ctaButtonText: "Start",
-  brandDescription: "I build practical ERP systems, business web applications and custom digital solutions for small and growing businesses.",
+  brandDescription: "We build practical ERP systems, business web applications and custom digital solutions for small and growing businesses.",
   quickLinks: [
     { name: "Home", href: "#home" },
     { name: "About", href: "#about" },

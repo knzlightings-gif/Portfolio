@@ -1,11 +1,11 @@
 {
   "headline": "From Business Operations to Software Development",
-  "badge": "About The Developer",
+  "badge": "About Our Team",
   "paragraphs": [
-    "My journey started with business operations, where I experienced firsthand how businesses struggle with manual processes, scattered information and complicated software.",
-    "Instead of only using software, I started learning how to build it.",
-    "Today, I combine business understanding, ERP knowledge and modern AI-assisted development to create practical software solutions for small and growing businesses.",
-    "My focus is simple: Understand the problem. Build the right solution. Keep it practical."
+    "Our journey started with business operations, where we experienced firsthand how businesses struggle with manual processes, scattered information and complicated software.",
+    "Instead of only using software, we started learning how to build it.",
+    "Today, we combine business understanding, ERP knowledge and modern AI-assisted development to create practical software solutions for small and growing businesses.",
+    "Our focus is simple: Understand the problem. Build the right solution. Keep it practical."
   ],
   "stats": [
     {
@@ -18,7 +18,7 @@
     }
   ],
   "photoUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
-  "photoCaption": "Muhammad Kashif • Full-Stack ERP & Web Developer",
+  "photoCaption": "E For ERP • Full-Stack ERP & Web Application Development",
   "experienceBadge": "8+ Years in Business Operations & Tech",
   "techStack": {
     "frontend": [
