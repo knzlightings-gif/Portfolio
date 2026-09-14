@@ -232,27 +232,15 @@ export default function Projects() {
                       />
                     )}
 
-                    {/* Top Badges: Live Demo & Video Demo */}
-                    <div className="absolute top-4 left-4 z-20 flex flex-wrap items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveVideo({ project, embedUrl: videoEmbedUrl || "request" });
-                        }}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-lg shadow-rose-600/40 hover:scale-105 transition-all border border-white/20 cursor-pointer"
-                      >
-                        <Play className="w-3.5 h-3.5 fill-white animate-pulse" />
-                        <span>▶ Watch Demo Video</span>
-                      </button>
-
-                      {project.demoUrl && !getYouTubeEmbedUrl(project.demoUrl) && (
+                    {/* Top Badges: Live Demo Status */}
+                    {project.demoUrl && !getYouTubeEmbedUrl(project.demoUrl) && (
+                      <div className="absolute top-4 left-4 z-20">
                         <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 backdrop-blur-md border border-emerald-500/40 text-emerald-400 text-xs font-bold tracking-wide shadow-lg">
                           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                           Live Demo Active
                         </span>
-                      )}
-                    </div>
+                      </div>
+                    )}
 
                     {/* Screenshot Count Badge */}
                     {projectImages.length > 1 && (
