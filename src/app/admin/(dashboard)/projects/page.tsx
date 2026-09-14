@@ -14,6 +14,7 @@ type Project = {
   image: string;
   gallery?: string[];
   demoUrl?: string;
+  videoUrl?: string;
   demoCredentials?: string;
   hasCaseStudy?: boolean;
   order?: number;
@@ -39,6 +40,7 @@ export default function ProjectsAdmin() {
     image: "",
     gallery: [],
     demoUrl: "",
+    videoUrl: "",
     demoCredentials: "",
     hasCaseStudy: false,
   };
@@ -65,6 +67,7 @@ export default function ProjectsAdmin() {
         image: project.image || galleryList[0] || "",
         gallery: galleryList,
         demoUrl: project.demoUrl || "",
+        videoUrl: project.videoUrl || "",
         demoCredentials: project.demoCredentials || "",
       });
     } else {
@@ -519,14 +522,14 @@ export default function ProjectsAdmin() {
                 </div>
               </div>
 
-              {/* Live Demo Fields */}
+              {/* Live Demo & YouTube Video Fields */}
               <div className="p-5 rounded-xl bg-brand-bg/80 border border-brand-border space-y-4">
                 <div className="flex items-center gap-2 text-brand-cyan font-bold text-sm">
                   <ExternalLink className="w-4 h-4" />
-                  Live Demo & Credentials Settings
+                  Live Demo & YouTube Video Settings
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-semibold text-brand-text-muted">Live Demo URL</label>
                     <input
@@ -536,17 +539,29 @@ export default function ProjectsAdmin() {
                       className="px-3.5 py-2.5 bg-brand-card border border-brand-border rounded-lg text-brand-text text-sm focus:outline-none focus:border-brand-cyan"
                       placeholder="https://demo-erp.vercel.app"
                     />
-                    <span className="text-[11px] text-brand-text-muted">Leave blank if no live demo is available yet.</span>
+                    <span className="text-[11px] text-brand-text-muted">Direct link to live web app.</span>
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-semibold text-brand-text-muted">Demo Credentials (Optional Note)</label>
+                    <label className="text-xs font-semibold text-brand-text-muted">YouTube Video Link (Demo)</label>
+                    <input
+                      type="url"
+                      value={formData.videoUrl || ""}
+                      onChange={(e) => setFormData((p) => ({ ...p, videoUrl: e.target.value }))}
+                      className="px-3.5 py-2.5 bg-brand-card border border-brand-border rounded-lg text-brand-text text-sm focus:outline-none focus:border-brand-cyan"
+                      placeholder="https://www.youtube.com/watch?v=..."
+                    />
+                    <span className="text-[11px] text-brand-text-muted">Increases YouTube views & demo engagement.</span>
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-brand-text-muted">Demo Credentials (Optional)</label>
                     <input
                       type="text"
                       value={formData.demoCredentials || ""}
                       onChange={(e) => setFormData((p) => ({ ...p, demoCredentials: e.target.value }))}
                       className="px-3.5 py-2.5 bg-brand-card border border-brand-border rounded-lg text-brand-text text-sm focus:outline-none focus:border-brand-cyan"
-                      placeholder="e.g. Email: demo@company.com | Pass: demo123"
+                      placeholder="e.g. Email: demo@co.com | Pass: 123"
                     />
                     <span className="text-[11px] text-brand-text-muted">Helps prospective clients login instantly.</span>
                   </div>

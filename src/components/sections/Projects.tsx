@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { featuredProjects as defaultProjects } from "@/data/content";
 import DashboardMockup from "@/components/ui/DashboardMockup";
-import { ArrowRight, CheckCircle2, ExternalLink, KeyRound, Sparkles, Eye, Images, ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
+import { ArrowRight, CheckCircle2, ExternalLink, KeyRound, Sparkles, Eye, Images, ChevronLeft, ChevronRight, X, ZoomIn, Play } from "lucide-react";
 import Link from "next/link";
 
 type Project = {
@@ -18,9 +18,22 @@ type Project = {
   image: string;
   gallery?: string[];
   demoUrl?: string;
+  videoUrl?: string;
   demoCredentials?: string;
   hasCaseStudy?: boolean;
 };
+
+export function getYouTubeEmbedUrl(url?: string): string | null {
+  if (!url || !url.trim()) return null;
+  const raw = url.trim();
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = raw.match(regExp);
+  if (match && match[2] && match[2].length === 11) {
+    return `https://www.youtube-nocookie.com/embed/${match[2]}?autoplay=1&rel=0`;
+  }
+  if (raw.startsWith("http")) return raw;
+  return null;
+}
 
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>(defaultProjects as Project[]);
@@ -29,6 +42,12 @@ export default function Projects() {
   const [activeLightbox, setActiveLightbox] = useState<{
     project: Project;
     index: number;
+  } | null>(null);
+
+  // Video Modal State
+  const [activeVideo, setActiveVideo] = useState<{
+    project: Project;
+    embedUrl: string;
   } | null>(null);
 
   useEffect(() => {
@@ -168,6 +187,20 @@ export default function Projects() {
                     <div className="absolute inset-0 bg-brand-bg/85 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 p-6 backdrop-blur-sm z-20"
                       onClick={(e) => e.stopPropagation()}
                     >
+                      {project.videoUrl && getYouTubeEmbedUrl(project.videoUrl) && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const embed = getYouTubeEmbedUrl(project.videoUrl);
+                            if (embed) setActiveVideo({ project, embedUrl: embed });
+                          }}
+                          className="px-6 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-full hover:scale-105 transition-all flex items-center gap-2 shadow-xl text-sm"
+                        >
+                          <Play className="w-4 h-4 fill-white" />
+                          <span>Watch Demo Video</span>
+                        </button>
+                      )}
+
                       <button
                         type="button"
                         onClick={() => setActiveLightbox({ project, index: 0 })}
@@ -289,7 +322,7 @@ export default function Projects() {
                   </div>
 
                   {/* Demo Action Bar & Gallery Launch */}
-                  <div className="w-full pt-4 border-t border-brand-border/50 flex flex-col sm:flex-row sm:items-center gap-3">
+                  <div className="w-full pt-4 border-t border-brand-border/50 flex flex-wrap items-center gap-3">
                     <button
                       type="button"
                       onClick={() => setActiveLightbox({ project, index: 0 })}
@@ -298,6 +331,20 @@ export default function Projects() {
                       <Images className="w-4 h-4 text-brand-cyan" />
                       <span>Screenshots ({projectImages.length || 1})</span>
                     </button>
+
+                    {project.videoUrl && getYouTubeEmbedUrl(project.videoUrl) && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const embed = getYouTubeEmbedUrl(project.videoUrl);
+                          if (embed) setActiveVideo({ project, embedUrl: embed });
+                        }}
+                        className="px-5 py-2.5 bg-rose-600/90 hover:bg-rose-600 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-md hover:shadow-rose-600/30"
+                      >
+                        <Play className="w-4 h-4 fill-white" />
+                        <span>Demo Video</span>
+                      </button>
+                    )}
 
                     {project.demoUrl ? (
                       <div className="flex flex-col sm:flex-row sm:items-center gap-3 flex-1">
@@ -459,6 +506,52 @@ export default function Projects() {
                   />
                 </button>
               ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* FULL-SCREEN YOUTUBE VIDEO DEMO MODAL */}
+      <AnimatePresence>
+        {activeVideo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/92 backdrop-blur-xl flex flex-col items-center justify-center p-4 sm:p-6"
+            onClick={() => setActiveVideo(null)}
+          >
+            <div
+              className="relative w-full max-w-5xl bg-slate-950 border border-white/15 rounded-2xl overflow-hidden shadow-2xl flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="px-6 py-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="w-3 h-3 rounded-full bg-rose-500 animate-pulse" />
+                  <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <span>{activeVideo.project.title}</span>
+                    <span className="text-xs font-medium text-rose-400"> Live Video Demo</span>
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveVideo(null)}
+                  className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                  title="Close Video (Esc)"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="relative aspect-video w-full bg-black">
+                <iframe
+                  src={activeVideo.embedUrl}
+                  title={`${activeVideo.project.title} Demo Video`}
+                  className="w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </div>
             </div>
           </motion.div>
         )}
