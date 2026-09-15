@@ -1,50 +1,159 @@
 "use client";
 
-import { Database, LayoutDashboard, Settings, Cpu, Zap, Shield, Code2, Globe } from "lucide-react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Database, LayoutDashboard, Zap, Cpu, ArrowRight, Sparkles } from "lucide-react";
 
-const features = [
-  { icon: Database,       label: "ERP Development" },
-  { icon: LayoutDashboard,label: "Business Applications" },
-  { icon: Settings,       label: "Custom Software" },
-  { icon: Cpu,            label: "AI-Assisted Development" },
-  { icon: Zap,            label: "Workflow Automation" },
-  { icon: Shield,         label: "Secure & Scalable" },
-  { icon: Code2,          label: "API Integrations" },
-  { icon: Globe,          label: "Web Portals" },
+const coreServices = [
+  {
+    id: "erp",
+    icon: Database,
+    badge: "Core ERP",
+    title: "ERP Systems",
+    description: "Custom ERP solutions for managing sales, purchases, inventory, ledgers, and accounts.",
+    gradient: "from-blue-500/20 to-cyan-500/20",
+    borderHover: "hover:border-cyan-500/50",
+    glow: "rgba(0, 180, 216, 0.25)",
+    tags: ["Inventory", "Accounts", "Sales"]
+  },
+  {
+    id: "web-apps",
+    icon: LayoutDashboard,
+    badge: "Web Apps",
+    title: "Business Web Applications",
+    description: "Modern web dashboards, portals, and management tools designed for high performance.",
+    gradient: "from-purple-500/20 to-indigo-500/20",
+    borderHover: "hover:border-purple-500/50",
+    glow: "rgba(139, 92, 246, 0.25)",
+    tags: ["Dashboards", "Portals", "Real-Time"]
+  },
+  {
+    id: "automation",
+    icon: Zap,
+    badge: "Automation",
+    title: "Workflow Automation",
+    description: "Eliminate repetitive manual tasks with streamlined digital workflows and automated data imports.",
+    gradient: "from-amber-500/20 to-orange-500/20",
+    borderHover: "hover:border-amber-500/50",
+    glow: "rgba(245, 158, 11, 0.25)",
+    tags: ["Auto Workflows", "Data Import", "Efficiency"]
+  },
+  {
+    id: "ai-cloud",
+    icon: Cpu,
+    badge: "AI & Cloud",
+    title: "AI & Custom Software",
+    description: "Next-gen software engineering combining modern web stacks, APIs, and AI-accelerated workflows.",
+    gradient: "from-cyan-500/20 to-emerald-500/20",
+    borderHover: "hover:border-emerald-500/50",
+    glow: "rgba(16, 185, 129, 0.25)",
+    tags: ["API Integration", "AI-Powered", "Cloud"]
+  }
 ];
 
 export default function QuickIntro() {
-  // Duplicate 4 times to ensure an uninterrupted, seamless infinite continuous ticker loop
-  const items = [...features, ...features, ...features, ...features];
-
   return (
-    <section className="py-7 bg-brand-card/90 backdrop-blur-md relative overflow-hidden border-y border-brand-border/60">
-      {/* Top gradient border */}
-      <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-brand-cyan/60 to-transparent" />
-      {/* Bottom gradient border */}
-      <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-brand-purple/60 to-transparent" />
+    <section className="py-20 bg-brand-bg relative overflow-hidden">
+      {/* Ambient background glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[350px] bg-brand-cyan/5 rounded-full blur-[140px] pointer-events-none" />
 
-      {/* Edge fade masks */}
-      <div className="absolute left-0 top-0 bottom-0 w-28 md:w-48 bg-gradient-to-r from-brand-card via-brand-card/80 to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-28 md:w-48 bg-gradient-to-l from-brand-card via-brand-card/80 to-transparent z-10 pointer-events-none" />
+      <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
+        
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/25 text-brand-cyan text-xs font-bold uppercase tracking-wider mb-4 shadow-sm"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-brand-cyan" />
+            Core Capabilities
+          </motion.div>
 
-      {/* Scrolling track */}
-      <div className="flex overflow-hidden select-none">
-        <div className="marquee-track-pills flex gap-5 shrink-0">
-          {items.map((feature, index) => (
-            <div
-              key={index}
-              className="group flex items-center gap-3 px-5 py-2.5 rounded-full bg-brand-bg/95 border border-brand-border/90 hover:border-brand-cyan/60 hover:shadow-[0_4px_16px_var(--theme-primary-glow,rgba(0,112,243,0.2))] hover:scale-105 transition-all duration-300 shrink-0 cursor-default"
-            >
-              <div className="w-7 h-7 rounded-lg bg-brand-card border border-brand-border flex items-center justify-center group-hover:scale-110 group-hover:border-brand-cyan/50 group-hover:shadow-[0_0_10px_rgba(0,112,243,0.3)] transition-all duration-300">
-                <feature.icon className="w-3.5 h-3.5 text-brand-cyan" />
-              </div>
-              <span className="font-semibold text-brand-text-muted group-hover:text-brand-text text-sm whitespace-nowrap transition-colors duration-300">
-                {feature.label}
-              </span>
-            </div>
-          ))}
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-5xl font-black text-brand-text mb-4 tracking-tight"
+          >
+            Services Built For <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-brand-purple">Business Growth</span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-base md:text-lg text-brand-text-muted"
+          >
+            Tailored software solutions designed to eliminate operational friction and scale your business efficiently.
+          </motion.p>
         </div>
+
+        {/* 4 Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {coreServices.map((service, index) => {
+            const IconComponent = service.icon;
+            return (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -6 }}
+                className={`group relative p-6 md:p-7 rounded-3xl bg-brand-card/90 backdrop-blur-md border border-brand-border/80 ${service.borderHover} transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-2xl`}
+              >
+                {/* Top card accent */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${service.gradient} border border-brand-border flex items-center justify-center text-brand-cyan group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
+                    <IconComponent className="w-6 h-6 text-brand-cyan group-hover:text-white transition-colors" />
+                  </div>
+                  <span className="text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-brand-bg/80 border border-brand-border text-brand-text-muted">
+                    {service.badge}
+                  </span>
+                </div>
+
+                {/* Content */}
+                <div>
+                  <h3 className="text-xl font-bold text-brand-text mb-2.5 group-hover:text-brand-cyan transition-colors">
+                    {service.title}
+                  </h3>
+                  <p className="text-sm text-brand-text-muted leading-relaxed mb-6">
+                    {service.description}
+                  </p>
+                </div>
+
+                {/* Footer Tags & Arrow */}
+                <div>
+                  <div className="flex flex-wrap gap-1.5 pt-4 border-t border-brand-border/50">
+                    {service.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-brand-bg text-brand-text-muted border border-brand-border/60"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="text-center">
+          <Link
+            href="/services"
+            className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full font-bold text-sm text-white bg-gradient-to-r from-brand-cyan to-brand-purple hover:from-brand-purple hover:to-brand-cyan shadow-lg shadow-brand-cyan/20 hover:shadow-brand-purple/30 hover:scale-105 transition-all duration-300"
+          >
+            Explore Detailed Services & Solutions
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
       </div>
     </section>
   );
