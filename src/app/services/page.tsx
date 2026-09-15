@@ -1,5 +1,4 @@
 import Navbar from "@/components/layout/Navbar";
-import WhatIDo from "@/components/sections/WhatIDo";
 import BusinessProblems from "@/components/sections/BusinessProblems";
 import Solutions from "@/components/sections/Solutions";
 import Footer from "@/components/layout/Footer";
@@ -15,7 +14,6 @@ export default function ServicesPage() {
     <>
       <Navbar />
       <main className="flex-grow pt-20">
-        <WhatIDo />
         <BusinessProblems />
         <Solutions />
       </main>
@@ -24,3 +22,4 @@ export default function ServicesPage() {
     </>
   );
 }
+
