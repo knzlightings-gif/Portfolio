@@ -112,7 +112,7 @@ export default function QuickIntro() {
         {/* Action Link */}
         <div className="flex justify-center">
           <Link
-            href="/services"
+            href="/#services"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs md:text-sm font-bold text-brand-text bg-brand-card border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition-all shadow-sm group"
           >
             Explore All Services & Technical Stack
