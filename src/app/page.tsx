@@ -1,7 +1,7 @@
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
 import QuickIntro from "@/components/sections/QuickIntro";
-import Contact from "@/components/sections/Contact";
+import Testimonials from "@/components/sections/Testimonials";
 import Footer from "@/components/layout/Footer";
 import FloatingButtons from "@/components/ui/FloatingButtons";
 
@@ -12,7 +12,7 @@ export default function Home() {
       <main className="flex-grow">
         <Hero />
         <QuickIntro />
-        <Contact />
+        <Testimonials />
       </main>
       <Footer />
       <FloatingButtons />
