@@ -146,6 +146,13 @@ export default function AdminDashboard() {
           <div>
             <h2 className="text-xl font-bold text-brand-text mb-6">Quick Actions</h2>
             <div className="space-y-4">
+              <Link href="/admin/services" className="flex items-center justify-between p-4 rounded-xl bg-brand-bg border border-brand-cyan/40 hover:border-brand-cyan transition-colors group shadow-xs">
+                <div>
+                  <h3 className="font-bold text-brand-text group-hover:text-brand-cyan transition-colors">Manage Services (Homepage Cards)</h3>
+                  <p className="text-sm text-brand-text-muted">Add new service cards to show live under the Hero section.</p>
+                </div>
+                <ArrowRight className="w-5 h-5 text-brand-cyan group-hover:translate-x-1 transition-all" />
+              </Link>
               <Link href="/admin/personal-info" className="flex items-center justify-between p-4 rounded-xl bg-brand-bg border border-brand-border hover:border-brand-cyan transition-colors group">
                 <div>
                   <h3 className="font-bold text-brand-text group-hover:text-brand-cyan transition-colors">Edit Personal Info</h3>
