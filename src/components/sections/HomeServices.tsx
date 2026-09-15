@@ -18,7 +18,7 @@ import {
   Sparkles,
   Layers,
 } from "lucide-react";
-import { ServiceItem } from "@/data/servicesData";
+import { defaultServices, ServiceItem } from "@/data/servicesData";
 
 const iconMap: Record<string, any> = {
   Database,
@@ -34,8 +34,8 @@ const iconMap: Record<string, any> = {
 };
 
 export default function HomeServices() {
-  const [services, setServices] = useState<ServiceItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [services, setServices] = useState<ServiceItem[]>(defaultServices);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function loadServices() {
@@ -43,22 +43,17 @@ export default function HomeServices() {
         const res = await fetch("/api/services", { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data)) {
+          if (Array.isArray(data) && data.length > 0) {
             setServices(data);
           }
         }
       } catch (err) {
         console.error("Failed to fetch home services:", err);
-      } finally {
-        setLoading(false);
       }
     }
     loadServices();
   }, []);
 
-  if (!loading && services.length === 0) {
-    return null;
-  }
 
   return (
     <section id="services" className="py-20 bg-brand-bg relative overflow-hidden">
