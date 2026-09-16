@@ -31,32 +31,26 @@ const cardThemeStyles = [
   {
     gradient: "from-emerald-500 via-teal-600 to-cyan-700",
     badgeBg: "#10B981",
-    glowColor: "rgba(16, 185, 129, 0.35)",
   },
   {
     gradient: "from-teal-600 via-cyan-600 to-sky-700",
     badgeBg: "#06B6D4",
-    glowColor: "rgba(6, 182, 212, 0.35)",
   },
   {
     gradient: "from-cyan-600 via-sky-600 to-blue-700",
     badgeBg: "#0284C7",
-    glowColor: "rgba(2, 132, 199, 0.35)",
   },
   {
     gradient: "from-sky-600 via-blue-600 to-indigo-700",
     badgeBg: "#2563EB",
-    glowColor: "rgba(37, 99, 235, 0.35)",
   },
   {
     gradient: "from-blue-600 via-indigo-700 to-blue-900",
     badgeBg: "#4F46E5",
-    glowColor: "rgba(79, 70, 229, 0.35)",
   },
   {
     gradient: "from-indigo-700 via-blue-900 to-slate-950",
     badgeBg: "#1E3A8A",
-    glowColor: "rgba(30, 58, 138, 0.35)",
   },
 ];
 
@@ -99,7 +93,7 @@ export default function HomeServices() {
       <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] relative z-10">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 pb-8 border-b border-brand-border/60">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 pb-8 border-b border-brand-border/60">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -126,14 +120,14 @@ export default function HomeServices() {
           </motion.p>
         </div>
 
-        {/* Desktop View: Slanted Ribbon Process Card Flow */}
-        <div className="hidden lg:flex items-stretch justify-center relative pt-12 pb-6 min-h-[500px]">
+        {/* Desktop View: Slanted Ribbon Process Card Flow (Ultra-Minimalist Text) */}
+        <div className="hidden lg:flex items-stretch justify-center relative pt-12 pb-6 min-h-[440px]">
           {services.map((service, index) => {
             const IconComp = iconMap[service.icon] || Layers;
             const num = `/${String(index + 1).padStart(2, "0")}`;
             const theme = cardThemeStyles[index % cardThemeStyles.length];
             const clipPathStyle = ribbonClipPaths[index % ribbonClipPaths.length];
-            const displayFeatures = service.features?.slice(0, 2) || [];
+            const firstFeature = service.features?.[0] || "";
 
             return (
               <motion.div
@@ -142,7 +136,7 @@ export default function HomeServices() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: index * 0.07 }}
-                className="group relative flex-1 min-w-[180px] max-w-[245px] -mr-3.5 first:mr-0 z-10 hover:z-30 transition-all duration-300"
+                className="group relative flex-1 min-w-[170px] max-w-[240px] -mr-3.5 first:mr-0 z-10 hover:z-30 transition-all duration-300"
               >
                 {/* Numbered Stem Pin at Top */}
                 <div className="absolute -top-11 left-1/2 -translate-x-1/2 flex flex-col items-center z-20 pointer-events-none">
@@ -165,55 +159,49 @@ export default function HomeServices() {
                   className="block h-full cursor-pointer select-none"
                 >
                   <div
-                    className="h-full pt-8 pb-8 px-4 flex flex-col transition-all duration-300 group-hover:-translate-y-2 group-hover:brightness-110 group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)]"
+                    className="h-full pt-8 pb-8 px-3.5 flex flex-col transition-all duration-300 group-hover:-translate-y-2 group-hover:brightness-110 group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)]"
                     style={{ clipPath: clipPathStyle }}
                   >
                     <div
-                      className={`w-full h-full bg-gradient-to-b ${theme.gradient} flex flex-col justify-between p-5 rounded-xl text-white shadow-xl`}
+                      className={`w-full h-full bg-gradient-to-b ${theme.gradient} flex flex-col justify-between p-4.5 rounded-xl text-white shadow-xl`}
                     >
                       {/* Top Row: Icon Circle + Arrow Link */}
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="w-11 h-11 rounded-full bg-white text-slate-900 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      <div className="flex items-center justify-between mb-3.5">
+                        <div className="w-10 h-10 rounded-full bg-white text-slate-900 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
                           <IconComp className="w-5 h-5 text-slate-800" />
                         </div>
-                        <div className="w-7 h-7 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white opacity-80 group-hover:opacity-100 group-hover:bg-white group-hover:text-slate-900 transition-all">
+                        <div className="w-6.5 h-6.5 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white opacity-80 group-hover:opacity-100 group-hover:bg-white group-hover:text-slate-900 transition-all">
                           <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                         </div>
                       </div>
 
-                      {/* Content Body */}
+                      {/* Content Body (Short & Minimalist) */}
                       <div className="flex-1 flex flex-col justify-start">
-                        <h3 className="text-base font-bold text-white mb-2 leading-snug tracking-tight group-hover:text-amber-200 transition-colors">
+                        <h3 className="text-sm font-extrabold text-white mb-1.5 leading-snug tracking-tight group-hover:text-amber-200 transition-colors">
                           {service.title}
                         </h3>
 
-                        <p className="text-[11px] leading-relaxed text-white/85 font-normal line-clamp-3 mb-4">
+                        {/* Minimalist 1-line description */}
+                        <p className="text-[11px] leading-relaxed text-white/85 font-normal line-clamp-1 mb-3">
                           {service.description}
                         </p>
                       </div>
 
-                      {/* Features Pills & Footer */}
-                      <div className="space-y-3 pt-3 border-t border-white/20 mt-auto">
-                        {displayFeatures.length > 0 && (
-                          <div className="flex flex-col gap-1.5">
-                            {displayFeatures.map((feat, fIdx) => (
-                              <span
-                                key={fIdx}
-                                className="text-[10px] font-medium px-2 py-0.5 rounded bg-white/15 text-white/95 border border-white/20 truncate"
-                              >
-                                {feat}
-                              </span>
-                            ))}
-                          </div>
+                      {/* Minimal Feature Tag & Clean Footer */}
+                      <div className="pt-2.5 border-t border-white/20 mt-auto space-y-2">
+                        {firstFeature && (
+                          <span className="block text-[10px] font-medium px-2 py-0.5 rounded bg-white/15 text-white/95 border border-white/20 truncate">
+                            {firstFeature}
+                          </span>
                         )}
 
-                        <div className="flex items-center justify-between text-[11px] font-bold text-white/90 pt-1">
-                          <span className="flex items-center gap-1.5 text-[10px]">
+                        <div className="flex items-center justify-between text-[10px] font-bold text-white/90">
+                          <span className="flex items-center gap-1 text-[10px]">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                             Available
                           </span>
-                          <span className="text-[10px] group-hover:translate-x-1 transition-transform">
-                            Learn more &rarr;
+                          <span className="group-hover:translate-x-0.5 transition-transform">
+                            Learn &rarr;
                           </span>
                         </div>
                       </div>
@@ -226,12 +214,12 @@ export default function HomeServices() {
         </div>
 
         {/* Mobile & Tablet View: Responsive Cards Grid */}
-        <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 pt-6">
+        <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 pt-4">
           {services.map((service, index) => {
             const IconComp = iconMap[service.icon] || Layers;
             const num = `/${String(index + 1).padStart(2, "0")}`;
             const theme = cardThemeStyles[index % cardThemeStyles.length];
-            const displayFeatures = service.features?.slice(0, 2) || [];
+            const firstFeature = service.features?.[0] || "";
 
             return (
               <motion.div
@@ -245,51 +233,44 @@ export default function HomeServices() {
                   href={`/services/${service.id}`}
                   className="group relative flex flex-col justify-between overflow-hidden rounded-2xl shadow-lg border border-slate-200 dark:border-slate-800 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 block h-full"
                 >
-                  <div className={`bg-gradient-to-br ${theme.gradient} p-6 flex flex-col justify-between h-full text-white`}>
+                  <div className={`bg-gradient-to-br ${theme.gradient} p-5 flex flex-col justify-between h-full text-white`}>
                     <div>
                       {/* Header Row: Icon + Number Badge + Arrow */}
-                      <div className="flex items-center justify-between mb-5">
-                        <div className="w-12 h-12 rounded-full bg-white text-slate-900 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                          <IconComp className="w-6 h-6 text-slate-800" />
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="w-10 h-10 rounded-full bg-white text-slate-900 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                          <IconComp className="w-5 h-5 text-slate-800" />
                         </div>
 
                         <div className="flex items-center gap-2">
                           <span
-                            className="text-xs font-mono font-bold px-2.5 py-1 rounded-full text-white border border-white/20 shadow-xs"
+                            className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full text-white border border-white/20 shadow-xs"
                             style={{ backgroundColor: theme.badgeBg }}
                           >
                             {num}
                           </span>
-                          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white">
-                            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                          <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white">
+                            <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                           </div>
                         </div>
                       </div>
 
                       {/* Title */}
-                      <h3 className="text-lg font-bold text-white mb-2">
+                      <h3 className="text-base font-bold text-white mb-1.5">
                         {service.title}
                       </h3>
 
                       {/* Description */}
-                      <p className="text-xs text-white/90 leading-relaxed mb-5">
+                      <p className="text-xs text-white/90 leading-relaxed mb-4 line-clamp-2">
                         {service.description}
                       </p>
                     </div>
 
-                    {/* Features Pills & Footer */}
-                    <div className="space-y-4 pt-4 border-t border-white/20 mt-auto">
-                      {displayFeatures.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5">
-                          {displayFeatures.map((feat, fIdx) => (
-                            <span
-                              key={fIdx}
-                              className="text-[11px] font-medium px-2.5 py-1 rounded bg-white/15 text-white/95 border border-white/20"
-                            >
-                              {feat}
-                            </span>
-                          ))}
-                        </div>
+                    {/* Features & Footer */}
+                    <div className="pt-3 border-t border-white/20 mt-auto space-y-2.5">
+                      {firstFeature && (
+                        <span className="inline-block text-[11px] font-medium px-2.5 py-0.5 rounded bg-white/15 text-white/95 border border-white/20">
+                          {firstFeature}
+                        </span>
                       )}
 
                       <div className="flex items-center justify-between text-xs font-bold text-white/90">
