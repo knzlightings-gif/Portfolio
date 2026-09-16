@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   Database,
@@ -10,7 +9,6 @@ import {
   Cpu,
   Link as LinkIcon,
   BarChart,
-  ArrowUpRight,
   Sparkles,
   Layers,
   LucideIcon,
@@ -109,7 +107,7 @@ export default function HomeServices() {
           </motion.p>
         </div>
 
-        {/* Desktop View: Wide Landscape Slanted Ribbon Cards (No Top Number Pins) */}
+        {/* Desktop View: Wide Landscape Slanted Ribbon Cards (No Page Links) */}
         <div className="hidden lg:flex items-stretch justify-center relative pt-4 pb-4 min-h-[270px] w-full mx-auto">
           {services.map((service, index) => {
             const IconComp = iconMap[service.icon] || Layers;
@@ -127,65 +125,54 @@ export default function HomeServices() {
                 className="group relative flex-1 min-w-[320px] max-w-[480px] -mr-4 first:mr-0 z-10 hover:z-30 transition-all duration-300"
               >
                 {/* Main Card with Slanted Polygon Clip-Path */}
-                <Link
-                  href={`/services/${service.id}`}
-                  className="block h-full cursor-pointer select-none"
+                <div
+                  className="h-full pt-6 pb-6 px-4 flex flex-col transition-all duration-300 group-hover:-translate-y-2 group-hover:brightness-110 group-hover:shadow-[0_20px_40px_-10px_rgba(63,101,192,0.4)]"
+                  style={{ clipPath: clipPathStyle }}
                 >
                   <div
-                    className="h-full pt-6 pb-6 px-4 flex flex-col transition-all duration-300 group-hover:-translate-y-2 group-hover:brightness-110 group-hover:shadow-[0_20px_40px_-10px_rgba(63,101,192,0.4)]"
-                    style={{ clipPath: clipPathStyle }}
+                    className={`w-full h-full bg-gradient-to-b ${theme.gradient} flex flex-col justify-between p-5.5 rounded-xl text-white shadow-xl border border-white/10`}
                   >
-                    <div
-                      className={`w-full h-full bg-gradient-to-b ${theme.gradient} flex flex-col justify-between p-5.5 rounded-xl text-white shadow-xl border border-white/10`}
-                    >
-                      {/* Top Row: Icon Circle + Title + Arrow Link */}
-                      <div className="flex items-center justify-between gap-3 mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-white text-[#3f65c0] flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300 shrink-0">
-                            <IconComp className="w-5 h-5 text-[#3f65c0]" />
-                          </div>
-                          <h3 className="text-base font-extrabold text-white tracking-tight group-hover:text-amber-200 transition-colors leading-snug">
-                            {service.title}
-                          </h3>
-                        </div>
-
-                        <div className="w-7 h-7 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white opacity-80 group-hover:opacity-100 group-hover:bg-white group-hover:text-[#3f65c0] transition-all shrink-0">
-                          <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                        </div>
+                    {/* Top Row: Icon Circle + Title */}
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-full bg-white text-[#3f65c0] flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300 shrink-0">
+                        <IconComp className="w-5 h-5 text-[#3f65c0]" />
                       </div>
+                      <h3 className="text-base font-extrabold text-white tracking-tight group-hover:text-amber-200 transition-colors leading-snug">
+                        {service.title}
+                      </h3>
+                    </div>
 
-                      {/* Content Body */}
-                      <p className="text-xs leading-relaxed text-white/90 font-normal line-clamp-1 mb-3">
-                        {service.description}
-                      </p>
+                    {/* Content Body */}
+                    <p className="text-xs leading-relaxed text-white/90 font-normal line-clamp-1 mb-3">
+                      {service.description}
+                    </p>
 
-                      {/* Bottom Row: Feature Tag & Action Footer */}
-                      <div className="pt-2.5 border-t border-white/20 mt-auto flex items-center justify-between text-xs font-bold text-white/90 gap-2">
-                        {firstFeature ? (
-                          <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-white/15 text-white/95 border border-white/20 truncate max-w-[200px]">
-                            {firstFeature}
-                          </span>
-                        ) : (
-                          <span className="flex items-center gap-1.5 text-[10px]">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                            Available
-                          </span>
-                        )}
-
-                        <span className="text-[11px] group-hover:translate-x-0.5 transition-transform flex items-center gap-1 shrink-0">
-                          <span>Learn more</span>
-                          <span>&rarr;</span>
+                    {/* Bottom Row: Feature Tag & Status */}
+                    <div className="pt-2.5 border-t border-white/20 mt-auto flex items-center justify-between text-xs font-bold text-white/90 gap-2">
+                      {firstFeature ? (
+                        <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-white/15 text-white/95 border border-white/20 truncate max-w-[200px]">
+                          {firstFeature}
                         </span>
-                      </div>
+                      ) : (
+                        <span className="flex items-center gap-1.5 text-[10px]">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          Available
+                        </span>
+                      )}
+
+                      <span className="flex items-center gap-1.5 text-[10px] font-semibold text-white/80">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        Active
+                      </span>
                     </div>
                   </div>
-                </Link>
+                </div>
               </motion.div>
             );
           })}
         </div>
 
-        {/* Mobile & Tablet View: 3 Responsive Cards (No Numbering) */}
+        {/* Mobile & Tablet View: 3 Responsive Cards */}
         <div className="lg:hidden grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
           {services.map((service, index) => {
             const IconComp = iconMap[service.icon] || Layers;
@@ -200,20 +187,13 @@ export default function HomeServices() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.35, delay: index * 0.05 }}
               >
-                <Link
-                  href={`/services/${service.id}`}
-                  className="group relative flex flex-col justify-between overflow-hidden rounded-2xl shadow-lg border border-slate-200 dark:border-slate-800 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 block h-full"
-                >
+                <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl shadow-lg border border-slate-200 dark:border-slate-800 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 h-full">
                   <div className={`bg-gradient-to-br ${theme.gradient} p-5 flex flex-col justify-between h-full text-white`}>
                     <div>
-                      {/* Header Row: Icon + Arrow */}
+                      {/* Header Row: Icon */}
                       <div className="flex items-center justify-between mb-4">
                         <div className="w-10 h-10 rounded-full bg-white text-[#3f65c0] flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
                           <IconComp className="w-5 h-5 text-[#3f65c0]" />
-                        </div>
-
-                        <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white">
-                          <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                         </div>
                       </div>
 
@@ -236,13 +216,13 @@ export default function HomeServices() {
                         </span>
                       )}
 
-                      <span className="flex items-center gap-1 group-hover:translate-x-1 transition-transform ml-auto">
-                        <span>Learn more</span>
-                        <span>&rarr;</span>
+                      <span className="flex items-center gap-1.5 text-[11px] text-white/80 ml-auto">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        Available
                       </span>
                     </div>
                   </div>
-                </Link>
+                </div>
               </motion.div>
             );
           })}
