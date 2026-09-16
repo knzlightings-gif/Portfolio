@@ -30,15 +30,12 @@ const iconMap: Record<string, LucideIcon> = {
 const cardThemeStyles = [
   {
     gradient: "from-[#3f65c0] via-[#3558b0] to-[#2a489b]",
-    badgeBg: "#3f65c0",
   },
   {
     gradient: "from-[#3f65c0] via-[#3558b0] to-[#2a489b]",
-    badgeBg: "#3f65c0",
   },
   {
     gradient: "from-[#3f65c0] via-[#3558b0] to-[#2a489b]",
-    badgeBg: "#3f65c0",
   },
 ];
 
@@ -112,11 +109,10 @@ export default function HomeServices() {
           </motion.p>
         </div>
 
-        {/* Desktop View: Wide Landscape Slanted Ribbon Cards (#3f65c0 theme) */}
-        <div className="hidden lg:flex items-stretch justify-center relative pt-10 pb-4 min-h-[310px] w-full mx-auto">
+        {/* Desktop View: Wide Landscape Slanted Ribbon Cards (No Top Number Pins) */}
+        <div className="hidden lg:flex items-stretch justify-center relative pt-4 pb-4 min-h-[270px] w-full mx-auto">
           {services.map((service, index) => {
             const IconComp = iconMap[service.icon] || Layers;
-            const num = `/${String(index + 1).padStart(2, "0")}`;
             const theme = cardThemeStyles[index % cardThemeStyles.length];
             const clipPathStyle = ribbonClipPaths[index % ribbonClipPaths.length];
             const firstFeature = service.features?.[0] || "";
@@ -130,21 +126,6 @@ export default function HomeServices() {
                 transition={{ duration: 0.45, delay: index * 0.08 }}
                 className="group relative flex-1 min-w-[320px] max-w-[480px] -mr-4 first:mr-0 z-10 hover:z-30 transition-all duration-300"
               >
-                {/* Numbered Stem Pin at Top */}
-                <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center z-20 pointer-events-none">
-                  <div
-                    className="h-7 px-3 rounded-full flex items-center justify-center text-xs font-mono font-bold text-white shadow-md border-2 border-white dark:border-slate-900 group-hover:scale-110 transition-transform duration-300"
-                    style={{ backgroundColor: theme.badgeBg }}
-                  >
-                    {num}
-                  </div>
-                  {/* Stem connector */}
-                  <div
-                    className="w-0.5 h-3.5 opacity-80"
-                    style={{ backgroundColor: theme.badgeBg }}
-                  />
-                </div>
-
                 {/* Main Card with Slanted Polygon Clip-Path */}
                 <Link
                   href={`/services/${service.id}`}
@@ -155,7 +136,7 @@ export default function HomeServices() {
                     style={{ clipPath: clipPathStyle }}
                   >
                     <div
-                      className={`w-full h-full bg-gradient-to-b ${theme.gradient} flex flex-col justify-between p-5 rounded-xl text-white shadow-xl border border-white/10`}
+                      className={`w-full h-full bg-gradient-to-b ${theme.gradient} flex flex-col justify-between p-5.5 rounded-xl text-white shadow-xl border border-white/10`}
                     >
                       {/* Top Row: Icon Circle + Title + Arrow Link */}
                       <div className="flex items-center justify-between gap-3 mb-3">
@@ -204,11 +185,10 @@ export default function HomeServices() {
           })}
         </div>
 
-        {/* Mobile & Tablet View: 3 Responsive Cards */}
-        <div className="lg:hidden grid grid-cols-1 md:grid-cols-3 gap-5 pt-4">
+        {/* Mobile & Tablet View: 3 Responsive Cards (No Numbering) */}
+        <div className="lg:hidden grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
           {services.map((service, index) => {
             const IconComp = iconMap[service.icon] || Layers;
-            const num = `/${String(index + 1).padStart(2, "0")}`;
             const theme = cardThemeStyles[index % cardThemeStyles.length];
             const firstFeature = service.features?.[0] || "";
 
@@ -226,22 +206,14 @@ export default function HomeServices() {
                 >
                   <div className={`bg-gradient-to-br ${theme.gradient} p-5 flex flex-col justify-between h-full text-white`}>
                     <div>
-                      {/* Header Row: Icon + Number Badge + Arrow */}
+                      {/* Header Row: Icon + Arrow */}
                       <div className="flex items-center justify-between mb-4">
                         <div className="w-10 h-10 rounded-full bg-white text-[#3f65c0] flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
                           <IconComp className="w-5 h-5 text-[#3f65c0]" />
                         </div>
 
-                        <div className="flex items-center gap-2">
-                          <span
-                            className="text-xs font-mono font-bold px-3 py-0.5 rounded-full text-white border border-white/20 shadow-xs"
-                            style={{ backgroundColor: theme.badgeBg }}
-                          >
-                            {num}
-                          </span>
-                          <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white">
-                            <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                          </div>
+                        <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white">
+                          <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                         </div>
                       </div>
 
