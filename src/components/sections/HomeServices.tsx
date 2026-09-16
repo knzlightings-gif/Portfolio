@@ -26,19 +26,19 @@ const iconMap: Record<string, LucideIcon> = {
   BarChart,
 };
 
-// Gradient transitions tailored to the site theme for 3 cards
+// Unified brand color #3f65c0 style for all 3 cards
 const cardThemeStyles = [
   {
-    gradient: "from-emerald-500 via-teal-600 to-cyan-700",
-    badgeBg: "#10B981",
+    gradient: "from-[#3f65c0] via-[#3558b0] to-[#2a489b]",
+    badgeBg: "#3f65c0",
   },
   {
-    gradient: "from-cyan-600 via-sky-600 to-blue-700",
-    badgeBg: "#0284C7",
+    gradient: "from-[#3f65c0] via-[#3558b0] to-[#2a489b]",
+    badgeBg: "#3f65c0",
   },
   {
-    gradient: "from-blue-600 via-indigo-700 to-slate-900",
-    badgeBg: "#1E3A8A",
+    gradient: "from-[#3f65c0] via-[#3558b0] to-[#2a489b]",
+    badgeBg: "#3f65c0",
   },
 ];
 
@@ -78,7 +78,7 @@ export default function HomeServices() {
   return (
     <section id="services" className="py-16 md:py-20 bg-brand-bg relative overflow-hidden">
       {/* Background ambient glow orbs */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-cyan/10 rounded-full blur-[140px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#3f65c0]/10 rounded-full blur-[140px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-purple/10 rounded-full blur-[140px] translate-y-1/3 -translate-x-1/3 pointer-events-none" />
 
       {/* Full width container spanning across page edges */}
@@ -93,11 +93,11 @@ export default function HomeServices() {
             transition={{ duration: 0.4 }}
           >
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full badge-brand-subtle text-xs font-bold tracking-wider uppercase mb-3 shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-brand-cyan" />
+              <Sparkles className="w-3.5 h-3.5 text-[#3f65c0]" />
               What We Offer
             </div>
             <h2 className="text-3xl md:text-5xl font-black text-brand-text tracking-tight">
-              Our Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-brand-cyan to-brand-purple">Services & Solutions</span>
+              Our Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3f65c0] via-[#527ce0] to-brand-purple">Services & Solutions</span>
             </h2>
           </motion.div>
           
@@ -112,7 +112,7 @@ export default function HomeServices() {
           </motion.p>
         </div>
 
-        {/* Desktop View: Wide Landscape Slanted Ribbon Cards (Shorter Height + Spans Across Screen) */}
+        {/* Desktop View: Wide Landscape Slanted Ribbon Cards (#3f65c0 theme) */}
         <div className="hidden lg:flex items-stretch justify-center relative pt-10 pb-4 min-h-[310px] w-full mx-auto">
           {services.map((service, index) => {
             const IconComp = iconMap[service.icon] || Layers;
@@ -151,24 +151,24 @@ export default function HomeServices() {
                   className="block h-full cursor-pointer select-none"
                 >
                   <div
-                    className="h-full pt-6 pb-6 px-4 flex flex-col transition-all duration-300 group-hover:-translate-y-2 group-hover:brightness-110 group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)]"
+                    className="h-full pt-6 pb-6 px-4 flex flex-col transition-all duration-300 group-hover:-translate-y-2 group-hover:brightness-110 group-hover:shadow-[0_20px_40px_-10px_rgba(63,101,192,0.4)]"
                     style={{ clipPath: clipPathStyle }}
                   >
                     <div
-                      className={`w-full h-full bg-gradient-to-b ${theme.gradient} flex flex-col justify-between p-5 rounded-xl text-white shadow-xl`}
+                      className={`w-full h-full bg-gradient-to-b ${theme.gradient} flex flex-col justify-between p-5 rounded-xl text-white shadow-xl border border-white/10`}
                     >
                       {/* Top Row: Icon Circle + Title + Arrow Link */}
                       <div className="flex items-center justify-between gap-3 mb-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-white text-slate-900 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300 shrink-0">
-                            <IconComp className="w-5 h-5 text-slate-800" />
+                          <div className="w-10 h-10 rounded-full bg-white text-[#3f65c0] flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300 shrink-0">
+                            <IconComp className="w-5 h-5 text-[#3f65c0]" />
                           </div>
                           <h3 className="text-base font-extrabold text-white tracking-tight group-hover:text-amber-200 transition-colors leading-snug">
                             {service.title}
                           </h3>
                         </div>
 
-                        <div className="w-7 h-7 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white opacity-80 group-hover:opacity-100 group-hover:bg-white group-hover:text-slate-900 transition-all shrink-0">
+                        <div className="w-7 h-7 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white opacity-80 group-hover:opacity-100 group-hover:bg-white group-hover:text-[#3f65c0] transition-all shrink-0">
                           <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                         </div>
                       </div>
@@ -228,8 +228,8 @@ export default function HomeServices() {
                     <div>
                       {/* Header Row: Icon + Number Badge + Arrow */}
                       <div className="flex items-center justify-between mb-4">
-                        <div className="w-10 h-10 rounded-full bg-white text-slate-900 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                          <IconComp className="w-5 h-5 text-slate-800" />
+                        <div className="w-10 h-10 rounded-full bg-white text-[#3f65c0] flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                          <IconComp className="w-5 h-5 text-[#3f65c0]" />
                         </div>
 
                         <div className="flex items-center gap-2">
