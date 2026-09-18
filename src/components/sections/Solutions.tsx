@@ -1,8 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { solutionsByBusiness } from "@/data/content";
-import { Factory, Store, Truck, Briefcase, GraduationCap, Stethoscope, ArrowRight } from "lucide-react";
+import { solutionsByBusiness as defaultSolutionsByBusiness } from "@/data/content";
+import { Factory, Store, Truck, Briefcase, GraduationCap, Stethoscope, ArrowRight, Layers } from "lucide-react";
 
 const iconMap: Record<string, any> = {
   Factory,
@@ -13,41 +14,53 @@ const iconMap: Record<string, any> = {
   Stethoscope,
 };
 
-// Industry specific rich descriptions and highlights
-const businessDetails: Record<string, { subtitle: string; description: string; badge: string }> = {
-  Manufacturing: {
-    subtitle: "Factory & Production ERP",
-    description: "End-to-end management for raw materials, batch schedules, inventory valuation & costing.",
-    badge: "Industry 4.0",
-  },
-  Retail: {
-    subtitle: "Multi-Store POS & Sales",
-    description: "Fast barcode billing, customer credit ledgers, multi-branch stock sync & daily P&L.",
-    badge: "Omnichannel",
-  },
-  Distribution: {
-    subtitle: "Supply Chain & Wholesale",
-    description: "Bulk order dispatch, delivery route management, warehouse bin tracking & live aging.",
-    badge: "Logistics",
-  },
-  Services: {
-    subtitle: "Agency & Operations Hub",
-    description: "Job scheduling, timesheet tracking, automated invoicing & recurring subscriptions.",
-    badge: "Workflow",
-  },
-  Education: {
-    subtitle: "School & Academy Portal",
-    description: "Student admission records, digital fee vouchers, automated alerts & exam grading.",
-    badge: "EdTech",
-  },
-  Healthcare: {
-    subtitle: "Clinic & Hospital System",
-    description: "Doctor appointment bookings, EHR records, pharmacy stock & patient billing.",
-    badge: "HealthTech",
-  },
-};
-
 export default function Solutions() {
+  const [solutions, setSolutions] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function loadSolutions() {
+      try {
+        const res = await fetch("/api/solutions", { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setSolutions(data);
+            return;
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load solutions:", err);
+      }
+      setSolutions(
+        defaultSolutionsByBusiness.map((s) => ({
+          id: s.title.toLowerCase().replace(/[^a-z0-9]/g, "-"),
+          title: s.title,
+          subtitle: s.title === "Manufacturing" ? "Factory & Production ERP" :
+                    s.title === "Retail" ? "Multi-Store POS & Sales" :
+                    s.title === "Distribution" ? "Supply Chain & Wholesale" :
+                    s.title === "Services" ? "Agency & Operations Hub" :
+                    s.title === "Education" ? "School & Academy Portal" :
+                    s.title === "Healthcare" ? "Clinic & Hospital System" : "Custom Business System",
+          description: s.title === "Manufacturing" ? "End-to-end management for raw materials, batch schedules, inventory valuation & costing." :
+                       s.title === "Retail" ? "Fast barcode billing, customer credit ledgers, multi-branch stock sync & daily P&L." :
+                       s.title === "Distribution" ? "Bulk order dispatch, delivery route management, warehouse bin tracking & live aging." :
+                       s.title === "Services" ? "Job scheduling, timesheet tracking, automated invoicing & recurring subscriptions." :
+                       s.title === "Education" ? "Student admission records, digital fee vouchers, automated alerts & exam grading." :
+                       s.title === "Healthcare" ? "Doctor appointment bookings, EHR records, pharmacy stock & patient billing." : "Custom digital workflow system tailored to your exact operational challenges.",
+          badge: s.title === "Manufacturing" ? "Industry 4.0" :
+                 s.title === "Retail" ? "Omnichannel" :
+                 s.title === "Distribution" ? "Logistics" :
+                 s.title === "Services" ? "Workflow" :
+                 s.title === "Education" ? "EdTech" :
+                 s.title === "Healthcare" ? "HealthTech" : "Custom",
+          features: s.features,
+          icon: s.icon,
+        }))
+      );
+    }
+    loadSolutions();
+  }, []);
+
   return (
     <section className="py-10 md:py-14 bg-brand-bg relative overflow-hidden">
       {/* Ambient background glows */}
@@ -85,18 +98,16 @@ export default function Solutions() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
-          {solutionsByBusiness.map((solution, index) => {
-            const Icon = iconMap[solution.icon];
-            const details = businessDetails[solution.title] || {
-              subtitle: "Custom Business System",
-              description: "Streamlined digital workflows tailored specifically to solve your operational challenges.",
-              badge: "Custom",
-            };
+          {solutions.map((solution, index) => {
+            const Icon = iconMap[solution.icon] || Layers;
             const num = String(index + 1).padStart(2, "0");
+            const featureList = typeof solution.features === "string" 
+              ? solution.features.split(" + ") 
+              : Array.isArray(solution.features) ? solution.features : [];
 
             return (
               <motion.div
-                key={solution.title}
+                key={solution.id || solution.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -111,12 +122,12 @@ export default function Solutions() {
                   {/* Top Header Row: Icon + Badge */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-105 bg-brand-cyan/10 border border-brand-cyan/25 text-brand-cyan shadow-xs group-hover:bg-brand-cyan group-hover:text-white">
-                      {Icon && <Icon className="w-5 h-5 stroke-[2.2]" />}
+                      <Icon className="w-5 h-5 stroke-[2.2]" />
                     </div>
 
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan">
-                        {details.badge}
+                        {solution.badge || "Custom"}
                       </span>
                       <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md bg-brand-bg border border-brand-border text-brand-text-muted">
                         /{num}
@@ -129,33 +140,37 @@ export default function Solutions() {
                     <h3 className="text-lg font-bold text-brand-text group-hover:text-brand-cyan transition-colors duration-200">
                       {solution.title}
                     </h3>
-                    <p className="text-xs font-semibold text-brand-cyan tracking-wide mt-0.5">
-                      {details.subtitle}
-                    </p>
+                    {solution.subtitle && (
+                      <p className="text-xs font-semibold text-brand-cyan tracking-wide mt-0.5">
+                        {solution.subtitle}
+                      </p>
+                    )}
                   </div>
 
                   {/* Clear Descriptive Text */}
                   <p className="text-brand-text-muted text-xs leading-relaxed mb-4">
-                    {details.description}
+                    {solution.description}
                   </p>
 
                   {/* Modules / Features Pill List */}
-                  <div className="mb-4">
-                    <p className="text-[10px] uppercase font-bold text-brand-text-muted/80 tracking-wider mb-2">
-                      Core Modules Included:
-                    </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {solution.features.split(" + ").map((feature) => (
-                        <span
-                          key={feature}
-                          className="text-[11px] font-semibold px-2 py-0.5 bg-brand-bg text-brand-text-muted border border-brand-border/70 rounded-md group-hover:border-brand-cyan/30 group-hover:text-brand-text transition-colors flex items-center gap-1.5"
-                        >
-                          <span className="w-1 h-1 rounded-full bg-brand-cyan" />
-                          {feature}
-                        </span>
-                      ))}
+                  {featureList.length > 0 && (
+                    <div className="mb-4">
+                      <p className="text-[10px] uppercase font-bold text-brand-text-muted/80 tracking-wider mb-2">
+                        Core Modules Included:
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {featureList.map((feature: string) => (
+                          <span
+                            key={feature}
+                            className="text-[11px] font-semibold px-2 py-0.5 bg-brand-bg text-brand-text-muted border border-brand-border/70 rounded-md group-hover:border-brand-cyan/30 group-hover:text-brand-text transition-colors flex items-center gap-1.5"
+                          >
+                            <span className="w-1 h-1 rounded-full bg-brand-cyan" />
+                            {feature}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
 
                 {/* Interactive Card Footer */}

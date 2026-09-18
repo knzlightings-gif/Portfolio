@@ -35,18 +35,14 @@ export default function HomeServices() {
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data) && data.length > 0) {
-            const targetIds = ["ai", "erp", "web-apps"];
-            const filtered = data.filter((s) => targetIds.includes(s.id));
-            setServices(filtered.length === 3 ? filtered : data.slice(0, 3));
+            setServices(data);
             return;
           }
         }
       } catch (err) {
         console.error("Failed to fetch home services:", err);
       }
-      const targetIds = ["ai", "erp", "web-apps"];
-      const filtered = defaultServices.filter((s) => targetIds.includes(s.id));
-      setServices(filtered.length === 3 ? filtered : defaultServices.slice(0, 3));
+      setServices(defaultServices);
     }
     loadServices();
   }, []);
