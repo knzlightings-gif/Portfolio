@@ -108,11 +108,12 @@ export default function Solutions() {
             return (
               <motion.div
                 key={solution.id || solution.title}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -8, scale: 1.015 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.35, delay: index * 0.06 }}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-brand-card/90 backdrop-blur-md border border-brand-border/80 shadow-md hover:shadow-[0_16px_36px_-8px_var(--theme-primary-glow,rgba(0,112,243,0.22))] hover:border-brand-cyan/50 transition-all duration-300 p-5 md:p-6"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-brand-card/90 backdrop-blur-md border border-brand-border/80 shadow-md hover:shadow-[0_20px_40px_-8px_var(--theme-primary-glow,rgba(0,112,243,0.3))] hover:border-brand-cyan/60 transition-all duration-300 p-5 md:p-6"
               >
                 {/* Top decorative gradient accent line */}
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-brand-purple opacity-40 group-hover:opacity-100 transition-opacity duration-300" />
@@ -121,7 +122,7 @@ export default function Solutions() {
                 <div className="relative z-10">
                   {/* Top Header Row: Icon + Badge */}
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-105 bg-brand-cyan/10 border border-brand-cyan/25 text-brand-cyan shadow-xs group-hover:bg-brand-cyan group-hover:text-white">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 bg-brand-cyan/10 border border-brand-cyan/25 text-brand-cyan shadow-xs group-hover:bg-brand-cyan group-hover:text-white">
                       <Icon className="w-5 h-5 stroke-[2.2]" />
                     </div>
 

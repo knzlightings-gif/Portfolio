@@ -71,20 +71,24 @@ export default function QuickIntro() {
             return (
               <motion.div
                 key={item.title}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -8, scale: 1.015 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.08 }}
-                className={`group relative p-7 rounded-2xl bg-brand-card/90 border border-brand-border/80 ${item.border} transition-all duration-300 flex flex-col justify-between hover:shadow-xl`}
+                transition={{ duration: 0.35, delay: index * 0.08 }}
+                className={`group relative p-7 rounded-2xl bg-brand-card/90 border border-brand-border/80 ${item.border} transition-all duration-300 flex flex-col justify-between hover:shadow-[0_20px_40px_-8px_var(--theme-primary-glow,rgba(0,112,243,0.25))] overflow-hidden`}
               >
+                {/* Top ambient accent glow */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan to-brand-purple opacity-30 group-hover:opacity-100 transition-opacity duration-300" />
+
                 <div>
                   {/* Icon Header */}
                   <div className="flex items-center justify-between mb-6">
-                    <div className={`w-12 h-12 rounded-xl ${item.bgIcon} flex items-center justify-center shrink-0`}>
+                    <div className={`w-12 h-12 rounded-xl ${item.bgIcon} flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}>
                       <Icon className="w-6 h-6" />
                     </div>
-                    <span className="text-[11px] font-medium text-brand-text-muted/80 tracking-wide">
-                      0{index + 1}
+                    <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md bg-brand-bg border border-brand-border text-brand-text-muted group-hover:border-brand-cyan/40 group-hover:text-brand-cyan transition-colors">
+                      /0{index + 1}
                     </span>
                   </div>
 
@@ -102,7 +106,7 @@ export default function QuickIntro() {
                   <span className="text-xs font-semibold text-brand-text-muted group-hover:text-brand-text transition-colors">
                     {item.highlight}
                   </span>
-                  <ArrowRight className="w-4 h-4 text-brand-text-muted group-hover:text-brand-cyan group-hover:translate-x-1 transition-all" />
+                  <ArrowRight className="w-4 h-4 text-brand-text-muted group-hover:text-brand-cyan group-hover:translate-x-1.5 transition-all duration-300" />
                 </div>
               </motion.div>
             );

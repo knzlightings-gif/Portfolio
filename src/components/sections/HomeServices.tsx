@@ -93,15 +93,15 @@ export default function HomeServices() {
             return (
               <motion.div
                 key={service.id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ y: -6 }}
+                whileHover={{ y: -8, scale: 1.015 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.35, delay: index * 0.08 }}
                 className="h-full"
               >
                 <div
-                  className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-brand-card/90 backdrop-blur-md border border-brand-border/80 shadow-md hover:shadow-[0_20px_40px_-10px_var(--theme-primary-glow,rgba(0,112,243,0.25))] hover:border-brand-cyan/50 transition-all duration-300 p-6 md:p-7 h-full"
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-brand-card/90 backdrop-blur-md border border-brand-border/80 shadow-md hover:shadow-[0_20px_40px_-8px_var(--theme-primary-glow,rgba(0,112,243,0.3))] hover:border-brand-cyan/60 transition-all duration-300 p-6 md:p-7 h-full"
                 >
                   {/* Top Ambient Gradient Line */}
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-brand-purple opacity-40 group-hover:opacity-100 transition-opacity duration-300" />
@@ -109,7 +109,7 @@ export default function HomeServices() {
                   <div>
                     {/* Header Row: Icon + Number Badge */}
                     <div className="flex items-center justify-between mb-5">
-                      <div className="w-12 h-12 rounded-xl bg-brand-cyan/10 border border-brand-cyan/25 flex items-center justify-center text-brand-cyan shadow-xs group-hover:scale-110 group-hover:bg-brand-cyan group-hover:text-white transition-all duration-300">
+                      <div className="w-12 h-12 rounded-xl bg-brand-cyan/10 border border-brand-cyan/25 flex items-center justify-center text-brand-cyan shadow-xs group-hover:scale-110 group-hover:rotate-3 group-hover:bg-brand-cyan group-hover:text-white transition-all duration-300">
                         <IconComp className="w-6 h-6" />
                       </div>
 
@@ -142,9 +142,9 @@ export default function HomeServices() {
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                         Active Service
                       </span>
-                      <span className="flex items-center gap-1 text-brand-cyan group-hover:translate-x-1 transition-transform">
+                      <span className="flex items-center gap-1 text-brand-cyan font-bold group-hover:translate-x-1.5 transition-transform duration-300">
                         <span>Details</span>
-                        <ArrowUpRight className="w-3.5 h-3.5" />
+                        <ArrowUpRight className="w-3.5 h-3.5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
                       </span>
                     </div>
                   </div>
