@@ -75,7 +75,7 @@ export default function Testimonials() {
   const duplicatedTestimonials = items.length > 0 ? [...items, ...items, ...items] : [];
 
   return (
-    <section id="testimonials" className="py-24 bg-brand-bg relative overflow-hidden">
+    <section id="testimonials" className="py-10 md:py-14 bg-brand-bg relative overflow-hidden">
       
       {/* Ambient Lighting */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-brand-cyan/5 rounded-full blur-[140px] pointer-events-none" />
@@ -83,12 +83,12 @@ export default function Testimonials() {
       <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
         
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-purple/10 border border-brand-purple/25 text-brand-purple text-xs font-bold uppercase tracking-wider mb-4 shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-purple/10 border border-brand-purple/25 text-brand-purple text-xs font-bold uppercase tracking-wider mb-3 shadow-sm"
           >
             <Sparkles className="w-3.5 h-3.5 text-brand-purple" />
             Social Proof & Client Endorsements
@@ -98,7 +98,7 @@ export default function Testimonials() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-black text-brand-text mb-4 tracking-tight"
+            className="text-3xl md:text-5xl font-black text-brand-text mb-3 tracking-tight"
           >
             What <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-brand-purple">Clients Say</span>
           </motion.h2>
@@ -108,19 +108,19 @@ export default function Testimonials() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-base md:text-lg text-brand-text-muted max-w-2xl mx-auto"
+            className="text-base text-brand-text-muted max-w-2xl mx-auto"
           >
             Real feedback from business owners and teams who transformed their operations with custom software.
           </motion.p>
         </div>
 
         {/* Compact Review Submission Box on TOP */}
-        <div className="max-w-2xl mx-auto mb-16">
+        <div className="max-w-2xl mx-auto mb-8">
           <motion.div
             initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="p-6 md:p-8 rounded-3xl bg-brand-card/90 backdrop-blur-md border border-brand-border shadow-xl relative overflow-hidden"
+            className="p-4 sm:p-6 rounded-2xl bg-brand-card/90 backdrop-blur-md border border-brand-border shadow-md relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-brand-cyan/10 rounded-full blur-2xl pointer-events-none" />
 

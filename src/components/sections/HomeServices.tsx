@@ -52,7 +52,7 @@ export default function HomeServices() {
   }, []);
 
   return (
-    <section id="services" className="py-16 md:py-24 bg-brand-bg relative overflow-hidden">
+    <section id="services" className="py-10 md:py-14 bg-brand-bg relative overflow-hidden">
       {/* Background ambient glow orbs */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-cyan/10 rounded-full blur-[140px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-purple/10 rounded-full blur-[140px] translate-y-1/3 -translate-x-1/3 pointer-events-none" />
@@ -60,7 +60,7 @@ export default function HomeServices() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-10 max-w-[1600px] relative z-10">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-6 border-b border-brand-border/60">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 pb-4 border-b border-brand-border/60">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

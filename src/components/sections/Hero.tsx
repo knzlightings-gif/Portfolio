@@ -73,7 +73,7 @@ export default function Hero() {
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
 
   return (
-    <section id="home" className="pt-24 pb-16 md:pt-28 md:pb-24 overflow-hidden relative flex items-center">
+    <section id="home" className="pt-24 pb-10 md:pt-26 md:pb-12 overflow-hidden relative flex items-center">
       
       {/* Background Ambient Glows */}
       <div className="absolute top-1/4 left-1/4 w-[600px] h-[500px] bg-brand-cyan/5 rounded-full blur-[160px] pointer-events-none -z-10" />

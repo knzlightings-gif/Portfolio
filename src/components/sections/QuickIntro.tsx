@@ -45,11 +45,11 @@ const services = [
 
 export default function QuickIntro() {
   return (
-    <section className="py-20 bg-brand-bg relative overflow-hidden">
+    <section className="py-10 md:py-12 bg-brand-bg relative overflow-hidden">
       <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 pb-8 border-b border-brand-border/60">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 pb-4 border-b border-brand-border/60">
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan block mb-2">
               What We Do
@@ -65,7 +65,7 @@ export default function QuickIntro() {
         </div>
 
         {/* 4 Sleek Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           {services.map((item, index) => {
             const Icon = item.icon;
             return (
