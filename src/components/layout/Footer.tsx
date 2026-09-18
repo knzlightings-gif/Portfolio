@@ -54,90 +54,88 @@ export default function Footer() {
   const servicesLinks = footerContent?.servicesLinks || defaultFooter.servicesLinks;
 
   return (
-    <footer className="bg-brand-card border-t border-brand-border relative overflow-hidden pt-20 pb-10">
+    <footer className="bg-brand-card border-t border-brand-border relative overflow-hidden pt-10 pb-6">
       
       {/* Background Accent */}
-      <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-brand-cyan/5 rounded-full blur-[150px] pointer-events-none -translate-y-1/2" />
+      <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-brand-cyan/5 rounded-full blur-[120px] pointer-events-none -translate-y-1/2" />
       
       <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
         
-        {/* Top Section - Large CTA */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-20">
+        {/* Top Section - Compact CTA */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-8 mb-8 border-b border-brand-border/40">
           <div>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-brand-text mb-4 tracking-tight">
-              {footerContent?.ctaHeading1 || "Let's build something"} <br className="hidden md:block" />
+            <h2 className="text-2xl md:text-3xl font-bold text-brand-text tracking-tight">
+              {footerContent?.ctaHeading1 || "Let's build something"}{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-brand-purple">
                 {footerContent?.ctaHeading2 || "extraordinary."}
               </span>
             </h2>
-            <p className="text-brand-text-muted text-lg max-w-md">
+            <p className="text-brand-text-muted text-sm mt-1 max-w-xl">
               {footerContent?.ctaSubtext || "Ready to transform your business with custom software tailored to your workflow?"}
             </p>
           </div>
           <Link
             href="#contact"
-            className="group flex items-center justify-center w-32 h-32 md:w-40 md:h-40 bg-brand-bg border border-brand-cyan/30 rounded-full hover:bg-gradient-to-r hover:from-brand-cyan hover:to-brand-purple hover:text-white transition-all duration-500 shadow-[0_0_30px_var(--theme-primary-glow,rgba(0,112,243,0.15))] hover:shadow-[0_0_40px_var(--theme-primary-glow,rgba(0,112,243,0.35))] hover:border-transparent shrink-0"
+            className="group inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-cyan/10 to-brand-purple/10 hover:from-brand-cyan hover:to-brand-purple text-brand-text hover:text-white border border-brand-cyan/30 rounded-full transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_var(--theme-primary-glow,rgba(0,112,243,0.3))] shrink-0 font-medium text-sm"
           >
-            <span className="font-bold text-lg flex items-center gap-2 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform">
-              {footerContent?.ctaButtonText || "Start"}
-              <ArrowUpRight className="w-6 h-6" />
-            </span>
+            <span>{footerContent?.ctaButtonText || "Start"}</span>
+            <ArrowUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           
           {/* Column 1: Brand Info */}
           <div className="lg:col-span-1">
-            <Link href="#home" className="inline-block mb-6">
-              <span className="text-2xl font-bold tracking-tight text-brand-text">
+            <Link href="#home" className="inline-block mb-3">
+              <span className="text-xl font-bold tracking-tight text-brand-text">
                 {personalInfo?.name || "Developer"}
               </span>
-              <div className="text-xs font-semibold text-brand-cyan tracking-widest uppercase mt-1">
+              <div className="text-[11px] font-semibold text-brand-cyan tracking-widest uppercase mt-0.5">
                 {personalInfo?.roleDescriptor || "ERP & Web Developer"}
               </div>
             </Link>
-            <p className="text-sm text-brand-text-muted leading-relaxed mb-6">
+            <p className="text-xs text-brand-text-muted leading-relaxed mb-4">
               {footerContent?.brandDescription || "I build practical ERP systems, business web applications and custom digital solutions."}
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2.5">
               <a 
                 href={linkedinUrl} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="w-10 h-10 rounded-full bg-brand-bg border border-brand-border flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan transition-colors group font-bold text-sm"
+                className="w-8 h-8 rounded-full bg-brand-bg border border-brand-border flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan transition-colors group font-bold text-xs"
                 aria-label="LinkedIn"
               >
                 in
               </a>
               <a 
                 href={`mailto:${emailVal}`} 
-                className="w-10 h-10 rounded-full bg-brand-bg border border-brand-border flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan transition-colors group"
+                className="w-8 h-8 rounded-full bg-brand-bg border border-brand-border flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan transition-colors group"
                 aria-label="Email"
               >
-                <Mail className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <Mail className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
               </a>
               <a 
                 href={`https://wa.me/${cleanWhatsapp}`} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="w-10 h-10 rounded-full bg-brand-bg border border-brand-border flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan transition-colors group"
+                className="w-8 h-8 rounded-full bg-brand-bg border border-brand-border flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan transition-colors group"
                 aria-label="WhatsApp"
               >
-                <Phone className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <Phone className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
               </a>
             </div>
           </div>
 
           {/* Column 2: Quick Links */}
           <div>
-            <h4 className="text-sm font-bold text-brand-text uppercase tracking-wider mb-6">Quick Links</h4>
-            <ul className="space-y-4">
+            <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider mb-3">Quick Links</h4>
+            <ul className="space-y-2">
               {quickLinks.map((link: any) => (
                 <li key={link.name || link.label || link.href}>
-                  <Link href={link.href || "#"} className="text-sm text-brand-text-muted hover:text-brand-cyan transition-colors flex items-center gap-2 group">
-                    <span className="w-1.5 h-1.5 rounded-full bg-brand-border group-hover:bg-brand-cyan transition-colors" />
+                  <Link href={link.href || "#"} className="text-xs text-brand-text-muted hover:text-brand-cyan transition-colors flex items-center gap-1.5 group">
+                    <span className="w-1 h-1 rounded-full bg-brand-border group-hover:bg-brand-cyan transition-colors" />
                     {link.name || link.label}
                   </Link>
                 </li>
@@ -147,12 +145,12 @@ export default function Footer() {
 
           {/* Column 3: Services */}
           <div>
-            <h4 className="text-sm font-bold text-brand-text uppercase tracking-wider mb-6">Services</h4>
-            <ul className="space-y-4">
+            <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider mb-3">Services</h4>
+            <ul className="space-y-2">
               {servicesLinks.map((link: any) => (
                 <li key={link.name || link.label || link.href}>
-                  <Link href={link.href || "#"} className="text-sm text-brand-text-muted hover:text-brand-cyan transition-colors flex items-center gap-2 group">
-                    <span className="w-1.5 h-1.5 rounded-full bg-brand-border group-hover:bg-brand-cyan transition-colors" />
+                  <Link href={link.href || "#"} className="text-xs text-brand-text-muted hover:text-brand-cyan transition-colors flex items-center gap-1.5 group">
+                    <span className="w-1 h-1 rounded-full bg-brand-border group-hover:bg-brand-cyan transition-colors" />
                     {link.name || link.label}
                   </Link>
                 </li>
@@ -162,24 +160,24 @@ export default function Footer() {
 
           {/* Column 4: Contact */}
           <div>
-            <h4 className="text-sm font-bold text-brand-text uppercase tracking-wider mb-6">Get In Touch</h4>
-            <ul className="space-y-4 text-sm text-brand-text-muted">
+            <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider mb-3">Get In Touch</h4>
+            <ul className="space-y-2.5 text-xs text-brand-text-muted">
               <li>
-                <span className="block text-xs text-brand-text-muted/70 mb-1">Email</span>
+                <span className="block text-[10px] text-brand-text-muted/70 uppercase tracking-wider mb-0.5">Email</span>
                 <a href={`mailto:${emailVal}`} className="text-brand-text hover:text-brand-cyan transition-colors">
                   {emailVal}
                 </a>
               </li>
               <li>
-                <span className="block text-xs text-brand-text-muted/70 mb-1">WhatsApp / Phone</span>
+                <span className="block text-[10px] text-brand-text-muted/70 uppercase tracking-wider mb-0.5">WhatsApp / Phone</span>
                 <a href={`https://wa.me/${cleanWhatsapp}`} className="text-brand-text hover:text-brand-cyan transition-colors">
                   {rawWhatsapp}
                 </a>
               </li>
               <li>
-                <span className="block text-xs text-brand-text-muted/70 mb-1">Availability</span>
-                <span className="text-brand-text flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="block text-[10px] text-brand-text-muted/70 uppercase tracking-wider mb-0.5">Availability</span>
+                <span className="text-brand-text flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                   {personalInfo?.availability || "Available for Projects"}
                 </span>
               </li>
@@ -189,9 +187,9 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-brand-border/50 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-brand-text-muted">
+        <div className="pt-4 border-t border-brand-border/50 flex flex-col md:flex-row justify-between items-center gap-2 text-[11px] text-brand-text-muted">
           <p>&copy; {currentYear} {personalInfo?.name || "Developer"}. All rights reserved.</p>
-          <div className="flex gap-6">
+          <div className="flex gap-4">
             <Link href="#home" className="hover:text-brand-cyan transition-colors">Privacy Policy</Link>
             <Link href="#home" className="hover:text-brand-cyan transition-colors">Terms of Service</Link>
           </div>
