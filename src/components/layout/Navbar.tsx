@@ -11,7 +11,7 @@ import { cn } from "@/utils/cn";
 // Navbar with multi-page App Router links
 const navLinks = [
   { name: "Home",     href: "/",          gradient: "from-brand-cyan to-brand-purple", glow: "var(--theme-primary-glow, rgba(0,112,243,0.35))" },
-  { name: "Services", href: "/#services", gradient: "from-brand-purple to-brand-cyan", glow: "var(--theme-secondary-glow, rgba(0,153,255,0.35))" },
+  { name: "Services", href: "/services",   gradient: "from-brand-purple to-brand-cyan", glow: "var(--theme-secondary-glow, rgba(0,153,255,0.35))" },
   { name: "Projects", href: "/projects",  gradient: "from-brand-cyan to-brand-purple", glow: "var(--theme-primary-glow, rgba(0,112,243,0.35))" },
   { name: "About",    href: "/about",     gradient: "from-brand-cyan to-brand-purple", glow: "var(--theme-primary-glow, rgba(0,112,243,0.35))" },
   { name: "Contact",  href: "/contact",   gradient: "from-brand-purple to-brand-cyan", glow: "var(--theme-secondary-glow, rgba(0,153,255,0.35))" },
