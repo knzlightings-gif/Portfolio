@@ -88,12 +88,19 @@ export default function Footer() {
           
           {/* Column 1: Brand Info */}
           <div className="lg:col-span-1">
-            <Link href="#home" className="inline-block mb-3">
-              <span className="text-xl font-bold tracking-tight text-brand-text">
-                {personalInfo?.name || "Developer"}
-              </span>
-              <div className="text-[11px] font-semibold text-brand-cyan tracking-widest uppercase mt-0.5">
-                {personalInfo?.roleDescriptor || "ERP & Web Developer"}
+            <Link href="#home" className="inline-flex items-center gap-2.5 mb-3">
+              {personalInfo?.logoUrl && (
+                <div className="h-8 max-w-[140px] px-1 py-0.5 rounded-lg bg-brand-bg border border-brand-border flex items-center justify-center shrink-0 overflow-hidden">
+                  <img src={personalInfo.logoUrl} alt={personalInfo.name} className="max-h-full max-w-full w-auto h-auto object-contain" />
+                </div>
+              )}
+              <div>
+                <span className="text-xl font-bold tracking-tight text-brand-text">
+                  {personalInfo?.name || "Developer"}
+                </span>
+                <div className="text-[11px] font-semibold text-brand-cyan tracking-widest uppercase mt-0.5">
+                  {personalInfo?.roleDescriptor || "ERP & Web Developer"}
+                </div>
               </div>
             </Link>
             <p className="text-xs text-brand-text-muted leading-relaxed mb-4">

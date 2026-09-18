@@ -58,11 +58,11 @@ export default function Navbar() {
         {/* Brand */}
         <Link href="/" className="flex items-center gap-3 group">
           {personalInfo.logoUrl && (
-            <div className="w-10 h-10 rounded-xl bg-brand-card/90 border border-brand-border/80 p-1.5 flex items-center justify-center shrink-0 shadow-sm group-hover:border-brand-cyan/60 group-hover:scale-105 transition-all">
+            <div className="h-9 max-w-[180px] px-1.5 py-1 rounded-xl bg-brand-card/90 border border-brand-border/80 flex items-center justify-center shrink-0 shadow-sm group-hover:border-brand-cyan/60 group-hover:scale-105 transition-all overflow-hidden">
               <img
                 src={personalInfo.logoUrl}
                 alt={personalInfo.name}
-                className="w-full h-full object-contain"
+                className="max-h-full max-w-full w-auto h-auto object-contain"
               />
             </div>
           )}
