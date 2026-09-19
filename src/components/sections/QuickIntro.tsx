@@ -2,44 +2,44 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Database, LayoutDashboard, Workflow, Link2, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const services = [
   {
-    icon: Database,
+    image: "/icons/erp.jpg",
     title: "ERP Systems",
     description: "Custom sales, inventory, purchasing & accounts software built directly around how your business operates.",
     highlight: "Sales & Stock Management",
     accent: "group-hover:text-brand-cyan",
     border: "group-hover:border-brand-cyan/40",
-    bgIcon: "bg-brand-cyan/10 text-brand-cyan",
+    glow: "hover:shadow-[0_20px_40px_-8px_rgba(0,112,243,0.3)]",
   },
   {
-    icon: LayoutDashboard,
+    image: "/icons/webapp.jpg",
     title: "Web Applications",
     description: "Fast, modern business web applications and admin portals designed for daily team productivity.",
     highlight: "Custom Dashboards & Portals",
     accent: "group-hover:text-brand-purple",
     border: "group-hover:border-brand-purple/40",
-    bgIcon: "bg-brand-purple/10 text-brand-purple",
+    glow: "hover:shadow-[0_20px_40px_-8px_rgba(99,102,241,0.3)]",
   },
   {
-    icon: Workflow,
+    image: "/icons/automation.jpg",
     title: "Workflow Automation",
     description: "Replace tedious Excel entry, manual calculations, and repetitive tasks with simple automated workflows.",
     highlight: "Process & Data Automation",
     accent: "group-hover:text-amber-400",
     border: "group-hover:border-amber-400/40",
-    bgIcon: "bg-amber-400/10 text-amber-400",
+    glow: "hover:shadow-[0_20px_40px_-8px_rgba(251,191,36,0.3)]",
   },
   {
-    icon: Link2,
+    image: "/icons/integration.jpg",
     title: "Custom Integrations",
     description: "Connect your existing software with third-party APIs, payment gateways, messaging tools & cloud databases.",
     highlight: "APIs & System Sync",
     accent: "group-hover:text-emerald-400",
     border: "group-hover:border-emerald-400/40",
-    bgIcon: "bg-emerald-400/10 text-emerald-400",
+    glow: "hover:shadow-[0_20px_40px_-8px_rgba(52,211,153,0.3)]",
   },
 ];
 
@@ -64,53 +64,55 @@ export default function QuickIntro() {
           </p>
         </div>
 
-        {/* 4 Sleek Cards */}
+        {/* 4 Cards with colorful images */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          {services.map((item, index) => {
-            const Icon = item.icon;
-            return (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ y: -8, scale: 1.015 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.35, delay: index * 0.08 }}
-                className={`group relative p-7 rounded-2xl bg-brand-card/90 border border-brand-border/80 ${item.border} transition-all duration-300 flex flex-col justify-between hover:shadow-[0_20px_40px_-8px_var(--theme-primary-glow,rgba(0,112,243,0.25))] overflow-hidden`}
-              >
-                {/* Top ambient accent glow */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan to-brand-purple opacity-30 group-hover:opacity-100 transition-opacity duration-300" />
+          {services.map((item, index) => (
+            <motion.div
+              key={item.title}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -8, scale: 1.015 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.35, delay: index * 0.08 }}
+              className={`group relative rounded-2xl bg-brand-card/90 border border-brand-border/80 ${item.border} ${item.glow} transition-all duration-300 flex flex-col overflow-hidden`}
+            >
+              {/* Top gradient line */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan to-brand-purple opacity-30 group-hover:opacity-100 transition-opacity duration-300 z-10" />
 
+              {/* Colorful Image */}
+              <div className="relative w-full h-40 overflow-hidden">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-brand-card/90" />
+                <span className="absolute top-2.5 right-2.5 text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-black/50 backdrop-blur-md border border-white/20 text-white">
+                  /0{index + 1}
+                </span>
+              </div>
+
+              {/* Card Content */}
+              <div className="p-6 flex flex-col flex-1 justify-between">
                 <div>
-                  {/* Icon Header */}
-                  <div className="flex items-center justify-between mb-6">
-                    <div className={`w-12 h-12 rounded-xl ${item.bgIcon} flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}>
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md bg-brand-bg border border-brand-border text-brand-text-muted group-hover:border-brand-cyan/40 group-hover:text-brand-cyan transition-colors">
-                      /0{index + 1}
-                    </span>
-                  </div>
-
-                  {/* Title & Description */}
-                  <h3 className={`text-xl font-bold text-brand-text mb-3 ${item.accent} transition-colors`}>
+                  <h3 className={`text-lg font-bold text-brand-text mb-2 ${item.accent} transition-colors`}>
                     {item.title}
                   </h3>
-                  <p className="text-sm text-brand-text-muted leading-relaxed mb-6">
+                  <p className="text-sm text-brand-text-muted leading-relaxed mb-5">
                     {item.description}
                   </p>
                 </div>
 
-                {/* Footer Highlight */}
+                {/* Footer */}
                 <div className="pt-4 border-t border-brand-border/40 flex items-center justify-between">
                   <span className="text-xs font-semibold text-brand-text-muted group-hover:text-brand-text transition-colors">
                     {item.highlight}
                   </span>
                   <ArrowRight className="w-4 h-4 text-brand-text-muted group-hover:text-brand-cyan group-hover:translate-x-1.5 transition-all duration-300" />
                 </div>
-              </motion.div>
-            );
-          })}
+              </div>
+            </motion.div>
+          ))}
         </div>
 
         {/* Action Link */}
@@ -128,3 +130,4 @@ export default function QuickIntro() {
     </section>
   );
 }
+

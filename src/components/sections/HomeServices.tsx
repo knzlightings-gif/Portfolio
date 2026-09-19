@@ -2,28 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import {
-  Database,
-  LayoutDashboard,
-  Workflow,
-  Cpu,
-  Link as LinkIcon,
-  BarChart,
-  Sparkles,
-  Layers,
-  LucideIcon,
-  ArrowUpRight,
-} from "lucide-react";
+import { Sparkles, ArrowUpRight } from "lucide-react";
 import { defaultServices, ServiceItem } from "@/data/servicesData";
-
-const iconMap: Record<string, LucideIcon> = {
-  Database,
-  LayoutDashboard,
-  Workflow,
-  Cpu,
-  Link: LinkIcon,
-  BarChart,
-};
 
 export default function HomeServices() {
   const [services, setServices] = useState<ServiceItem[]>([]);
@@ -85,12 +65,17 @@ export default function HomeServices() {
           </motion.p>
         </div>
 
-        {/* Responsive Grid of Cards */}
+        {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {services.map((service, index) => {
-            const IconComp = iconMap[service.icon] || Layers;
             const firstFeature = service.features?.[0] || "";
             const num = `/${String(index + 1).padStart(2, "0")}`;
+            const serviceImageMap: Record<string, string> = {
+              automation: "/icons/automation.jpg",
+              erp: "/icons/erp.jpg",
+              "web-apps": "/icons/webapp.jpg",
+            };
+            const imgSrc = serviceImageMap[service.id] || "";
 
             return (
               <motion.div
@@ -102,52 +87,52 @@ export default function HomeServices() {
                 transition={{ duration: 0.35, delay: index * 0.08 }}
                 className="h-full"
               >
-                <div
-                  className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-brand-card/90 backdrop-blur-md border border-brand-border/80 shadow-md hover:shadow-[0_20px_40px_-8px_var(--theme-primary-glow,rgba(0,112,243,0.3))] hover:border-brand-cyan/60 transition-all duration-300 p-6 md:p-7 h-full"
-                >
-                  {/* Top Ambient Gradient Line */}
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-brand-purple opacity-40 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="group relative flex flex-col overflow-hidden rounded-2xl bg-brand-card/90 backdrop-blur-md border border-brand-border/80 shadow-md hover:shadow-[0_20px_40px_-8px_var(--theme-primary-glow,rgba(0,112,243,0.3))] hover:border-brand-cyan/60 transition-all duration-300 h-full">
+                  {/* Top gradient line */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-brand-purple opacity-40 group-hover:opacity-100 transition-opacity duration-300 z-10" />
 
-                  <div>
-                    {/* Header Row: Icon + Number Badge */}
-                    <div className="flex items-center justify-between mb-5">
-                      <div className="w-12 h-12 rounded-xl bg-brand-cyan/10 border border-brand-cyan/25 flex items-center justify-center text-brand-cyan shadow-xs group-hover:scale-110 group-hover:rotate-3 group-hover:bg-brand-cyan group-hover:text-white transition-all duration-300">
-                        <IconComp className="w-6 h-6" />
-                      </div>
-
-                      <span className="text-xs font-mono font-bold px-3 py-1 rounded-lg bg-brand-bg border border-brand-border text-brand-text-muted group-hover:border-brand-cyan/40 group-hover:text-brand-cyan transition-colors">
-                        {num}
-                      </span>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-xl font-bold text-brand-text mb-2 tracking-tight group-hover:text-brand-cyan transition-colors duration-200">
-                      {service.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-sm text-brand-text-muted leading-relaxed mb-6 line-clamp-2">
-                      {service.description}
-                    </p>
+                  {/* Colorful Image */}
+                  <div className="relative w-full h-48 overflow-hidden">
+                    {imgSrc && (
+                      <img
+                        src={imgSrc}
+                        alt={service.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-brand-card" />
+                    <span className="absolute top-3 right-3 text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-black/50 backdrop-blur-md border border-white/20 text-white">
+                      {num}
+                    </span>
                   </div>
 
-                  {/* Feature Tag & Footer */}
-                  <div className="pt-4 border-t border-brand-border/50 mt-auto space-y-3">
-                    {firstFeature && (
-                      <span className="inline-block text-xs font-medium px-3 py-1 rounded-md bg-brand-bg text-brand-text-muted border border-brand-border/70 group-hover:border-brand-cyan/30 group-hover:text-brand-text transition-colors truncate max-w-full">
-                        {firstFeature}
-                      </span>
-                    )}
+                  {/* Card Content */}
+                  <div className="p-6 flex flex-col flex-1 justify-between">
+                    <div>
+                      <h3 className="text-xl font-bold text-brand-text mb-2 tracking-tight group-hover:text-brand-cyan transition-colors duration-200">
+                        {service.title}
+                      </h3>
+                      <p className="text-sm text-brand-text-muted leading-relaxed mb-5 line-clamp-2">
+                        {service.description}
+                      </p>
+                    </div>
 
-                    <div className="flex items-center justify-between text-xs font-bold text-brand-text-muted">
-                      <span className="flex items-center gap-1.5 text-xs text-brand-text">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        Active Service
-                      </span>
-                      <span className="flex items-center gap-1 text-brand-cyan font-bold group-hover:translate-x-1.5 transition-transform duration-300">
-                        <span>Details</span>
-                        <ArrowUpRight className="w-3.5 h-3.5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
-                      </span>
+                    <div className="pt-4 border-t border-brand-border/50 space-y-3">
+                      {firstFeature && (
+                        <span className="inline-block text-xs font-medium px-3 py-1 rounded-md bg-brand-bg text-brand-text-muted border border-brand-border/70 group-hover:border-brand-cyan/30 group-hover:text-brand-text transition-colors truncate max-w-full">
+                          {firstFeature}
+                        </span>
+                      )}
+                      <div className="flex items-center justify-between text-xs font-bold">
+                        <span className="flex items-center gap-1.5 text-brand-text">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                          Active Service
+                        </span>
+                        <span className="flex items-center gap-1 text-brand-cyan font-bold group-hover:translate-x-1.5 transition-transform duration-300">
+                          Details
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
