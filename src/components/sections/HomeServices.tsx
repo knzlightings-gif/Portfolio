@@ -35,7 +35,9 @@ export default function HomeServices() {
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data) && data.length > 0) {
-            setServices(data);
+            const targetIds = ["automation", "erp", "web-apps"];
+            const filtered = data.filter((s: ServiceItem) => targetIds.includes(s.id));
+            setServices(filtered.length > 0 ? filtered : defaultServices);
             return;
           }
         }

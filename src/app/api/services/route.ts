@@ -36,12 +36,16 @@ export async function GET() {
       return NextResponse.json([]);
     }
 
-    const services = snapshot.docs.map((d) => ({
-      id: d.id,
-      ...d.data(),
-    }));
+    const allowedIds = ["automation", "erp", "web-apps"];
 
-    return NextResponse.json(services);
+    const services = snapshot.docs
+      .map((d) => ({
+        id: d.id,
+        ...d.data(),
+      }))
+      .filter((s: any) => allowedIds.includes(s.id));
+
+    return NextResponse.json(services.length > 0 ? services : defaultServices);
   } catch (error) {
     console.error("Error fetching services from Firestore:", error);
     return NextResponse.json(defaultServices);

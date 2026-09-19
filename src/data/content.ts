@@ -26,6 +26,12 @@ export const personalInfo = {
 
 export const whatIDo = [
   {
+    id: "automation",
+    title: "Business Automation",
+    description: "Replace repetitive manual processes with simple digital workflows.",
+    icon: "Workflow"
+  },
+  {
     id: "erp",
     title: "ERP Development",
     description: "Custom ERP systems for managing sales, purchases, inventory, accounts and business operations.",
@@ -36,30 +42,6 @@ export const whatIDo = [
     title: "Web Applications",
     description: "Modern web-based business applications, dashboards and management systems.",
     icon: "LayoutDashboard"
-  },
-  {
-    id: "automation",
-    title: "Business Automation",
-    description: "Replace repetitive manual processes with simple digital workflows.",
-    icon: "Workflow"
-  },
-  {
-    id: "ai",
-    title: "AI-Assisted Development",
-    description: "Modern AI-powered development workflows that help build and iterate software faster while maintaining a strong focus on quality and usability.",
-    icon: "Cpu"
-  },
-  {
-    id: "api",
-    title: "API Integrations",
-    description: "Connecting your business software with third-party services, payment gateways, and external tools.",
-    icon: "Link"
-  },
-  {
-    id: "analytics",
-    title: "Data Dashboards",
-    description: "Visualizing complex business data into simple, actionable insights and reporting dashboards.",
-    icon: "BarChart"
   }
 ];
 
