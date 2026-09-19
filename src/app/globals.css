@@ -122,7 +122,7 @@ html {
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee-ltr 30s linear infinite;
+  animation: marquee-left 30s linear infinite;
   will-change: transform;
 }
 
