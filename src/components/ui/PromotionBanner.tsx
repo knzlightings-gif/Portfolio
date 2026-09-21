@@ -97,7 +97,7 @@ export default function PromotionBanner() {
         <div className="flex overflow-hidden relative w-full items-center">
           <motion.div
             className="flex items-center gap-12 whitespace-nowrap group-hover:[animation-play-state:paused]"
-            animate={{ x: ["-50%", "0%"] }}
+            animate={{ x: ["0%", "-50%"] }}
             transition={{
               repeat: Infinity,
               repeatType: "loop",
