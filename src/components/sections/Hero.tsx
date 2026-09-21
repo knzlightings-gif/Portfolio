@@ -6,31 +6,37 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, Activity, ShieldCheck, Cpu } from "lucide-react";
 
-// Curated High-End Corporate & Enterprise ERP Visuals
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 🎬 HERO IMAGE SLIDES — Cinematic Ken Burns Animation (Video Feel)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const heroSlides = [
   {
-    url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=85&w=1600",
+    url: "/hero-slide1.jpg",
     badge: "Enterprise ERP & Analytics",
     title: "Real-Time Executive Intelligence",
     subtitle: "Automated business reporting & KPI telemetry",
+    kenBurns: "kenBurnsZoomIn",   // zoom in + right
   },
   {
-    url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=85&w=1600",
+    url: "/hero-slide2.jpg",
     badge: "Custom Financial Systems",
     title: "Multi-Entity Cloud Ledger",
     subtitle: "Automated reconciliation & cash flow tracking",
+    kenBurns: "kenBurnsPanLeft",   // pan left
   },
   {
-    url: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&q=85&w=1600",
+    url: "/hero-slide3.jpg",
     badge: "Operations & Inventory Management",
     title: "Supply Chain Command Center",
     subtitle: "Live stock tracking & automated purchase pipelines",
+    kenBurns: "kenBurnsZoomOut",   // zoom out
   },
   {
-    url: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=85&w=1600",
+    url: "/hero-slide4.jpg",
     badge: "Full-Stack Scalable Architecture",
     title: "High-Performance Cloud Systems",
     subtitle: "Microservices, secure APIs & 99.9% uptime reliability",
+    kenBurns: "kenBurnsPanRight",  // pan right
   },
 ];
 
@@ -56,9 +62,9 @@ export default function Hero() {
       .catch((err) => console.error("Error loading personal info:", err));
   }, []);
 
-  // Auto slide when hovered (and periodic gentle shift when not hovered)
+  // Auto slide
   useEffect(() => {
-    const duration = isHovered ? 2400 : 5000;
+    const duration = isHovered ? 6000 : 5000;
 
     intervalRef.current = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
@@ -188,25 +194,32 @@ export default function Hero() {
                   </div>
                 </div>
 
-                {/* Visual Image Viewport */}
+                {/* 🎬 Cinematic Image Viewport with Ken Burns Animation */}
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-950">
                   {heroSlides.map((slide, index) => (
                     <div
                       key={slide.url}
-                      className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                      className={`absolute inset-0 ${
                         index === currentSlide 
-                          ? "opacity-100 scale-100 z-10" 
-                          : "opacity-0 scale-105 z-0 pointer-events-none"
+                          ? "opacity-100 z-10" 
+                          : "opacity-0 z-0 pointer-events-none"
                       }`}
-                      style={{ transition: "opacity 0.7s ease-in-out, transform 0.7s ease-in-out" }}
+                      style={{ transition: "opacity 1s ease-in-out" }}
                     >
+                      {/* Image with Ken Burns motion effect */}
                       <img 
                         src={slide.url} 
                         alt={slide.title} 
                         className="w-full h-full object-cover"
+                        style={{
+                          animation: index === currentSlide 
+                            ? `${slide.kenBurns} 6s ease-in-out forwards` 
+                            : "none",
+                          transformOrigin: "center center",
+                        }}
                       />
-                      {/* Dark Gradient Overlay for Cinematic Contrast */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
+                      {/* Cinematic Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
                     </div>
                   ))}
 

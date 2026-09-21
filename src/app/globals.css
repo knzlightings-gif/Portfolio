@@ -218,3 +218,31 @@ html {
   border: 1px solid var(--theme-primary-glow, rgba(0, 112, 243, 0.25));
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   🎬 Ken Burns Cinematic Animations — Hero Slider (Video Feel)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Slide 1: Zoom In */
+@keyframes kenBurnsZoomIn {
+  0%   { transform: scale(1)    translate(0%, 0%); }
+  100% { transform: scale(1.12) translate(-2%, -1%); }
+}
+
+/* Slide 2: Pan Left (right se left ki taraf) */
+@keyframes kenBurnsPanLeft {
+  0%   { transform: scale(1.1) translate(3%, 0%); }
+  100% { transform: scale(1.1) translate(-3%, 0%); }
+}
+
+/* Slide 3: Zoom Out */
+@keyframes kenBurnsZoomOut {
+  0%   { transform: scale(1.15) translate(0%, 0%); }
+  100% { transform: scale(1)    translate(2%, 1%); }
+}
+
+/* Slide 4: Pan Right (left se right ki taraf) */
+@keyframes kenBurnsPanRight {
+  0%   { transform: scale(1.1) translate(-3%, 0%); }
+  100% { transform: scale(1.1) translate(3%, 0%); }
+}
+
