@@ -77,7 +77,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
   const IconComp = availableIcons[service.icon] || Database;
 
   return (
-    <main className="min-h-screen bg-brand-bg text-brand-text selection:bg-brand-cyan selection:text-slate-950 flex flex-col justify-between">
+    <main className="min-h-screen bg-transparent text-brand-text selection:bg-brand-cyan selection:text-slate-950 flex flex-col justify-between">
       <Navbar />
 
       <div className="pt-32 pb-24 relative overflow-hidden">

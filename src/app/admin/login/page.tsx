@@ -56,7 +56,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-brand-bg items-center justify-center p-6 relative">
+    <div className="min-h-screen flex flex-col bg-transparent items-center justify-center p-6 relative">
       <Link href="/" className="absolute top-8 left-8 flex items-center gap-2 text-brand-text-muted hover:text-brand-cyan transition-colors font-medium">
         <ArrowLeft className="w-5 h-5" />
         Back to Website

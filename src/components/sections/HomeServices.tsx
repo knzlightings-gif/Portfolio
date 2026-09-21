@@ -37,7 +37,7 @@ export default function HomeServices() {
   }, []);
 
   return (
-    <section id="services" className="py-10 md:py-14 bg-brand-bg relative overflow-hidden">
+    <section id="services" className="py-10 md:py-14 bg-transparent relative overflow-hidden">
       {/* Background ambient glow orbs */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-cyan/10 rounded-full blur-[140px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-purple/10 rounded-full blur-[140px] translate-y-1/3 -translate-x-1/3 pointer-events-none" />

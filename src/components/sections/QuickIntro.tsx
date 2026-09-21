@@ -45,7 +45,7 @@ const services = [
 
 export default function QuickIntro() {
   return (
-    <section className="py-10 md:py-12 bg-brand-bg relative overflow-hidden">
+    <section className="py-10 md:py-12 bg-transparent relative overflow-hidden">
       <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
         
         {/* Section Header */}

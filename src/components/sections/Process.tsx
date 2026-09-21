@@ -89,7 +89,7 @@ const processSteps: ProcessStepDetail[] = [
 
 export default function Process() {
   return (
-    <section id="process" className="py-24 bg-brand-bg relative overflow-hidden">
+    <section id="process" className="py-24 bg-transparent relative overflow-hidden">
       
       {/* Background Ambient Glows */}
       <div className="absolute top-1/3 left-0 w-[600px] h-[600px] bg-brand-cyan/10 rounded-full blur-[160px] -translate-x-1/2 pointer-events-none" />

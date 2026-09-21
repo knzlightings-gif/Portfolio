@@ -129,7 +129,7 @@ export default function WhyMe() {
   const principles = data?.principles || defaultPhilosophy.principles;
 
   return (
-    <section className="py-28 bg-brand-bg relative overflow-hidden">
+    <section className="py-28 bg-transparent relative overflow-hidden">
       {/* Dynamic Ambient Background Lights */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-brand-cyan/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-[400px] h-[400px] bg-brand-purple/5 rounded-full blur-[120px] pointer-events-none" />

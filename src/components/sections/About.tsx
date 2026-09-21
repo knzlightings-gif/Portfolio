@@ -35,7 +35,7 @@ export default function About() {
   const techStack = data?.techStack || defaultAbout.techStack;
 
   return (
-    <section id="about" className="py-24 bg-brand-bg border-t border-brand-border relative overflow-hidden">
+    <section id="about" className="py-24 bg-transparent border-t border-brand-border relative overflow-hidden">
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 -left-48 w-96 h-96 rounded-full bg-brand-cyan/5 blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 -right-48 w-96 h-96 rounded-full bg-brand-purple/5 blur-3xl pointer-events-none" />
@@ -94,7 +94,7 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.3 + index * 0.1 }}
-                  className="p-7 rounded-3xl bg-brand-bg/80 backdrop-blur-sm border border-brand-border hover:border-brand-cyan/40 transition-all duration-300 shadow-sm group"
+                  className="p-7 rounded-3xl bg-brand-card/80 backdrop-blur-sm border border-brand-border hover:border-brand-cyan/40 transition-all duration-300 shadow-sm group"
                 >
                   <div className="text-4xl md:text-5xl font-black text-brand-text mb-2 group-hover:text-brand-cyan transition-colors">
                     {stat.value}
@@ -175,7 +175,7 @@ export default function About() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="p-8 rounded-3xl bg-brand-bg/60 border border-brand-border backdrop-blur-sm"
+              className="p-8 rounded-3xl bg-brand-card/70 border border-brand-border backdrop-blur-sm"
             >
               <h3 className="text-xl md:text-2xl font-bold text-brand-text mb-6 flex items-center gap-3">
                 <span className="w-2 h-6 rounded-full bg-brand-cyan" />

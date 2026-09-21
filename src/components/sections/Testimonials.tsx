@@ -75,7 +75,7 @@ export default function Testimonials() {
   const duplicatedTestimonials = items.length > 0 ? [...items, ...items, ...items] : [];
 
   return (
-    <section id="testimonials" className="py-10 md:py-14 bg-brand-bg relative overflow-hidden">
+    <section id="testimonials" className="py-10 md:py-14 bg-transparent relative overflow-hidden">
       
       {/* Ambient Lighting */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-brand-cyan/5 rounded-full blur-[140px] pointer-events-none" />

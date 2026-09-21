@@ -63,7 +63,7 @@ export default function Solutions() {
   }, []);
 
   return (
-    <section className="py-10 md:py-14 bg-brand-bg relative overflow-hidden">
+    <section className="py-10 md:py-14 bg-transparent relative overflow-hidden">
       {/* Ambient background glows */}
       <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-brand-cyan/10 rounded-full blur-[140px] pointer-events-none -translate-x-1/2" />
       <div className="absolute bottom-10 right-0 w-[500px] h-[500px] bg-brand-purple/10 rounded-full blur-[140px] pointer-events-none translate-x-1/2" />

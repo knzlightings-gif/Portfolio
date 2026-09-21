@@ -54,7 +54,7 @@ export default function Footer() {
   const servicesLinks = footerContent?.servicesLinks || defaultFooter.servicesLinks;
 
   return (
-    <footer className="bg-brand-card border-t border-brand-border relative overflow-hidden pt-10 pb-6">
+    <footer className="bg-brand-card/85 backdrop-blur-md border-t border-brand-border relative overflow-hidden pt-10 pb-6">
       
       {/* Background Accent */}
       <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-brand-cyan/5 rounded-full blur-[120px] pointer-events-none -translate-y-1/2" />

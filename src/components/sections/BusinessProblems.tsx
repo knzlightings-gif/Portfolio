@@ -81,7 +81,7 @@ export default function BusinessProblems() {
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + manualTroubles.length) % manualTroubles.length);
 
   return (
-    <section className="py-24 bg-brand-bg relative overflow-hidden">
+    <section className="py-24 bg-transparent relative overflow-hidden">
       
       {/* Background ambient gradient glow */}
       <div className="absolute top-1/2 right-0 w-96 h-96 bg-brand-cyan/10 rounded-full blur-[130px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
@@ -117,7 +117,7 @@ export default function BusinessProblems() {
               className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-10"
             >
               {problems.map((problem, i) => (
-                <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-brand-bg/60 border border-brand-border/60 hover:border-red-400/40 transition-colors">
+                <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-brand-card/70 backdrop-blur-xs border border-brand-border/60 hover:border-red-400/40 transition-colors">
                   <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
                   <span className="text-brand-text text-sm font-medium">{problem}</span>
                 </div>
