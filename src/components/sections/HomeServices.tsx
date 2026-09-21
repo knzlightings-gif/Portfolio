@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, ArrowUpRight, Zap, LayoutGrid, Monitor } from "lucide-react";
+import { Sparkles, ArrowUpRight } from "lucide-react";
 import { defaultServices, ServiceItem } from "@/data/servicesData";
 
-// Icon map per service
-const serviceIconMap: Record<string, React.ElementType> = {
-  automation: Zap,
-  erp: LayoutGrid,
-  "web-apps": Monitor,
+// Illustration per service
+const serviceImageMap: Record<string, string> = {
+  automation: "/card-automation.jpg",
+  erp: "/card-erp.jpg",
+  "web-apps": "/card-webapp.jpg",
 };
 
 export default function HomeServices() {
@@ -77,7 +77,7 @@ export default function HomeServices() {
           {services.map((service, index) => {
             const firstFeature = service.features?.[0] || "";
             const num = `/${String(index + 1).padStart(2, "0")}`;
-            const Icon = serviceIconMap[service.id] || LayoutGrid;
+            const imgSrc = serviceImageMap[service.id] || "/card-erp.jpg";
 
             return (
               <motion.div
@@ -93,22 +93,15 @@ export default function HomeServices() {
                   {/* Top gradient accent line */}
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-brand-purple opacity-40 group-hover:opacity-100 transition-opacity duration-300 z-10" />
 
-                  {/* Clean Icon Visual Header */}
-                  <div className="relative w-full h-44 overflow-hidden bg-gradient-to-br from-brand-cyan/6 via-brand-bg to-brand-purple/6 flex items-center justify-center border-b border-brand-border/50">
-                    {/* Dot grid pattern */}
-                    <div
-                      className="absolute inset-0 opacity-[0.04]"
-                      style={{
-                        backgroundImage: "radial-gradient(circle, var(--theme-primary) 1px, transparent 1px)",
-                        backgroundSize: "24px 24px",
-                      }}
+                  {/* Illustration Image Header */}
+                  <div className="relative w-full h-44 overflow-hidden border-b border-brand-border/50">
+                    <img
+                      src={imgSrc}
+                      alt={service.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                     />
-                    {/* Outer glow ring */}
-                    <div className="absolute w-36 h-36 rounded-full bg-brand-cyan/10 blur-3xl group-hover:bg-brand-cyan/20 transition-all duration-500" />
-                    {/* Icon box */}
-                    <div className="relative z-10 w-20 h-20 rounded-2xl bg-brand-card border border-brand-cyan/30 flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:border-brand-cyan/70 group-hover:shadow-[0_0_32px_rgba(0,112,243,0.25)] transition-all duration-400">
-                      <Icon className="w-9 h-9 text-brand-cyan stroke-[1.7]" />
-                    </div>
+                    {/* Gradient overlay bottom */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-brand-card/80" />
                     {/* Slide number */}
                     <span className="absolute top-3 right-3 text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-brand-bg/80 backdrop-blur-md border border-brand-border text-brand-text-muted">
                       {num}

@@ -3,15 +3,16 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { solutionsByBusiness as defaultSolutionsByBusiness } from "@/data/content";
-import { Factory, Store, Truck, Briefcase, GraduationCap, Stethoscope, ArrowRight, Layers } from "lucide-react";
+import { ArrowRight, Layers } from "lucide-react";
 
-const iconMap: Record<string, any> = {
-  Factory,
-  Store,
-  Truck,
-  Briefcase,
-  GraduationCap,
-  Stethoscope,
+// Industry illustration map
+const solutionImageMap: Record<string, string> = {
+  Manufacturing: "/card-manufacturing.jpg",
+  Retail: "/card-retail.jpg",
+  Distribution: "/card-distribution.jpg",
+  Services: "/card-services.jpg",
+  Education: "/card-education.jpg",
+  Healthcare: "/card-education.jpg", // fallback until healthcare image is ready
 };
 
 export default function Solutions() {
@@ -99,7 +100,6 @@ export default function Solutions() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
           {solutions.map((solution, index) => {
-            const Icon = iconMap[solution.icon] || Layers;
             const num = String(index + 1).padStart(2, "0");
             const featureList = typeof solution.features === "string" 
               ? solution.features.split(" + ") 
@@ -113,29 +113,32 @@ export default function Solutions() {
                 whileHover={{ y: -8, scale: 1.015 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.35, delay: index * 0.06 }}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-brand-card/90 backdrop-blur-md border border-brand-border/80 shadow-md hover:shadow-[0_20px_40px_-8px_var(--theme-primary-glow,rgba(0,112,243,0.3))] hover:border-brand-cyan/60 transition-all duration-300 p-5 md:p-6"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-brand-card/90 backdrop-blur-md border border-brand-border/80 shadow-md hover:shadow-[0_20px_40px_-8px_var(--theme-primary-glow,rgba(0,112,243,0.3))] hover:border-brand-cyan/60 transition-all duration-300"
               >
                 {/* Top decorative gradient accent line */}
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-brand-purple opacity-40 group-hover:opacity-100 transition-opacity duration-300" />
 
-                {/* Main Content Area */}
-                <div className="relative z-10">
-                  {/* Top Header Row: Icon + Badge */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 bg-brand-cyan/10 border border-brand-cyan/25 text-brand-cyan shadow-xs group-hover:bg-brand-cyan group-hover:text-white">
-                      <Icon className="w-5 h-5 stroke-[2.2]" />
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan">
-                        {solution.badge || "Custom"}
-                      </span>
-                      <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md bg-brand-bg border border-brand-border text-brand-text-muted">
-                        /{num}
-                      </span>
-                    </div>
+                {/* Illustration Image Header */}
+                <div className="relative w-full h-40 overflow-hidden border-b border-brand-border/50">
+                  <img
+                    src={solutionImageMap[solution.title] || "/card-erp.jpg"}
+                    alt={solution.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-brand-card/90" />
+                  {/* Badge + Number overlay */}
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-bg/80 backdrop-blur-md border border-brand-border text-brand-cyan">
+                      {solution.badge || "Custom"}
+                    </span>
+                    <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md bg-brand-bg/80 backdrop-blur-md border border-brand-border text-brand-text-muted">
+                      /{num}
+                    </span>
                   </div>
+                </div>
 
+                {/* Main Content Area */}
+                <div className="relative z-10 p-5 md:p-6">
                   {/* Title & Subtitle */}
                   <div className="mb-2">
                     <h3 className="text-lg font-bold text-brand-text group-hover:text-brand-cyan transition-colors duration-200">
