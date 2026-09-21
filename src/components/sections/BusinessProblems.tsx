@@ -81,7 +81,7 @@ export default function BusinessProblems() {
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + manualTroubles.length) % manualTroubles.length);
 
   return (
-    <section className="py-24 bg-brand-card relative overflow-hidden">
+    <section className="py-24 bg-brand-bg relative overflow-hidden">
       
       {/* Background ambient gradient glow */}
       <div className="absolute top-1/2 right-0 w-96 h-96 bg-brand-cyan/10 rounded-full blur-[130px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
