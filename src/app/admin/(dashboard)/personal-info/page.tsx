@@ -1,7 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Save, Loader2, CheckCircle2, Upload, Trash2, Image as ImageIcon, Sparkles } from "lucide-react";
+import { Save, Loader2, CheckCircle2, Upload, Trash2, Image as ImageIcon, Palette, Type } from "lucide-react";
+
+// Preset color options for quick selection
+const TEXT_COLOR_PRESETS = [
+  { label: "Default Dark", value: "" },
+  { label: "Brand Blue", value: "#0070F3" },
+  { label: "Cyan", value: "#00C4CC" },
+  { label: "Purple", value: "#7C3AED" },
+  { label: "Indigo", value: "#4F46E5" },
+  { label: "Emerald", value: "#10B981" },
+  { label: "Amber", value: "#F59E0B" },
+  { label: "Rose", value: "#F43F5E" },
+  { label: "White", value: "#FFFFFF" },
+  { label: "Slate", value: "#64748B" },
+];
 
 const defaultData = {
   name: "",
@@ -14,7 +28,79 @@ const defaultData = {
   email: "",
   whatsapp: "",
   linkedin: "",
+  // Text colors
+  nameColor: "",
+  taglineColor: "",
+  taglineAccentColor: "",
+  descriptionColor: "",
+  roleDescriptorColor: "",
+  availabilityColor: "",
 };
+
+// Reusable color picker row component
+function ColorPickerRow({
+  label,
+  fieldName,
+  value,
+  onChange,
+}: {
+  label: string;
+  fieldName: string;
+  value: string;
+  onChange: (name: string, value: string) => void;
+}) {
+  return (
+    <div className="flex items-center gap-3 mt-2">
+      <Palette className="w-3.5 h-3.5 text-brand-text-muted shrink-0" />
+      <span className="text-xs text-brand-text-muted whitespace-nowrap">Text Color:</span>
+      <div className="flex items-center gap-1.5 flex-wrap">
+        {TEXT_COLOR_PRESETS.map((preset) => (
+          <button
+            key={preset.value}
+            type="button"
+            title={preset.label}
+            onClick={() => onChange(fieldName, preset.value)}
+            className={`w-5 h-5 rounded-full border-2 transition-all hover:scale-110 ${
+              value === preset.value
+                ? "border-brand-cyan scale-110 shadow-[0_0_6px_rgba(0,196,204,0.6)]"
+                : "border-brand-border/60"
+            }`}
+            style={{
+              backgroundColor: preset.value || "var(--theme-text)",
+              ...(preset.value === "" && { background: "linear-gradient(135deg, #0F172A 50%, #94A3B8 50%)" }),
+            }}
+          />
+        ))}
+        {/* Custom color input */}
+        <label className="w-5 h-5 rounded-full border-2 border-brand-border/60 overflow-hidden cursor-pointer hover:scale-110 transition-all" title="Custom color">
+          <input
+            type="color"
+            value={value || "#0F172A"}
+            onChange={(e) => onChange(fieldName, e.target.value)}
+            className="w-full h-full opacity-0 cursor-pointer"
+          />
+          <div
+            className="w-full h-full -mt-5 rounded-full"
+            style={{ backgroundColor: value || "transparent", border: "2px dashed #94A3B8" }}
+          />
+        </label>
+        {value && (
+          <button
+            type="button"
+            onClick={() => onChange(fieldName, "")}
+            className="text-[10px] text-brand-text-muted hover:text-rose-400 transition-colors px-1"
+            title="Reset to default"
+          >
+            ✕ reset
+          </button>
+        )}
+      </div>
+      {value && (
+        <span className="text-[10px] font-mono text-brand-cyan ml-auto">{value}</span>
+      )}
+    </div>
+  );
+}
 
 export default function PersonalInfoAdmin() {
   const [isSaving, setIsSaving] = useState(false);
@@ -40,6 +126,13 @@ export default function PersonalInfoAdmin() {
             email: data.contact?.email || data.email || "",
             whatsapp: data.contact?.whatsapp || data.whatsapp || "",
             linkedin: data.contact?.linkedin || data.linkedin || "",
+            // Colors
+            nameColor: data.nameColor || "",
+            taglineColor: data.taglineColor || "",
+            taglineAccentColor: data.taglineAccentColor || "",
+            descriptionColor: data.descriptionColor || "",
+            roleDescriptorColor: data.roleDescriptorColor || "",
+            availabilityColor: data.availabilityColor || "",
           });
         }
       })
@@ -51,6 +144,10 @@ export default function PersonalInfoAdmin() {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleColorChange = (fieldName: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [fieldName]: value }));
+  };
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -60,11 +157,7 @@ export default function PersonalInfoAdmin() {
     body.append("file", file);
 
     try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body,
-      });
-
+      const res = await fetch("/api/upload", { method: "POST", body });
       const data = await res.json();
       if (data.url) {
         setFormData((prev) => ({ ...prev, logoUrl: data.url }));
@@ -72,7 +165,6 @@ export default function PersonalInfoAdmin() {
         alert(data.error || "Failed to upload logo image.");
       }
     } catch (err) {
-      console.error("Upload error:", err);
       alert("Error uploading file.");
     } finally {
       setIsUploading(false);
@@ -97,6 +189,13 @@ export default function PersonalInfoAdmin() {
         whatsapp: formData.whatsapp,
         linkedin: formData.linkedin,
       },
+      // Save colors
+      nameColor: formData.nameColor,
+      taglineColor: formData.taglineColor,
+      taglineAccentColor: formData.taglineAccentColor,
+      descriptionColor: formData.descriptionColor,
+      roleDescriptorColor: formData.roleDescriptorColor,
+      availabilityColor: formData.availabilityColor,
     };
 
     try {
@@ -152,9 +251,17 @@ export default function PersonalInfoAdmin() {
       {saveSuccess && (
         <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 flex items-center gap-3">
           <CheckCircle2 className="w-5 h-5 shrink-0" />
-          <p className="text-sm font-semibold">Personal info saved! Header logo & settings are live on your portfolio.</p>
+          <p className="text-sm font-semibold">Personal info saved! Changes are live on your portfolio.</p>
         </div>
       )}
+
+      {/* Color Legend */}
+      <div className="p-4 rounded-xl bg-brand-cyan/5 border border-brand-cyan/20 flex items-start gap-3">
+        <Type className="w-4 h-4 text-brand-cyan mt-0.5 shrink-0" />
+        <p className="text-xs text-brand-text-muted leading-relaxed">
+          <span className="text-brand-cyan font-semibold">Text Color Picker:</span> Har field ke neeche color dots hain — click karke text ka color change karo. Empty = default theme color.
+        </p>
+      </div>
 
       {/* Header Logo Upload Section */}
       <div className="p-8 bg-brand-card border border-brand-border rounded-2xl shadow-sm space-y-6">
@@ -195,8 +302,13 @@ export default function PersonalInfoAdmin() {
                 </div>
               )}
               <div>
-                <p className="text-sm font-bold text-brand-text">{formData.name || "[YOUR NAME]"}</p>
-                <p className="text-xs text-brand-text-muted tracking-wider uppercase">{formData.roleDescriptor || "Developer"}</p>
+                <p className="text-sm font-bold" style={{ color: formData.nameColor || undefined }}>
+                  {formData.name || "[YOUR NAME]"}
+                </p>
+                <p className="text-xs text-brand-text-muted tracking-wider uppercase"
+                  style={{ color: formData.roleDescriptorColor || undefined }}>
+                  {formData.roleDescriptor || "Developer"}
+                </p>
               </div>
             </div>
           </div>
@@ -214,7 +326,6 @@ export default function PersonalInfoAdmin() {
                 <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
               </label>
             </div>
-
             <div>
               <label className="block text-xs font-semibold text-brand-text-muted mb-1">Or Paste Direct Image URL</label>
               <input
@@ -222,7 +333,7 @@ export default function PersonalInfoAdmin() {
                 name="logoUrl"
                 value={formData.logoUrl}
                 onChange={handleChange}
-                placeholder="https://example.com/logo.png or /uploads/logo.png"
+                placeholder="https://example.com/logo.png"
                 className="w-full px-4 py-2.5 bg-brand-bg border border-brand-border rounded-xl text-brand-text text-sm focus:outline-none focus:border-brand-cyan"
               />
             </div>
@@ -236,13 +347,21 @@ export default function PersonalInfoAdmin() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-brand-text-muted">Full Name</label>
-            <input name="name" value={formData.name} onChange={handleChange}
-              className="px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan" />
+            <input
+              name="name" value={formData.name} onChange={handleChange}
+              style={{ color: formData.nameColor || undefined }}
+              className="px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan"
+            />
+            <ColorPickerRow label="Name Color" fieldName="nameColor" value={formData.nameColor} onChange={handleColorChange} />
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-brand-text-muted">Role / Title (For Navbar)</label>
-            <input name="roleDescriptor" value={formData.roleDescriptor} onChange={handleChange}
-              className="px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan" />
+            <input
+              name="roleDescriptor" value={formData.roleDescriptor} onChange={handleChange}
+              style={{ color: formData.roleDescriptorColor || undefined }}
+              className="px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan"
+            />
+            <ColorPickerRow label="Role Color" fieldName="roleDescriptorColor" value={formData.roleDescriptorColor} onChange={handleColorChange} />
           </div>
         </div>
       </div>
@@ -250,20 +369,44 @@ export default function PersonalInfoAdmin() {
       {/* Hero Section */}
       <div className="p-8 bg-brand-card border border-brand-border rounded-2xl shadow-sm">
         <h2 className="text-xl font-bold text-brand-text mb-6 pb-4 border-b border-brand-border/50">Hero Section</h2>
+
         <div className="flex flex-col gap-2 mb-6">
           <label className="text-sm font-medium text-brand-text-muted">Availability Status (Green badge)</label>
-          <input name="availability" value={formData.availability} onChange={handleChange}
-            className="px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan" />
+          <input
+            name="availability" value={formData.availability} onChange={handleChange}
+            style={{ color: formData.availabilityColor || undefined }}
+            className="px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan"
+          />
+          <ColorPickerRow label="Availability Color" fieldName="availabilityColor" value={formData.availabilityColor} onChange={handleColorChange} />
         </div>
+
         <div className="flex flex-col gap-2 mb-6">
           <label className="text-sm font-medium text-brand-text-muted">Main Headline (Tagline)</label>
-          <textarea name="tagline" rows={2} value={formData.tagline} onChange={handleChange}
-            className="px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan resize-none" />
+          <textarea
+            name="tagline" rows={2} value={formData.tagline} onChange={handleChange}
+            style={{ color: formData.taglineColor || undefined }}
+            className="px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan resize-none"
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <p className="text-xs text-brand-text-muted mb-1">Main text color:</p>
+              <ColorPickerRow label="Tagline Color" fieldName="taglineColor" value={formData.taglineColor} onChange={handleColorChange} />
+            </div>
+            <div>
+              <p className="text-xs text-brand-text-muted mb-1">Accent/gradient words color:</p>
+              <ColorPickerRow label="Accent Color" fieldName="taglineAccentColor" value={formData.taglineAccentColor} onChange={handleColorChange} />
+            </div>
+          </div>
         </div>
+
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-brand-text-muted">Short Description</label>
-          <textarea name="description" rows={3} value={formData.description} onChange={handleChange}
-            className="px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan resize-none" />
+          <textarea
+            name="description" rows={3} value={formData.description} onChange={handleChange}
+            style={{ color: formData.descriptionColor || undefined }}
+            className="px-4 py-3 bg-brand-bg border border-brand-border rounded-lg text-brand-text focus:outline-none focus:border-brand-cyan resize-none"
+          />
+          <ColorPickerRow label="Description Color" fieldName="descriptionColor" value={formData.descriptionColor} onChange={handleColorChange} />
         </div>
       </div>
 

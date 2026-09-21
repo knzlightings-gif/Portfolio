@@ -98,7 +98,9 @@ export default function Hero() {
             >
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/25 text-brand-cyan text-xs font-bold uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
-                {personalInfo?.roleDescriptor || defaultPersonalInfo.roleDescriptor}
+                <span style={{ color: personalInfo?.roleDescriptorColor || undefined }}>
+                  {personalInfo?.roleDescriptor || defaultPersonalInfo.roleDescriptor}
+                </span>
               </span>
             </motion.div>
 
@@ -106,19 +108,28 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-brand-text leading-[1.1] mb-6"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] mb-6"
+              style={{ color: personalInfo?.taglineColor || undefined }}
             >
               {(() => {
                 const tag = personalInfo?.tagline || defaultPersonalInfo.tagline;
                 const words = tag.split(" ");
                 const firstPart = words.slice(0, 3).join(" ");
                 const secondPart = words.slice(3).join(" ");
+                // If custom accent color set, use it; otherwise use default gradient
+                const accentColor = personalInfo?.taglineAccentColor;
                 return (
                   <>
                     {firstPart} <br className="hidden lg:block" />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-blue-600 to-brand-purple">
-                      {secondPart}
-                    </span>
+                    {accentColor ? (
+                      <span style={{ color: accentColor }}>
+                        {secondPart}
+                      </span>
+                    ) : (
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-blue-600 to-brand-purple">
+                        {secondPart}
+                      </span>
+                    )}
                   </>
                 );
               })()}
@@ -128,7 +139,8 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-lg md:text-xl text-brand-text-muted mb-10 max-w-lg leading-relaxed"
+              className="text-lg md:text-xl mb-10 max-w-lg leading-relaxed"
+              style={{ color: personalInfo?.descriptionColor || undefined }}
             >
               {personalInfo?.description || defaultPersonalInfo.description}
             </motion.p>
@@ -152,7 +164,10 @@ export default function Hero() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                 </div>
-                <span className="text-xs md:text-sm font-semibold text-brand-text-muted whitespace-nowrap">
+                <span
+                  className="text-xs md:text-sm font-semibold whitespace-nowrap"
+                  style={{ color: personalInfo?.availabilityColor || undefined }}
+                >
                   {personalInfo?.availability || defaultPersonalInfo.availability}
                 </span>
               </div>

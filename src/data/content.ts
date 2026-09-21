@@ -21,8 +21,16 @@ export const personalInfo = {
     email: "hello@example.com",
     whatsapp: "+1234567890",
     linkedin: "https://linkedin.com/in/yourprofile"
-  }
+  },
+  // Text color overrides (set from admin panel)
+  nameColor: "",
+  taglineColor: "",
+  taglineAccentColor: "",
+  descriptionColor: "",
+  roleDescriptorColor: "",
+  availabilityColor: "",
 };
+
 
 export const whatIDo = [
   {
