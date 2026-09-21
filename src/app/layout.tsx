@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import BackgroundBlobs from "@/components/ui/BackgroundBlobs";
+import AnimatedBackground from "@/components/ui/AnimatedBackground";
 import PromotionBanner from "@/components/ui/PromotionBanner";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,6 +24,9 @@ export default function RootLayout({
         <ThemeProvider>
           {/* Animated ambient blobs — fixed, behind everything */}
           <BackgroundBlobs />
+
+          {/* Particles Network — floating dots with connecting lines */}
+          <AnimatedBackground />
           
           {/* Top Animated Promotion / Discount Banner */}
           <PromotionBanner />
