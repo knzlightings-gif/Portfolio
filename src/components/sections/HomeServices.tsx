@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Sparkles, ArrowUpRight } from "lucide-react";
 import { defaultServices, ServiceItem } from "@/data/servicesData";
+import Link from "next/link";
 
 // Illustration per service
 const serviceImageMap: Record<string, string> = {
@@ -11,6 +12,138 @@ const serviceImageMap: Record<string, string> = {
   erp: "/card-erp.jpg",
   "web-apps": "/card-webapp.jpg",
 };
+
+function ServiceCard({ service, index }: { service: ServiceItem; index: number }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  // Motion values for silky-smooth 3D cursor tilt
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { damping: 25, stiffness: 220 };
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [7, -7]), springConfig);
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-7, 7]), springConfig);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    mouseX.set(x);
+    mouseY.set(y);
+    setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
+  const firstFeature = service.features?.[0] || "";
+  const num = `/${String(index + 1).padStart(2, "0")}`;
+  const imgSrc = serviceImageMap[service.id] || "/card-erp.jpg";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay: index * 0.08 }}
+      style={{ perspective: 1200 }}
+      className="h-full"
+    >
+      <motion.div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+        }}
+        whileHover={{ y: -8, scale: 1.015 }}
+        transition={{ duration: 0.2 }}
+        className="group relative flex flex-col overflow-hidden rounded-2xl bg-brand-card/90 backdrop-blur-md border border-brand-border/80 shadow-md hover:shadow-[0_25px_50px_-12px_var(--theme-primary-glow,rgba(0,112,243,0.35)),0_0_25px_2px_rgba(0,112,243,0.12)] hover:border-brand-cyan/70 transition-all duration-300 h-full cursor-pointer"
+      >
+        <Link href="/services" className="flex flex-col h-full">
+          {/* Top animated gradient accent line */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-brand-purple opacity-40 group-hover:opacity-100 group-hover:shadow-[0_0_12px_var(--theme-primary)] transition-all duration-300 z-30" />
+
+          {/* Dynamic Spotlight Glow that follows cursor */}
+          <div
+            className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"
+            style={{
+              background: isHovered
+                ? `radial-gradient(350px circle at ${mousePos.x}px ${mousePos.y}px, rgba(var(--theme-primary-rgb, 0, 112, 243), 0.16), transparent 80%)`
+                : "none",
+            }}
+          />
+
+          {/* Illustration Image Header */}
+          <div className="relative w-full h-44 overflow-hidden border-b border-brand-border/50">
+            <img
+              src={imgSrc}
+              alt={service.title}
+              className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+            />
+            {/* Shimmer light sweep */}
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none z-10" />
+
+            {/* Gradient overlay bottom */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-brand-card/85 pointer-events-none" />
+
+            {/* Slide number with glow */}
+            <span className="absolute top-3 right-3 text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-brand-bg/85 backdrop-blur-md border border-brand-border text-brand-text-muted group-hover:border-brand-cyan/50 group-hover:text-brand-cyan group-hover:shadow-[0_0_12px_rgba(var(--theme-primary-rgb),0.25)] transition-all duration-300 z-10">
+              {num}
+            </span>
+          </div>
+
+          {/* Card Content */}
+          <div className="p-6 flex flex-col flex-1 justify-between relative z-10">
+            <div>
+              <h3 className="text-xl font-bold text-brand-text mb-2 tracking-tight group-hover:text-brand-cyan transition-colors duration-200">
+                {service.title}
+              </h3>
+              <p className="text-sm text-brand-text-muted leading-relaxed mb-5 line-clamp-2">
+                {service.description}
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-brand-border/50 space-y-3">
+              {firstFeature && (
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-brand-bg text-brand-text-muted border border-brand-border/70 group-hover:border-brand-cyan/40 group-hover:text-brand-text group-hover:bg-brand-cyan/5 transition-all duration-300 truncate max-w-full">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan/60 group-hover:bg-brand-cyan transition-colors" />
+                  {firstFeature}
+                </span>
+              )}
+              <div className="flex items-center justify-between text-xs font-bold">
+                <span className="flex items-center gap-2 text-brand-text">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                  Active Service
+                </span>
+                <span className="flex items-center gap-1 text-brand-cyan font-bold group-hover:translate-x-1.5 group-hover:-translate-y-0.5 transition-transform duration-300">
+                  Details
+                  <ArrowUpRight className="w-3.5 h-3.5 group-hover:rotate-45 transition-transform duration-300" />
+                </span>
+              </div>
+            </div>
+          </div>
+        </Link>
+      </motion.div>
+    </motion.div>
+  );
+}
 
 export default function HomeServices() {
   const [services, setServices] = useState<ServiceItem[]>([]);
@@ -74,76 +207,13 @@ export default function HomeServices() {
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {services.map((service, index) => {
-            const firstFeature = service.features?.[0] || "";
-            const num = `/${String(index + 1).padStart(2, "0")}`;
-            const imgSrc = serviceImageMap[service.id] || "/card-erp.jpg";
-
-            return (
-              <motion.div
-                key={service.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ y: -8, scale: 1.015 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.35, delay: index * 0.08 }}
-                className="h-full"
-              >
-                <div className="group relative flex flex-col overflow-hidden rounded-2xl bg-brand-card/90 backdrop-blur-md border border-brand-border/80 shadow-md hover:shadow-[0_20px_40px_-8px_var(--theme-primary-glow,rgba(0,112,243,0.3))] hover:border-brand-cyan/60 transition-all duration-300 h-full">
-                  {/* Top gradient accent line */}
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-brand-purple opacity-40 group-hover:opacity-100 transition-opacity duration-300 z-10" />
-
-                  {/* Illustration Image Header */}
-                  <div className="relative w-full h-44 overflow-hidden border-b border-brand-border/50">
-                    <img
-                      src={imgSrc}
-                      alt={service.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                    />
-                    {/* Gradient overlay bottom */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-brand-card/80" />
-                    {/* Slide number */}
-                    <span className="absolute top-3 right-3 text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-brand-bg/80 backdrop-blur-md border border-brand-border text-brand-text-muted">
-                      {num}
-                    </span>
-                  </div>
-
-                  {/* Card Content */}
-                  <div className="p-6 flex flex-col flex-1 justify-between">
-                    <div>
-                      <h3 className="text-xl font-bold text-brand-text mb-2 tracking-tight group-hover:text-brand-cyan transition-colors duration-200">
-                        {service.title}
-                      </h3>
-                      <p className="text-sm text-brand-text-muted leading-relaxed mb-5 line-clamp-2">
-                        {service.description}
-                      </p>
-                    </div>
-
-                    <div className="pt-4 border-t border-brand-border/50 space-y-3">
-                      {firstFeature && (
-                        <span className="inline-block text-xs font-medium px-3 py-1 rounded-md bg-brand-bg text-brand-text-muted border border-brand-border/70 group-hover:border-brand-cyan/30 group-hover:text-brand-text transition-colors truncate max-w-full">
-                          {firstFeature}
-                        </span>
-                      )}
-                      <div className="flex items-center justify-between text-xs font-bold">
-                        <span className="flex items-center gap-1.5 text-brand-text">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                          Active Service
-                        </span>
-                        <span className="flex items-center gap-1 text-brand-cyan font-bold group-hover:translate-x-1.5 transition-transform duration-300">
-                          Details
-                          <ArrowUpRight className="w-3.5 h-3.5" />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
+          {services.map((service, index) => (
+            <ServiceCard key={service.id} service={service} index={index} />
+          ))}
         </div>
 
       </div>
     </section>
   );
 }
+
