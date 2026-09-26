@@ -88,13 +88,10 @@ function ServiceCard({ service, index }: { service: ServiceItem; index: number }
       className="h-full"
     >
       <Link href="/services" className="block h-full group">
-        <div className="relative overflow-hidden flex flex-col items-center text-center justify-between h-full p-6 sm:p-7 rounded-2xl bg-brand-card border border-brand-border/80 shadow-xs hover:shadow-[0_24px_50px_-10px_rgba(0,77,64,0.36),0_12px_24px_-6px_rgba(0,77,64,0.22)] hover:border-[#004D40] dark:hover:border-brand-cyan hover:-translate-y-1.5 hover:bg-[#C2E3DC] dark:hover:bg-[#14332D] transition-all duration-300">
+        <div className="relative overflow-hidden flex flex-col items-center text-center justify-between h-full p-6 sm:p-7 rounded-2xl bg-brand-card border border-brand-border/80 shadow-xs hover:shadow-[0_24px_50px_-10px_rgba(0,77,64,0.32),0_12px_24px_-6px_rgba(0,77,64,0.18)] hover:border-[#004D40] hover:-translate-y-1.5 hover:bg-[#DDF4F0] transition-all duration-300">
           
-          {/* Prominent hover shade overlay */}
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-transparent via-[#004D40]/[0.03] to-[#004D40]/[0.10] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
           {/* Centered IT Icon */}
-          <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl flex items-center justify-center bg-white/95 dark:bg-teal-950/80 border border-[#004D40]/25 text-[#004D40] dark:text-brand-cyan mb-4 shadow-2xs group-hover:scale-110 group-hover:bg-[#004D40] group-hover:text-white group-hover:shadow-md transition-all duration-300 relative z-10">
+          <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl flex items-center justify-center bg-white/95 border border-[#004D40]/25 text-[#004D40] mb-4 shadow-2xs group-hover:scale-110 group-hover:bg-[#004D40] group-hover:text-white group-hover:shadow-md transition-all duration-300 relative z-10">
             <IconComponent className="w-8 h-8 sm:w-9 sm:h-9" strokeWidth={1.8} />
           </div>
 
