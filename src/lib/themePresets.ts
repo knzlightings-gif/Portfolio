@@ -4,6 +4,7 @@ export interface ThemeConfig {
   description?: string;
   primary: string;       // Primary accent / CTA color
   secondary: string;     // Secondary accent / gradient endpoint
+  accent?: string;        // Accent / highlight color (e.g. coral flame)
   mode: "light" | "dark";
   bg?: string;
   card?: string;
@@ -13,6 +14,20 @@ export interface ThemeConfig {
 }
 
 export const THEME_PRESETS: ThemeConfig[] = [
+  {
+    id: "universal-teal",
+    name: "🌿 Universal Pine & Mint (Current Theme)",
+    description: "Official Theme: Deep Pine Teal with Mint Aqua background, 8% deeper green cards, and emerald-teal text gradient (Universal Gym Style).",
+    primary: "#004D40",
+    secondary: "#00796B",
+    accent: "#059669",
+    mode: "light",
+    bg: "#E0F2F1",
+    card: "#CEE8E3",
+    border: "#9DCBC4",
+    text: "#0C2822",
+    textMuted: "#1F453E",
+  },
   {
     id: "royal-blue",
     name: "Royal Tech Blue",
@@ -168,5 +183,18 @@ export const THEME_PRESETS: ThemeConfig[] = [
     border: "#FFEDD5",
     text: "#7C2D12",
     textMuted: "#9A3412",
+  },
+  {
+    id: "ember",
+    name: "🔥 Ember Tech",
+    description: "Sultry dark IT theme — Burnt Peach meets Light Red with Dark Gold accents. Energetic, bold & professional.",
+    primary: "#FF6B47",    // Burnt Peach / Coral
+    secondary: "#FF3D5A",  // Hot Light Red
+    mode: "dark",
+    bg: "#120A07",         // Deep charcoal ember
+    card: "#1C1008",       // Warm dark card
+    border: "#2E1A0E",     // Warm brown border
+    text: "#FFF5F0",       // Warm white
+    textMuted: "#C4937A",  // Muted peach-sand
   },
 ];

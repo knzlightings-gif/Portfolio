@@ -7,14 +7,15 @@ import { personalInfo as defaultPersonalInfo } from "@/data/content";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/utils/cn";
+import ThemeSwitcher from "@/components/layout/ThemeSwitcher";
 
 // Navbar with multi-page App Router links
 const navLinks = [
-  { name: "Home",     href: "/",          gradient: "from-brand-cyan to-brand-purple", glow: "var(--theme-primary-glow, rgba(0,112,243,0.35))" },
-  { name: "Services", href: "/services",   gradient: "from-brand-purple to-brand-cyan", glow: "var(--theme-secondary-glow, rgba(0,153,255,0.35))" },
-  { name: "Projects", href: "/projects",  gradient: "from-brand-cyan to-brand-purple", glow: "var(--theme-primary-glow, rgba(0,112,243,0.35))" },
-  { name: "About",    href: "/about",     gradient: "from-brand-cyan to-brand-purple", glow: "var(--theme-primary-glow, rgba(0,112,243,0.35))" },
-  { name: "Contact",  href: "/contact",   gradient: "from-brand-purple to-brand-cyan", glow: "var(--theme-secondary-glow, rgba(0,153,255,0.35))" },
+  { name: "Home",     href: "/",          gradient: "from-brand-cyan to-brand-purple", glow: "var(--theme-primary-glow, rgba(0,77,64,0.35))" },
+  { name: "Services", href: "/services",   gradient: "from-brand-purple to-brand-cyan", glow: "var(--theme-secondary-glow, rgba(0,172,193,0.35))" },
+  { name: "Projects", href: "/projects",  gradient: "from-brand-cyan to-brand-purple", glow: "var(--theme-primary-glow, rgba(0,77,64,0.35))" },
+  { name: "About",    href: "/about",     gradient: "from-brand-cyan to-brand-purple", glow: "var(--theme-primary-glow, rgba(0,77,64,0.35))" },
+  { name: "Contact",  href: "/contact",   gradient: "from-brand-purple to-brand-cyan", glow: "var(--theme-secondary-glow, rgba(0,172,193,0.35))" },
 ];
 
 
@@ -48,9 +49,9 @@ export default function Navbar() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out border-b border-brand-border bg-brand-bg/90 backdrop-blur-md shadow-sm",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out border-b border-brand-border/60 bg-brand-card/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,77,64,0.06)]",
         isScrolled
-          ? "py-3 shadow-md bg-brand-bg/95 border-brand-border"
+          ? "py-3 shadow-[0_6px_25px_rgba(0,77,64,0.1)] bg-brand-card/98"
           : "py-4.5"
       )}
     >
@@ -116,22 +117,25 @@ export default function Navbar() {
             })}
           </ul>
 
+          <ThemeSwitcher />
+
           <Link
             href="/contact"
-            className="group relative ml-3 flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm overflow-hidden"
+            className="group relative ml-2 flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm overflow-hidden"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-brand-cyan to-brand-purple group-hover:from-brand-purple group-hover:to-brand-cyan transition-all duration-500" />
             <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-12" />
-            <span className="absolute inset-0 rounded-full shadow-[0_0_20px_var(--theme-primary-glow,rgba(0,112,243,0.4))] group-hover:shadow-[0_0_30px_var(--theme-secondary-glow,rgba(0,153,255,0.5))] transition-shadow duration-500" />
+            <span className="absolute inset-0 rounded-full shadow-[0_0_20px_var(--theme-primary-glow,rgba(0,77,64,0.4))] group-hover:shadow-[0_0_30px_var(--theme-secondary-glow,rgba(0,172,193,0.5))] transition-shadow duration-500" />
             <span className="relative z-10 text-white group-hover:scale-105 transition-transform duration-300">Let&apos;s Work Together</span>
             <span className="relative z-10 text-white transition-transform duration-300 group-hover:translate-x-1">→</span>
           </Link>
         </nav>
 
-        {/* Mobile Menu Toggle */}
-        <div className="flex items-center gap-4 md:hidden">
+        {/* Mobile Menu Toggle & Theme Switcher */}
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeSwitcher />
           <button
-            className="md:hidden p-2 text-brand-text"
+            className="p-2 text-brand-text"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X /> : <Menu />}

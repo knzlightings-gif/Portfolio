@@ -1,13 +1,14 @@
 {
-  "id": "midnight-indigo",
-  "name": "Midnight Indigo",
-  "description": "Deep enterprise indigo with neon ultraviolet flair",
-  "primary": "#4F46E5",
-  "secondary": "#818CF8",
+  "id": "universal-teal",
+  "name": "🌿 Universal Pine & Mint (Current Theme)",
+  "description": "Official Theme: Deep Pine Teal with Mint Aqua background, 8% deeper green cards, and emerald-teal text gradient (Universal Gym Style).",
+  "primary": "#004D40",
+  "secondary": "#00796B",
+  "accent": "#059669",
   "mode": "light",
-  "bg": "#EEF2FF",
-  "card": "#FFFFFF",
-  "border": "#E0E7FF",
-  "text": "#312E81",
-  "textMuted": "#3730A3"
+  "bg": "#E0F2F1",
+  "card": "#CEE8E3",
+  "border": "#9DCBC4",
+  "text": "#0C2822",
+  "textMuted": "#1F453E"
 }

@@ -1,146 +1,125 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { Sparkles, ArrowUpRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { 
+  Sparkles, 
+  ArrowUpRight, 
+  Cpu, 
+  Database, 
+  Workflow, 
+  Zap, 
+  ShieldCheck, 
+  Terminal, 
+  Cloud, 
+  Bot, 
+  BarChart3, 
+  Server,
+  Layers
+} from "lucide-react";
 import { defaultServices, ServiceItem } from "@/data/servicesData";
 import Link from "next/link";
 
-// Illustration per service
-const serviceImageMap: Record<string, string> = {
-  automation: "/card-automation.jpg",
-  erp: "/card-erp.jpg",
-  "web-apps": "/card-webapp.jpg",
+// Rich IT metadata per service
+const serviceMetaMap: Record<string, {
+  sysCode: string;
+  badge: string;
+  shortDesc: string;
+  icon: any;
+  techTags: { label: string; icon: any; color: string }[];
+  latency: string;
+}> = {
+  automation: {
+    sysCode: "SYS://WORKFLOW.AUTO_v3",
+    badge: "AUTOMATION ENGINE",
+    shortDesc: "Automate repetitive manual operations, invoice dispatch & instant data sync.",
+    icon: Workflow,
+    techTags: [
+      { label: "WhatsApp & Email Bot Triggers", icon: Zap, color: "text-amber-500" },
+      { label: "Excel/CSV Batch Sync Pipelines", icon: Bot, color: "text-brand-cyan" },
+      { label: "Zero-Error Scheduled Jobs", icon: ShieldCheck, color: "text-emerald-500" },
+    ],
+    latency: "⚡ Real-Time Sync",
+  },
+  erp: {
+    sysCode: "SYS://ERP.CORE_LEDGER",
+    badge: "ENTERPRISE CLUSTER",
+    shortDesc: "Full control of inventory, double-entry accounts, purchases & multi-branch sales.",
+    icon: Database,
+    techTags: [
+      { label: "Live Multi-Warehouse Stock", icon: Database, color: "text-brand-cyan" },
+      { label: "Automated Financial Ledgers", icon: BarChart3, color: "text-purple-500" },
+      { label: "Role-Based Access Control", icon: ShieldCheck, color: "text-emerald-500" },
+    ],
+    latency: "🔒 99.9% Uptime",
+  },
+  "web-apps": {
+    sysCode: "SYS://CLOUD.APP_NODE",
+    badge: "HIGH-SPEED SAAS",
+    shortDesc: "High-performance business portals, executive dashboards & custom SaaS tools.",
+    icon: Terminal,
+    techTags: [
+      { label: "Executive Analytics Dashboards", icon: Terminal, color: "text-brand-cyan" },
+      { label: "Scalable Cloud Database", icon: Cloud, color: "text-blue-500" },
+      { label: "Secure REST APIs & Webhooks", icon: Cpu, color: "text-emerald-500" },
+    ],
+    latency: "⚡ <15ms Latency",
+  },
 };
 
 function ServiceCard({ service, index }: { service: ServiceItem; index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  // Motion values for silky-smooth 3D cursor tilt
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 25, stiffness: 220 };
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [7, -7]), springConfig);
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-7, 7]), springConfig);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    mouseX.set(x);
-    mouseY.set(y);
-    setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  const meta = serviceMetaMap[service.id] || {
+    sysCode: `SYS://${service.id.toUpperCase()}_v1`,
+    badge: "CORE SYSTEM",
+    shortDesc: service.description,
+    icon: Layers,
+    techTags: [],
+    latency: "⚡ High Performance",
   };
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    mouseX.set(0);
-    mouseY.set(0);
-  };
-
-  const firstFeature = service.features?.[0] || "";
-  const num = `/${String(index + 1).padStart(2, "0")}`;
-  const imgSrc = serviceImageMap[service.id] || "/card-erp.jpg";
+  const IconComponent = meta.icon;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 25 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.4, delay: index * 0.08 }}
-      style={{ perspective: 1200 }}
+      transition={{ duration: 0.35, delay: index * 0.08 }}
       className="h-full"
     >
-      <motion.div
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d",
-        }}
-        whileHover={{ y: -8, scale: 1.015 }}
-        transition={{ duration: 0.2 }}
-        className="group relative flex flex-col overflow-hidden rounded-2xl bg-brand-card/90 backdrop-blur-md border border-brand-border/80 shadow-md hover:shadow-[0_25px_50px_-12px_var(--theme-primary-glow,rgba(0,112,243,0.35)),0_0_25px_2px_rgba(0,112,243,0.12)] hover:border-brand-cyan/70 transition-all duration-300 h-full cursor-pointer"
-      >
-        <Link href="/services" className="flex flex-col h-full">
-          {/* Top animated gradient accent line */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-brand-purple opacity-40 group-hover:opacity-100 group-hover:shadow-[0_0_12px_var(--theme-primary)] transition-all duration-300 z-30" />
+      <Link href="/services" className="block h-full group">
+        <div className="relative overflow-hidden flex flex-col items-center text-center justify-between h-full p-6 sm:p-7 rounded-2xl bg-brand-card border border-brand-border/80 shadow-xs hover:shadow-[0_24px_50px_-10px_rgba(0,77,64,0.36),0_12px_24px_-6px_rgba(0,77,64,0.22)] hover:border-[#004D40] dark:hover:border-brand-cyan hover:-translate-y-1.5 hover:bg-[#C2E3DC] dark:hover:bg-[#14332D] transition-all duration-300">
+          
+          {/* Prominent hover shade overlay */}
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-transparent via-[#004D40]/[0.03] to-[#004D40]/[0.10] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-          {/* Dynamic Spotlight Glow that follows cursor */}
-          <div
-            className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"
-            style={{
-              background: isHovered
-                ? `radial-gradient(350px circle at ${mousePos.x}px ${mousePos.y}px, rgba(var(--theme-primary-rgb, 0, 112, 243), 0.16), transparent 80%)`
-                : "none",
-            }}
-          />
-
-          {/* Illustration Image Header */}
-          <div className="relative w-full h-44 overflow-hidden border-b border-brand-border/50">
-            <img
-              src={imgSrc}
-              alt={service.title}
-              className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
-            />
-            {/* Shimmer light sweep */}
-            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none z-10" />
-
-            {/* Gradient overlay bottom */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-brand-card/85 pointer-events-none" />
-
-            {/* Slide number with glow */}
-            <span className="absolute top-3 right-3 text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-brand-bg/85 backdrop-blur-md border border-brand-border text-brand-text-muted group-hover:border-brand-cyan/50 group-hover:text-brand-cyan group-hover:shadow-[0_0_12px_rgba(var(--theme-primary-rgb),0.25)] transition-all duration-300 z-10">
-              {num}
-            </span>
+          {/* Centered IT Icon */}
+          <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl flex items-center justify-center bg-white/95 dark:bg-teal-950/80 border border-[#004D40]/25 text-[#004D40] dark:text-brand-cyan mb-4 shadow-2xs group-hover:scale-110 group-hover:bg-[#004D40] group-hover:text-white group-hover:shadow-md transition-all duration-300 relative z-10">
+            <IconComponent className="w-8 h-8 sm:w-9 sm:h-9" strokeWidth={1.8} />
           </div>
 
-          {/* Card Content */}
-          <div className="p-6 flex flex-col flex-1 justify-between relative z-10">
-            <div>
-              <h3 className="text-xl font-bold text-brand-text mb-2 tracking-tight group-hover:text-brand-cyan transition-colors duration-200">
-                {service.title}
-              </h3>
-              <p className="text-sm text-brand-text-muted leading-relaxed mb-5 line-clamp-2">
-                {service.description}
-              </p>
-            </div>
+          {/* Centered Title */}
+          <h3 className="text-base sm:text-lg font-bold text-brand-text mb-1.5 group-hover:text-[#004D40] dark:group-hover:text-brand-cyan transition-colors relative z-10">
+            {service.title}
+          </h3>
 
-            <div className="pt-4 border-t border-brand-border/50 space-y-3">
-              {firstFeature && (
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-brand-bg text-brand-text-muted border border-brand-border/70 group-hover:border-brand-cyan/40 group-hover:text-brand-text group-hover:bg-brand-cyan/5 transition-all duration-300 truncate max-w-full">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan/60 group-hover:bg-brand-cyan transition-colors" />
-                  {firstFeature}
-                </span>
-              )}
-              <div className="flex items-center justify-between text-xs font-bold">
-                <span className="flex items-center gap-2 text-brand-text">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </span>
-                  Active Service
-                </span>
-                <span className="flex items-center gap-1 text-brand-cyan font-bold group-hover:translate-x-1.5 group-hover:-translate-y-0.5 transition-transform duration-300">
-                  Details
-                  <ArrowUpRight className="w-3.5 h-3.5 group-hover:rotate-45 transition-transform duration-300" />
-                </span>
-              </div>
-            </div>
+          {/* Short, compact description with high-contrast text */}
+          <p className="text-xs text-brand-text-muted font-medium leading-relaxed mb-3 max-w-[260px] line-clamp-2 relative z-10">
+            {meta.shortDesc}
+          </p>
+
+          {/* Centered IT Metric / Highlight */}
+          <div className="text-base sm:text-lg font-extrabold text-[#004D40] dark:text-brand-cyan mb-4 tracking-tight relative z-10">
+            {meta.latency}
           </div>
-        </Link>
-      </motion.div>
+
+          {/* Centered Pill Button */}
+          <span className="inline-flex items-center gap-1.5 px-6 py-2 rounded-full text-xs font-bold bg-[#004D40] hover:bg-[#00382E] text-white shadow-xs group-hover:shadow-lg group-hover:scale-105 transition-all relative z-10">
+            Explore Stack
+            <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          </span>
+        </div>
+      </Link>
     </motion.div>
   );
 }
@@ -190,7 +169,7 @@ export default function HomeServices() {
               What We Offer
             </div>
             <h2 className="text-3xl md:text-5xl font-black text-brand-text tracking-tight">
-              Our Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-blue-500 to-brand-purple">Services & Solutions</span>
+              Our Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]">Services & Solutions</span>
             </h2>
           </motion.div>
           

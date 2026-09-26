@@ -1,8 +1,23 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { AlertCircle, ArrowRight, ChevronLeft, ChevronRight, XCircle, CheckCircle2, Sparkles } from "lucide-react";
+import { 
+  AlertCircle, 
+  ArrowRight, 
+  ChevronLeft, 
+  ChevronRight, 
+  XCircle, 
+  CheckCircle2, 
+  Sparkles,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  Maximize2,
+  ShieldCheck,
+  Zap
+} from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
 const problems = [
@@ -18,40 +33,50 @@ const problems = [
 
 const manualTroubles = [
   {
-    image: "/problems/slide-1.jpg",
+    video: "/videos/trouble-office.mp4",
+    poster: "/problems/slide-1.jpg",
     badge: "Manual Registers & Bookkeeping",
+    shortTitle: "Paper Registers",
     troubleTag: "Manual Paper Chaos",
     troubleDesc: "Handwritten ledger books, scattered receipt piles & calculation mistakes",
     solutionTag: "Software Replaces This",
     solutionDesc: "Centralized Cloud Ledger & Automated Real-time Accounting",
   },
   {
-    image: "/problems/slide-2.jpg",
+    video: "/videos/trouble-excel.mp4",
+    poster: "/problems/slide-2.jpg",
     badge: "Excel Crashes & Formula Errors",
+    shortTitle: "Excel Crashes",
     troubleTag: "Spreadsheet Headache",
     troubleDesc: "Broken Excel formulas (#REF!), corrupted spreadsheets & mismatched numbers",
     solutionTag: "Software Replaces This",
     solutionDesc: "Secure Structured Database with Zero Formula Breakages",
   },
   {
-    image: "/problems/slide-3.jpg",
+    video: "/videos/trouble-warehouse.mp4",
+    poster: "/problems/slide-3.jpg",
     badge: "Warehouse & Stock Discrepancies",
+    shortTitle: "Stock Uncertainty",
     troubleTag: "Stock Uncertainty",
     troubleDesc: "Missing stock items, stock-out surprises & paper clipboard counts",
     solutionTag: "Software Replaces This",
     solutionDesc: "Live Barcode Stock Tracking with Automatic Low-Stock Alerts",
   },
   {
-    image: "/problems/slide-4.jpg",
+    video: "/videos/trouble-business.mp4",
+    poster: "/problems/slide-4.jpg",
     badge: "WhatsApp Orders & Sticky Notes",
+    shortTitle: "Scattered Orders",
     troubleTag: "Scattered Chat Orders",
     troubleDesc: "Unorganized WhatsApp voice notes, lost paper chits & missed customer orders",
     solutionTag: "Software Replaces This",
     solutionDesc: "Direct Multi-Channel POS Pipeline & Automated Order Tracking",
   },
   {
-    image: "/problems/slide-5.jpg",
+    video: "/videos/trouble-tech.mp4",
+    poster: "/problems/slide-5.jpg",
     badge: "Unpaid Invoices & Lost Receivables",
+    shortTitle: "Overdue Invoices",
     troubleTag: "Cash Flow Loss",
     troubleDesc: "Piles of overdue invoices, unrecorded credit & forgotten payments",
     solutionTag: "Software Replaces This",
@@ -61,39 +86,93 @@ const manualTroubles = [
 
 export default function BusinessProblems() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [progress, setProgress] = useState(0);
 
-  // Auto-slide: faster on hover (2s) so user can see all trouble slides quickly, steady (4.2s) when not hovered
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const slideDuration = 6000; // 6 seconds per video slide
+
+  // Cycle slide and sync timer progress bar
   useEffect(() => {
-    const duration = isHovered ? 2000 : 4200;
+    if (!isPlaying) return;
 
-    intervalRef.current = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % manualTroubles.length);
-    }, duration);
+    const intervalStep = 50; // update progress every 50ms
+    const totalSteps = slideDuration / intervalStep;
+    let stepCount = 0;
 
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [isHovered]);
+    const timer = setInterval(() => {
+      stepCount++;
+      const currentProgress = (stepCount / totalSteps) * 100;
+      setProgress(currentProgress);
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % manualTroubles.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + manualTroubles.length) % manualTroubles.length);
+      if (stepCount >= totalSteps) {
+        stepCount = 0;
+        setProgress(0);
+        setCurrentSlide((prev) => (prev + 1) % manualTroubles.length);
+      }
+    }, intervalStep);
+
+    return () => clearInterval(timer);
+  }, [isPlaying, currentSlide]);
+
+  // Handle active video playback
+  useEffect(() => {
+    videoRefs.current.forEach((vid, idx) => {
+      if (!vid) return;
+      if (idx === currentSlide) {
+        vid.currentTime = 0;
+        if (isPlaying) {
+          vid.play().catch(() => {});
+        }
+      } else {
+        vid.pause();
+      }
+    });
+  }, [currentSlide, isPlaying]);
+
+  // Sync mute state across videos
+  useEffect(() => {
+    videoRefs.current.forEach((vid) => {
+      if (vid) vid.muted = isMuted;
+    });
+  }, [isMuted]);
+
+  const nextSlide = () => {
+    setProgress(0);
+    setCurrentSlide((prev) => (prev + 1) % manualTroubles.length);
+  };
+
+  const prevSlide = () => {
+    setProgress(0);
+    setCurrentSlide((prev) => (prev - 1 + manualTroubles.length) % manualTroubles.length);
+  };
+
+  const toggleFullscreen = () => {
+    if (!containerRef.current) return;
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    } else {
+      containerRef.current.requestFullscreen().catch(() => {});
+    }
+  };
 
   return (
-    <section className="py-24 bg-transparent relative overflow-hidden">
+    <section className="py-20 lg:py-28 bg-transparent relative overflow-hidden">
       
       {/* Background ambient gradient glow */}
-      <div className="absolute top-1/2 right-0 w-96 h-96 bg-brand-cyan/10 rounded-full blur-[130px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-purple/10 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute top-1/3 right-0 w-[550px] h-[550px] bg-brand-cyan/15 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+      <div className="absolute bottom-10 left-0 w-[500px] h-[500px] bg-brand-purple/15 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
-        <div className="flex flex-col lg:flex-row gap-16 items-center">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1650px] relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-14 items-center">
           
-          {/* Left Column: Problem List & CTA */}
-          <div className="w-full lg:w-1/2">
+          {/* Left Column: Problem List & CTA (Takes 5 columns) */}
+          <div className="lg:col-span-5 w-full">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full badge-brand-subtle text-xs font-bold uppercase tracking-wider mb-4 shadow-xs">
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5 text-brand-cyan" />
               Manual Bottlenecks We Eliminate
             </div>
 
@@ -101,10 +180,10 @@ export default function BusinessProblems() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl md:text-5xl font-black text-brand-text mb-6 leading-tight tracking-tight"
+              className="text-3xl sm:text-4xl xl:text-5xl font-black text-brand-text mb-6 leading-tight tracking-tight"
             >
               Still Running Your Business on{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-brand-cyan to-brand-purple">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]">
                 Excel, WhatsApp & Manual Records?
               </span>
             </motion.h2>
@@ -114,12 +193,15 @@ export default function BusinessProblems() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-10"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8"
             >
               {problems.map((problem, i) => (
-                <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-brand-card/70 backdrop-blur-xs border border-brand-border/60 hover:border-red-400/40 transition-colors">
-                  <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
-                  <span className="text-brand-text text-sm font-medium">{problem}</span>
+                <div 
+                  key={i} 
+                  className="flex items-start gap-2.5 p-3 rounded-xl bg-brand-card/80 backdrop-blur-md border border-brand-border/70 hover:border-red-400/50 hover:shadow-sm transition-all"
+                >
+                  <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                  <span className="text-brand-text text-xs sm:text-sm font-medium leading-snug">{problem}</span>
                 </div>
               ))}
             </motion.div>
@@ -129,81 +211,141 @@ export default function BusinessProblems() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
+              className="space-y-6"
             >
-              <p className="text-xl font-medium text-brand-text mb-8">
-                Let&apos;s eliminate these everyday headaches with a clean, predictable digital system.
+              <p className="text-base sm:text-lg font-medium text-brand-text/90 leading-relaxed">
+                Let&apos;s eliminate these everyday bottlenecks with a fast, modern and automated ERP software customized for your business.
               </p>
-              <Link
-                href="#contact"
-                className="inline-flex items-center gap-2 px-8 py-4 btn-brand-gradient text-base font-bold rounded-full transition-all"
-              >
-                Discuss Your Business
-                <ArrowRight className="w-5 h-5" />
-              </Link>
+              <div className="flex flex-wrap items-center gap-4">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-2.5 px-8 py-4 btn-brand-gradient text-base font-bold rounded-full shadow-lg hover:shadow-brand-cyan/25 hover:scale-105 transition-all"
+                >
+                  Discuss Your Business
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+                <div className="flex items-center gap-2 text-xs font-semibold text-brand-text-muted">
+                  <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                  Custom Engineered • Cloud Hosted
+                </div>
+              </div>
             </motion.div>
           </div>
 
-          {/* Right Column: Problem Visual Carousel */}
-          <div className="w-full lg:w-1/2 relative flex justify-center">
+          {/* Right Column: High-End HD 4K Video Showcase (Takes 7 columns - large and prominent) */}
+          <div className="lg:col-span-7 w-full flex justify-center">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.96, y: 24 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="relative w-full max-w-xl aspect-[16/11] z-10"
+              className="relative w-full max-w-3xl xl:max-w-4xl"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
-              {/* Outer Decorative Accent Frame */}
-              <div className="absolute inset-0 bg-brand-card rounded-3xl border-2 border-brand-cyan/40 shadow-[0_20px_50px_var(--theme-primary-glow,rgba(0,112,243,0.22))] transform rotate-1 transition-transform duration-500" />
-              
-              {/* Main Carousel Viewport */}
-              <div className="absolute inset-2 md:inset-3 rounded-2xl overflow-hidden border border-brand-border bg-slate-950 shadow-inner z-10 group transform -rotate-1 hover:rotate-0 transition-transform duration-500 select-none">
+              {/* Outer Decorative Ambient Glow Frame */}
+              <div className="absolute -inset-1.5 bg-gradient-to-r from-brand-cyan/30 via-emerald-600/20 to-[#004D40]/30 rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+              {/* Main Video Showcase Box */}
+              <div 
+                ref={containerRef}
+                className="relative rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-brand-cyan/30 bg-slate-950 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] group select-none aspect-[16/10] sm:aspect-[16/9.5]"
+              >
                 
-                {/* Images Slides */}
-                {manualTroubles.map((slide, index) => (
-                  <div
-                    key={slide.image}
-                    className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-                      index === currentSlide ? "opacity-100 scale-100 z-10" : "opacity-0 scale-105 z-0 pointer-events-none"
-                    }`}
-                    style={{ transition: "opacity 0.7s ease-in-out, transform 0.7s ease-in-out" }}
-                  >
-                    <img 
-                      src={slide.image} 
-                      alt={slide.badge} 
-                      className="w-full h-full object-cover"
-                    />
-                    {/* Dark gradient overlay for text legibility */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-black/30" />
+                {/* 4K Video Slides */}
+                {manualTroubles.map((slide, index) => {
+                  const isActive = index === currentSlide;
+                  return (
+                    <div
+                      key={slide.video}
+                      className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                        isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+                      }`}
+                    >
+                      <video
+                        ref={(el) => {
+                          videoRefs.current[index] = el;
+                        }}
+                        src={slide.video}
+                        poster={slide.poster}
+                        autoPlay={isActive}
+                        loop
+                        muted={isMuted}
+                        playsInline
+                        preload="auto"
+                        className="w-full h-full object-cover"
+                      />
+                      
+                      {/* Vignette & Cinematic Dark Gradient for optimal text legibility */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/60 pointer-events-none" />
+                      <div className="absolute inset-0 bg-radial-vignette pointer-events-none" />
+                    </div>
+                  );
+                })}
+
+                {/* Top Video Header Bar (Overlay) */}
+                <div className="absolute top-3.5 left-4 right-4 z-20 flex items-center justify-between pointer-events-auto">
+                  {/* Left: 4K Live Indicator & Problem Badge */}
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/85 backdrop-blur-md border border-red-500/50 text-red-300 text-[11px] sm:text-xs font-bold shadow-md">
+                      <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                      PROBLEM #{String(currentSlide + 1).padStart(2, "0")}
+                    </span>
+
+                    <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/10 text-white/90 text-xs font-medium">
+                      {manualTroubles[currentSlide].badge}
+                    </span>
                   </div>
-                ))}
 
-                {/* Top Badge: Manual Trouble Header */}
-                <div className="absolute top-4 left-5 z-20">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-950/80 backdrop-blur-md border border-red-500/40 text-red-200 text-xs font-bold shadow-lg">
-                    <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
-                    TROUBLE: {manualTroubles[currentSlide].badge}
-                  </span>
+                  {/* Right: 4K Badge & Quick Video Controls */}
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-brand-cyan/20 border border-brand-cyan/40 text-brand-cyan text-[11px] font-black tracking-wider uppercase backdrop-blur-md shadow-xs">
+                      <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse" />
+                      4K UHD 60FPS
+                    </span>
+
+                    {/* Play/Pause Button */}
+                    <button
+                      onClick={() => setIsPlaying(!isPlaying)}
+                      className="p-1.5 sm:p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-white/90 border border-white/15 backdrop-blur-md transition-all hover:scale-105"
+                      title={isPlaying ? "Pause Video Slides" : "Play Video Slides"}
+                      aria-label="Toggle play pause"
+                    >
+                      {isPlaying ? <Pause className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+                    </button>
+
+                    {/* Mute/Unmute Audio Toggle */}
+                    <button
+                      onClick={() => setIsMuted(!isMuted)}
+                      className="p-1.5 sm:p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-white/90 border border-white/15 backdrop-blur-md transition-all hover:scale-105"
+                      title={isMuted ? "Unmute audio" : "Mute audio"}
+                      aria-label="Toggle mute"
+                    >
+                      {isMuted ? <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+                    </button>
+
+                    {/* Fullscreen Toggle */}
+                    <button
+                      onClick={toggleFullscreen}
+                      className="hidden sm:inline-flex p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-white/90 border border-white/15 backdrop-blur-md transition-all hover:scale-105"
+                      title="Toggle Fullscreen"
+                      aria-label="Toggle fullscreen"
+                    >
+                      <Maximize2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
 
-                {/* Hover Auto-slide indicator */}
-                <div className="absolute top-4 right-5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                  <span className="text-[10px] font-bold text-white/90 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-md">
-                    Auto-slides on hover
-                  </span>
-                </div>
-
-                {/* Arrow Navigation Controls */}
+                {/* Center Previous / Next Arrow Controls */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     prevSlide();
                   }}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-slate-900 flex items-center justify-center backdrop-blur-md shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
-                  aria-label="Previous trouble"
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-slate-900/80 hover:bg-white hover:text-slate-950 text-white flex items-center justify-center backdrop-blur-lg border border-white/20 shadow-2xl opacity-75 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
+                  aria-label="Previous trouble video"
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className="w-6 h-6" />
                 </button>
 
                 <button
@@ -211,69 +353,110 @@ export default function BusinessProblems() {
                     e.stopPropagation();
                     nextSlide();
                   }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-slate-900 flex items-center justify-center backdrop-blur-md shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
-                  aria-label="Next trouble"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-slate-900/80 hover:bg-white hover:text-slate-950 text-white flex items-center justify-center backdrop-blur-lg border border-white/20 shadow-2xl opacity-75 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
+                  aria-label="Next trouble video"
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-6 h-6" />
                 </button>
 
-                {/* Bottom Overlay: Trouble vs Elimination Solution */}
-                <div className="absolute bottom-4 left-4 right-4 z-20 bg-slate-950/90 backdrop-blur-md p-4 rounded-xl border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div className="flex-1 space-y-1.5">
-                    {/* The Trouble */}
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-red-400 bg-red-500/15 border border-red-500/20 px-2 py-0.5 rounded shrink-0 flex items-center gap-1">
-                        <XCircle className="w-3 h-3" />
-                        Trouble
-                      </span>
-                      <span className="text-xs text-white/80 line-through truncate font-medium">
-                        {manualTroubles[currentSlide].troubleDesc}
-                      </span>
+                {/* Bottom Overlay: Trouble vs Digital Replacement Card */}
+                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-20">
+                  <div className="bg-slate-950/92 backdrop-blur-xl p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-white/15 shadow-2xl space-y-2.5">
+                    
+                    {/* Top Row: Before vs After */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                      {/* Left: Trouble (Before) */}
+                      <div className="flex items-start gap-2.5 bg-red-950/40 p-2 sm:p-2.5 rounded-lg border border-red-500/25">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-red-400 bg-red-500/20 border border-red-500/30 px-2 py-0.5 rounded shrink-0 flex items-center gap-1 mt-0.5">
+                          <XCircle className="w-3 h-3 text-red-400" />
+                          Bottleneck
+                        </span>
+                        <span className="text-xs text-red-200/90 font-medium leading-relaxed">
+                          {manualTroubles[currentSlide].troubleDesc}
+                        </span>
+                      </div>
+
+                      {/* Right: Solution (Software Replaces This) */}
+                      <div className="flex items-start gap-2.5 bg-emerald-950/40 p-2 sm:p-2.5 rounded-lg border border-emerald-500/30">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-300 bg-emerald-500/20 border border-emerald-500/35 px-2 py-0.5 rounded shrink-0 flex items-center gap-1 mt-0.5">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                          Our ERP Fix
+                        </span>
+                        <span className="text-xs text-emerald-100 font-bold leading-relaxed">
+                          {manualTroubles[currentSlide].solutionDesc}
+                        </span>
+                      </div>
                     </div>
 
-                    {/* The Solution */}
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/15 border border-emerald-500/20 px-2 py-0.5 rounded shrink-0 flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3" />
-                        We Eliminate This
-                      </span>
-                      <span className="text-xs font-bold text-white truncate">
-                        {manualTroubles[currentSlide].solutionDesc}
-                      </span>
-                    </div>
-                  </div>
+                    {/* Timeline Progress Bar & Video Navigation Pills */}
+                    <div className="pt-2 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+                      {/* Timeline progress line */}
+                      <div className="w-full sm:w-auto flex-1 flex items-center gap-2">
+                        <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-gradient-to-r from-brand-cyan to-blue-500 transition-all duration-75 ease-linear rounded-full"
+                            style={{ width: `${progress}%` }}
+                          />
+                        </div>
+                        <span className="text-[10px] font-mono text-white/60 shrink-0">
+                          {String(currentSlide + 1).padStart(2, "0")} / {String(manualTroubles.length).padStart(2, "0")}
+                        </span>
+                      </div>
 
-                  {/* Dots Indicator */}
-                  <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-center">
-                    {manualTroubles.map((_, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setCurrentSlide(idx)}
-                        className={`transition-all duration-300 rounded-full ${
-                          idx === currentSlide 
-                            ? "w-6 h-2 bg-brand-cyan" 
-                            : "w-2 h-2 bg-white/40 hover:bg-white/80"
-                        }`}
-                        aria-label={`Go to slide ${idx + 1}`}
-                      />
-                    ))}
+                      {/* Slide Thumbnail Tabs */}
+                      <div className="flex items-center gap-1.5 self-end sm:self-center">
+                        {manualTroubles.map((slide, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => {
+                              setProgress(0);
+                              setCurrentSlide(idx);
+                            }}
+                            className={`px-2 py-0.5 text-[10px] font-bold rounded-md transition-all duration-200 ${
+                              idx === currentSlide
+                                ? "bg-brand-cyan text-slate-950 shadow-[0_0_12px_rgba(0,180,216,0.5)] scale-105"
+                                : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
+                            }`}
+                            aria-label={`Go to slide ${idx + 1}`}
+                          >
+                            {slide.shortTitle}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
                   </div>
                 </div>
 
               </div>
 
-              {/* Floating Solution Success Metric Badge */}
+              {/* Floating Success Metric Badge (Bottom Left) */}
               <motion.div
                 animate={{ y: [0, -6, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -bottom-5 -left-5 bg-brand-card border border-brand-border p-3.5 rounded-2xl shadow-2xl z-20 flex items-center gap-3"
+                className="absolute -bottom-6 -left-3 sm:-left-6 bg-brand-card/95 backdrop-blur-xl border border-brand-border/80 p-3 sm:p-4 rounded-2xl shadow-2xl z-30 flex items-center gap-3"
               >
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-600 flex items-center justify-center font-bold">
-                  <CheckCircle2 className="w-6 h-6" />
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center font-bold">
+                  <CheckCircle2 className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-brand-text">Zero Manual Errors</p>
-                  <p className="text-[11px] text-brand-text-muted">100% Automated Business Clarity</p>
+                  <p className="text-xs sm:text-sm font-black text-brand-text">Zero Manual Errors</p>
+                  <p className="text-[11px] sm:text-xs text-brand-text-muted">100% Automated Business Clarity</p>
+                </div>
+              </motion.div>
+
+              {/* Floating Cloud Sync Badge (Top Right) */}
+              <motion.div
+                animate={{ y: [0, 6, 0] }}
+                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="hidden md:flex absolute -top-5 -right-5 bg-brand-card/95 backdrop-blur-xl border border-brand-border/80 px-3.5 py-2.5 rounded-2xl shadow-xl z-30 items-center gap-2.5"
+              >
+                <div className="w-8 h-8 rounded-lg bg-brand-cyan/15 text-brand-cyan flex items-center justify-center font-bold">
+                  <Zap className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-brand-text">Real-time Cloud Sync</p>
+                  <p className="text-[10px] text-brand-text-muted">Multi-Device & Multi-Branch</p>
                 </div>
               </motion.div>
 

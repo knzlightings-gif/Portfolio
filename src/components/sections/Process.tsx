@@ -111,7 +111,7 @@ export default function Process() {
             className="text-4xl md:text-5xl lg:text-6xl font-black text-brand-text mb-5 tracking-tight"
           >
             From Problem to{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-brand-cyan to-brand-purple">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]">
               Working Software
             </span>
           </motion.h2>

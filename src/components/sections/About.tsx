@@ -3,7 +3,10 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import defaultAbout from "@/data/about.json";
-import { Sparkles, CheckCircle2, User } from "lucide-react";
+import { Sparkles, CheckCircle2, User, Zap, Cpu, Layers, Terminal, ShieldCheck } from "lucide-react";
+
+// Tech icon mapping for stats
+const statIcons = [Zap, CheckCircle2, Cpu, Layers];
 
 export default function About() {
   const [data, setData] = useState(defaultAbout);
@@ -86,24 +89,33 @@ export default function About() {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 gap-6">
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={stat.label + index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 + index * 0.1 }}
-                  className="p-7 rounded-3xl bg-brand-card/80 backdrop-blur-sm border border-brand-border hover:border-brand-cyan/40 transition-all duration-300 shadow-sm group"
-                >
-                  <div className="text-4xl md:text-5xl font-black text-brand-text mb-2 group-hover:text-brand-cyan transition-colors">
-                    {stat.value}
-                  </div>
-                  <div className="text-xs md:text-sm text-brand-text-muted font-bold uppercase tracking-wider">
-                    {stat.label}
-                  </div>
-                </motion.div>
-              ))}
+            <div className="grid grid-cols-2 gap-4 sm:gap-6">
+              {stats.map((stat, index) => {
+                const StatIcon = statIcons[index % statIcons.length];
+                return (
+                  <motion.div
+                    key={stat.label + index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 + index * 0.1 }}
+                    className="p-6 rounded-2xl bg-brand-card/95 backdrop-blur-xl border border-brand-border hover:border-brand-cyan/60 transition-all duration-300 shadow-xs hover:shadow-lg group relative overflow-hidden"
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="w-8 h-8 rounded-lg bg-brand-cyan/10 border border-brand-cyan/25 flex items-center justify-center text-brand-cyan group-hover:scale-110 transition-transform">
+                        <StatIcon className="w-4 h-4" />
+                      </div>
+                      <span className="text-[10px] font-mono text-brand-text-muted">0{index + 1}</span>
+                    </div>
+                    <div className="text-3xl md:text-4xl font-black text-brand-text mb-1 group-hover:text-brand-cyan transition-colors">
+                      {stat.value}
+                    </div>
+                    <div className="text-xs text-brand-text-muted font-bold uppercase tracking-wider">
+                      {stat.label}
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
 

@@ -126,7 +126,7 @@ export default function Hero() {
                         {secondPart}
                       </span>
                     ) : (
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-blue-600 to-brand-purple">
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]">
                         {secondPart}
                       </span>
                     )}
@@ -183,7 +183,7 @@ export default function Hero() {
               className="relative w-full max-w-2xl z-10 my-8 sm:my-12"
             >
               {/* Outer Ambient Glow Aura */}
-              <div className="absolute -inset-2 bg-gradient-to-r from-brand-cyan/25 via-blue-600/20 to-brand-purple/25 rounded-[32px] blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+              <div className="absolute -inset-2 bg-gradient-to-r from-brand-cyan/20 via-emerald-600/15 to-[#004D40]/20 rounded-[32px] blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
 
               {/* Main Laptop / Studio Glass Chassis */}
               <div 

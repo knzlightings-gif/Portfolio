@@ -13,37 +13,46 @@
 }
 
 :root {
-  /* Default Theme: Clean Royal Tech Blue */
-  --theme-bg: #F8FAFC;
-  --theme-card: #FFFFFF;
-  --theme-border: #E2E8F0;
-  --theme-primary: #0070F3; /* Royal Tech Blue */
-  --theme-secondary: #0099FF; /* Vivid Azure Blue */
-  --theme-primary-rgb: 0, 112, 243;
-  --theme-secondary-rgb: 0, 153, 255;
-  --theme-primary-glow: rgba(0, 112, 243, 0.35);
-  --theme-secondary-glow: rgba(0, 153, 255, 0.35);
-  --theme-primary-subtle: rgba(0, 112, 243, 0.12);
-  --theme-secondary-subtle: rgba(0, 153, 255, 0.12);
-  --theme-text: #0F172A;       /* Crisp text */
-  --theme-text-muted: #475569; /* Slate gray text */
+  /* Default Theme: Universal Ocean Teal (Inspired by universal-gym-lahore.surge.sh) */
+  --theme-bg: #E0F2F1;           /* Soft Mint Aqua Background */
+  --theme-card: #CEE8E3;         /* Harmonious 8% Deeper Green Cards */
+  --theme-border: #9DCBC4;       /* Balanced Seafoam Mint Border */
+  --theme-primary: #004D40;      /* Deep Pine Teal */
+  --theme-secondary: #00ACC1;    /* Vivid Ocean Cyan */
+  --theme-accent: #FF5722;       /* Energetic Coral Flame */
+  --theme-primary-rgb: 0, 77, 64;
+  --theme-secondary-rgb: 0, 172, 193;
+  --theme-accent-rgb: 255, 87, 34;
+  --theme-primary-glow: rgba(0, 77, 64, 0.35);
+  --theme-secondary-glow: rgba(0, 172, 193, 0.35);
+  --theme-accent-glow: rgba(255, 87, 34, 0.35);
+  --theme-primary-subtle: rgba(0, 77, 64, 0.12);
+  --theme-secondary-subtle: rgba(0, 172, 193, 0.12);
+  --theme-accent-subtle: rgba(255, 87, 34, 0.12);
+  --theme-text: #0C2822;         /* High-contrast deep pine text */
+  --theme-text-muted: #1F453E;   /* Polished dark seafoam text */
   color-scheme: light;
 }
 
-[data-theme="light"] {
-  --theme-bg: #F8FAFC;
-  --theme-card: #FFFFFF;
-  --theme-border: #E2E8F0;
-  --theme-primary: #0070F3;
-  --theme-secondary: #0099FF;
-  --theme-primary-rgb: 0, 112, 243;
-  --theme-secondary-rgb: 0, 153, 255;
-  --theme-primary-glow: rgba(0, 112, 243, 0.35);
-  --theme-secondary-glow: rgba(0, 153, 255, 0.35);
-  --theme-primary-subtle: rgba(0, 112, 243, 0.12);
-  --theme-secondary-subtle: rgba(0, 153, 255, 0.12);
-  --theme-text: #0F172A;
-  --theme-text-muted: #475569;
+[data-theme="light"],
+[data-theme="universal-teal"] {
+  --theme-bg: #E0F2F1;
+  --theme-card: #CEE8E3;
+  --theme-border: #9DCBC4;
+  --theme-primary: #004D40;
+  --theme-secondary: #00ACC1;
+  --theme-accent: #FF5722;
+  --theme-primary-rgb: 0, 77, 64;
+  --theme-secondary-rgb: 0, 172, 193;
+  --theme-accent-rgb: 255, 87, 34;
+  --theme-primary-glow: rgba(0, 77, 64, 0.35);
+  --theme-secondary-glow: rgba(0, 172, 193, 0.35);
+  --theme-accent-glow: rgba(255, 87, 34, 0.35);
+  --theme-primary-subtle: rgba(0, 77, 64, 0.12);
+  --theme-secondary-subtle: rgba(0, 172, 193, 0.12);
+  --theme-accent-subtle: rgba(255, 87, 34, 0.12);
+  --theme-text: #0C2822;
+  --theme-text-muted: #1F453E;
   color-scheme: light;
 }
 
@@ -84,12 +93,47 @@
   --theme-text-muted: #FDA4AF;
 }
 
+/* ─── 🔥 Ember Tech Theme — Peach × Light Red × Dark Gold ──── */
+[data-theme="ember"] {
+  /* Backgrounds */
+  --theme-bg: #120A07;           /* Deep charcoal-ember dark */
+  --theme-card: #1C1008;        /* Warm dark card surface */
+  --theme-border: #2E1A0E;      /* Warm brown border */
+
+  /* Primary: Burnt Peach / Coral */
+  --theme-primary: #FF6B47;
+  /* Secondary: Hot Light Red */
+  --theme-secondary: #FF3D5A;
+  /* Accent: Dark Gold / Yellow */
+  --theme-accent: #D4A017;
+
+  /* RGB values for JS/rgba usage */
+  --theme-primary-rgb: 255, 107, 71;
+  --theme-secondary-rgb: 255, 61, 90;
+  --theme-accent-rgb: 212, 160, 23;
+
+  /* Glows */
+  --theme-primary-glow: rgba(255, 107, 71, 0.40);
+  --theme-secondary-glow: rgba(255, 61, 90, 0.38);
+  --theme-accent-glow: rgba(212, 160, 23, 0.35);
+
+  /* Subtle tints */
+  --theme-primary-subtle: rgba(255, 107, 71, 0.14);
+  --theme-secondary-subtle: rgba(255, 61, 90, 0.12);
+  --theme-accent-subtle: rgba(212, 160, 23, 0.12);
+
+  /* Text */
+  --theme-text: #FFF5F0;         /* Warm white */
+  --theme-text-muted: #C4937A;  /* Muted peach-sand */
+  color-scheme: dark;
+}
+
 
 body {
   background-color: var(--color-brand-bg);
   color: var(--color-brand-text);
-  background-image: radial-gradient(var(--color-brand-border) 1.5px, transparent 1.5px);
-  background-size: 32px 32px;
+  background-image: radial-gradient(rgba(var(--theme-primary-rgb, 0, 77, 64), 0.05) 1px, transparent 1px);
+  background-size: 36px 36px;
   font-family: var(--font-sans);
 }
 

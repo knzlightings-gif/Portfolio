@@ -40,9 +40,19 @@ export function applyThemeToDom(config: ThemeConfig) {
     root.style.setProperty("--theme-secondary-subtle", `rgba(${secondaryRgb.r}, ${secondaryRgb.g}, ${secondaryRgb.b}, 0.12)`);
   }
 
+  // Accent Color & Glow (e.g. Coral Flame #FF5722)
+  const accentColor = config.accent || "#FF5722";
+  root.style.setProperty("--theme-accent", accentColor);
+  const accentRgb = hexToRgb(accentColor);
+  if (accentRgb) {
+    root.style.setProperty("--theme-accent-rgb", `${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}`);
+    root.style.setProperty("--theme-accent-glow", `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0.35)`);
+    root.style.setProperty("--theme-accent-subtle", `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0.12)`);
+  }
+
   // Set Light or Dark Mode Tokens
   if (config.mode === "dark") {
-    root.setAttribute("data-theme", "dark");
+    root.setAttribute("data-theme", config.id || "dark");
     root.style.setProperty("--theme-bg", config.bg || "#0B0F19");
     root.style.setProperty("--theme-card", config.card || "#111827");
     root.style.setProperty("--theme-border", config.border || "#1F2937");
@@ -50,12 +60,12 @@ export function applyThemeToDom(config: ThemeConfig) {
     root.style.setProperty("--theme-text-muted", config.textMuted || "#9CA3AF");
     root.style.colorScheme = "dark";
   } else {
-    root.setAttribute("data-theme", "light");
-    root.style.setProperty("--theme-bg", config.bg || "#F8FAFC");
-    root.style.setProperty("--theme-card", config.card || "#FFFFFF");
-    root.style.setProperty("--theme-border", config.border || "#E2E8F0");
-    root.style.setProperty("--theme-text", config.text || "#0F172A");
-    root.style.setProperty("--theme-text-muted", config.textMuted || "#475569");
+    root.setAttribute("data-theme", config.id || "light");
+    root.style.setProperty("--theme-bg", config.bg || "#E0F2F1");
+    root.style.setProperty("--theme-card", config.card || "#CEE8E3");
+    root.style.setProperty("--theme-border", config.border || "#9DCBC4");
+    root.style.setProperty("--theme-text", config.text || "#0C2822");
+    root.style.setProperty("--theme-text-muted", config.textMuted || "#1F453E");
     root.style.colorScheme = "light";
   }
 }

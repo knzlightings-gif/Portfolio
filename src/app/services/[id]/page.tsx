@@ -99,7 +99,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
 
           {/* Hero Header */}
           <div className="bg-brand-card/95 border border-brand-border/80 rounded-3xl p-8 md:p-12 shadow-xl backdrop-blur-md relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-cyan via-blue-500 to-brand-purple" />
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]" />
             
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
               <div className="space-y-4 max-w-2xl">

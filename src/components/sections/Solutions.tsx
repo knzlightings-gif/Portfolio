@@ -1,174 +1,74 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { solutionsByBusiness as defaultSolutionsByBusiness } from "@/data/content";
-import { ArrowRight, Layers } from "lucide-react";
+import { 
+  ArrowRight, 
+  ArrowUpRight, 
+  Layers, 
+  Cpu, 
+  Database, 
+  ShieldCheck, 
+  Terminal, 
+  Server,
+  Workflow
+} from "lucide-react";
 
-// Industry illustration map
-const solutionImageMap: Record<string, string> = {
-  Manufacturing: "/card-manufacturing.jpg",
-  Retail: "/card-retail.jpg",
-  Distribution: "/card-distribution.jpg",
-  Services: "/card-services.jpg",
-  Education: "/card-education.jpg",
-  Healthcare: "/card-education.jpg", // fallback until healthcare image is ready
+const solutionIconMap: Record<string, any> = {
+  Manufacturing: Cpu,
+  Retail: Layers,
+  Distribution: Server,
+  Services: Workflow,
+  Education: Terminal,
+  Healthcare: ShieldCheck,
 };
 
 function SolutionCard({ solution, index }: { solution: any; index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  // Motion values for smooth 3D tilt
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 25, stiffness: 220 };
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [6, -6]), springConfig);
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-6, 6]), springConfig);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    mouseX.set(x);
-    mouseY.set(y);
-    setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    mouseX.set(0);
-    mouseY.set(0);
-  };
-
-  const num = String(index + 1).padStart(2, "0");
-  const featureList = typeof solution.features === "string" 
-    ? solution.features.split(" + ") 
-    : Array.isArray(solution.features) ? solution.features : [];
+  const IconComponent = solutionIconMap[solution.title] || Database;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 25 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.35, delay: index * 0.06 }}
-      style={{ perspective: 1200 }}
       className="h-full"
     >
-      <motion.div
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d",
-        }}
-        whileHover={{ y: -8, scale: 1.015 }}
-        transition={{ duration: 0.2 }}
-        className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-brand-card/90 backdrop-blur-md border border-brand-border/80 shadow-md hover:shadow-[0_25px_50px_-12px_var(--theme-primary-glow,rgba(0,112,243,0.35)),0_0_25px_2px_rgba(0,112,243,0.12)] hover:border-brand-cyan/70 transition-all duration-300 h-full"
-      >
-        {/* Top decorative gradient accent line */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan via-blue-500 to-brand-purple opacity-40 group-hover:opacity-100 group-hover:shadow-[0_0_12px_var(--theme-primary)] transition-all duration-300 z-30" />
+      <div className="relative overflow-hidden flex flex-col items-center text-center justify-between h-full p-6 sm:p-7 rounded-2xl bg-brand-card border border-brand-border/80 shadow-xs hover:shadow-[0_24px_50px_-10px_rgba(0,77,64,0.36),0_12px_24px_-6px_rgba(0,77,64,0.22)] hover:border-[#004D40] dark:hover:border-brand-cyan hover:-translate-y-1.5 hover:bg-[#C2E3DC] dark:hover:bg-[#14332D] transition-all duration-300 group">
+        
+        {/* Prominent hover shade overlay */}
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-transparent via-[#004D40]/[0.03] to-[#004D40]/[0.10] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-        {/* Dynamic Spotlight Glow that follows cursor */}
-        <div
-          className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"
-          style={{
-            background: isHovered
-              ? `radial-gradient(350px circle at ${mousePos.x}px ${mousePos.y}px, rgba(var(--theme-primary-rgb, 0, 112, 243), 0.16), transparent 80%)`
-              : "none",
-          }}
-        />
-
-        {/* Illustration Image Header */}
-        <div className="relative w-full h-40 overflow-hidden border-b border-brand-border/50">
-          <img
-            src={solutionImageMap[solution.title] || "/card-erp.jpg"}
-            alt={solution.title}
-            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
-          />
-          {/* Shimmer light sweep */}
-          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none z-10" />
-
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-brand-card/90 pointer-events-none" />
-          
-          {/* Badge + Number overlay */}
-          <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-bg/85 backdrop-blur-md border border-brand-border text-brand-cyan group-hover:border-brand-cyan/50 group-hover:shadow-[0_0_8px_rgba(var(--theme-primary-rgb),0.2)] transition-all duration-300">
-              {solution.badge || "Custom"}
-            </span>
-            <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md bg-brand-bg/85 backdrop-blur-md border border-brand-border text-brand-text-muted group-hover:border-brand-cyan/50 group-hover:text-brand-cyan transition-all duration-300">
-              /{num}
-            </span>
-          </div>
+        {/* Centered IT Icon */}
+        <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white/95 dark:bg-teal-950/80 border border-[#004D40]/25 text-[#004D40] dark:text-brand-cyan mb-3.5 shadow-2xs group-hover:scale-110 group-hover:bg-[#004D40] group-hover:text-white group-hover:shadow-md transition-all duration-300 relative z-10">
+          <IconComponent className="w-8 h-8" strokeWidth={1.8} />
         </div>
 
-        {/* Main Content Area */}
-        <div className="relative z-10 p-5 md:p-6 flex-1 flex flex-col justify-between">
-          <div>
-            {/* Title & Subtitle */}
-            <div className="mb-2">
-              <h3 className="text-lg font-bold text-brand-text group-hover:text-brand-cyan transition-colors duration-200">
-                {solution.title}
-              </h3>
-              {solution.subtitle && (
-                <p className="text-xs font-semibold text-brand-cyan tracking-wide mt-0.5">
-                  {solution.subtitle}
-                </p>
-              )}
-            </div>
+        {/* Centered Title */}
+        <h3 className="text-base sm:text-lg font-bold text-brand-text mb-1 group-hover:text-[#004D40] dark:group-hover:text-brand-cyan transition-colors relative z-10">
+          {solution.title}
+        </h3>
 
-            {/* Clear Descriptive Text */}
-            <p className="text-brand-text-muted text-xs leading-relaxed mb-4">
-              {solution.description}
-            </p>
-          </div>
+        {/* Short, compact description with high-contrast text */}
+        <p className="text-xs text-brand-text-muted font-medium leading-relaxed mb-3 max-w-[240px] line-clamp-2 relative z-10">
+          {solution.description}
+        </p>
 
-          {/* Modules / Features Pill List */}
-          {featureList.length > 0 && (
-            <div className="mb-4">
-              <p className="text-[10px] uppercase font-bold text-brand-text-muted/80 tracking-wider mb-2">
-                Core Modules Included:
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {featureList.map((feature: string) => (
-                  <span
-                    key={feature}
-                    className="text-[11px] font-semibold px-2 py-0.5 bg-brand-bg text-brand-text-muted border border-brand-border/70 rounded-md group-hover:border-brand-cyan/40 group-hover:text-brand-text group-hover:bg-brand-cyan/5 transition-all duration-200 flex items-center gap-1.5"
-                  >
-                    <span className="w-1 h-1 rounded-full bg-brand-cyan" />
-                    {feature}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+        {/* Centered IT Metric / Subtitle */}
+        <div className="text-sm sm:text-base font-extrabold text-[#004D40] dark:text-brand-cyan mb-3.5 tracking-tight relative z-10">
+          {solution.subtitle || "Enterprise Ready"}
         </div>
 
-        {/* Interactive Card Footer */}
-        <div className="relative z-10 p-5 pt-3 border-t border-brand-border/50 flex items-center justify-between text-xs font-semibold text-brand-text-muted group-hover:text-brand-cyan transition-colors duration-200">
-          <span className="flex items-center gap-2 text-xs text-brand-text">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            Production Ready
-          </span>
-          <div className="flex items-center gap-1 font-bold group-hover:translate-x-1.5 transition-transform duration-200 text-brand-cyan">
-            <span>View Architecture</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform duration-200" />
-          </div>
-        </div>
-      </motion.div>
+        {/* Centered Pill Button */}
+        <a 
+          href="/contact"
+          className="inline-flex items-center gap-1.5 px-5 py-1.5 rounded-full text-xs font-bold bg-[#004D40] hover:bg-[#00382E] text-white shadow-xs group-hover:shadow-lg group-hover:scale-105 transition-all relative z-10"
+        >
+          View Solution
+          <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+        </a>
+      </div>
     </motion.div>
   );
 }
@@ -240,7 +140,7 @@ export default function Solutions() {
             className="text-3xl md:text-4xl font-black text-brand-text mb-3 tracking-tight"
           >
             Solutions for{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-blue-500 to-brand-purple">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]">
               Different Businesses
             </span>
           </motion.h2>

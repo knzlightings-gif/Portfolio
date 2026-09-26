@@ -66,7 +66,7 @@ export default function Footer() {
           <div>
             <h2 className="text-2xl md:text-3xl font-bold text-brand-text tracking-tight">
               {footerContent?.ctaHeading1 || "Let's build something"}{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-brand-purple">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]">
                 {footerContent?.ctaHeading2 || "extraordinary."}
               </span>
             </h2>

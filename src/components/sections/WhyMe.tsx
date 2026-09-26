@@ -156,7 +156,7 @@ export default function WhyMe() {
             className="text-3xl md:text-5xl lg:text-6xl font-black text-brand-text mb-6 leading-[1.15] tracking-tight"
           >
             {headingPart1}{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-blue-600 to-brand-purple">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]">
               {headingPart2}
             </span>
           </motion.h2>

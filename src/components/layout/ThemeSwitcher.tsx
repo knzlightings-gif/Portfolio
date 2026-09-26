@@ -6,6 +6,9 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const themes = [
+  { id: "universal-teal", name: "🌿 Universal Pine & Mint", color: "#004D40" },
+  { id: "royal-blue", name: "Royal Tech Blue", color: "#0070F3" },
+  { id: "ember", name: "🔥 Ember Tech", color: "#FF6B47" },
   { id: "ocean", name: "Ocean Dark", color: "#00E5FF" },
   { id: "forest", name: "Forest Dark", color: "#10B981" },
   { id: "sunset", name: "Sunset Dark", color: "#F43F5E" },
