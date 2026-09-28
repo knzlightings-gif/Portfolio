@@ -244,12 +244,12 @@ export default function BusinessProblems() {
               onMouseLeave={() => setIsHovered(false)}
             >
               {/* Outer Decorative Ambient Glow Frame */}
-              <div className="absolute -inset-1.5 bg-gradient-to-r from-brand-cyan/30 via-emerald-600/20 to-[#004D40]/30 rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+              <div className="absolute -inset-2 bg-gradient-to-r from-emerald-500/25 via-teal-400/20 to-cyan-500/25 rounded-3xl blur-2xl opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
               {/* Main Video Showcase Box */}
               <div 
                 ref={containerRef}
-                className="relative rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-brand-cyan/30 bg-slate-950 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] group select-none aspect-[16/10] sm:aspect-[16/9.5]"
+                className="relative rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-emerald-500/40 bg-slate-900 shadow-[0_20px_50px_rgba(0,121,107,0.22)] group select-none aspect-[16/10] sm:aspect-[16/9.5]"
               >
                 
                 {/* 4K Video Slides */}
@@ -273,12 +273,12 @@ export default function BusinessProblems() {
                         muted={isMuted}
                         playsInline
                         preload="auto"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover brightness-[1.20] contrast-[1.08] saturate-[1.12]"
                       />
                       
-                      {/* Vignette & Cinematic Dark Gradient for optimal text legibility */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/60 pointer-events-none" />
-                      <div className="absolute inset-0 bg-radial-vignette pointer-events-none" />
+                      {/* Gentle top & bottom gradients ONLY behind UI overlays — keeping the video bright & vibrant */}
+                      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/50 via-black/20 to-transparent pointer-events-none" />
+                      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none" />
                     </div>
                   );
                 })}
@@ -287,27 +287,27 @@ export default function BusinessProblems() {
                 <div className="absolute top-3.5 left-4 right-4 z-20 flex items-center justify-between pointer-events-auto">
                   {/* Left: 4K Live Indicator & Problem Badge */}
                   <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/85 backdrop-blur-md border border-red-500/50 text-red-300 text-[11px] sm:text-xs font-bold shadow-md">
+                    <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-red-500/50 text-red-300 text-[11px] sm:text-xs font-bold shadow-md">
                       <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
                       PROBLEM #{String(currentSlide + 1).padStart(2, "0")}
                     </span>
 
-                    <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/10 text-white/90 text-xs font-medium">
+                    <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/75 backdrop-blur-md border border-white/15 text-white/95 text-xs font-medium">
                       {manualTroubles[currentSlide].badge}
                     </span>
                   </div>
 
                   {/* Right: 4K Badge & Quick Video Controls */}
                   <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-brand-cyan/20 border border-brand-cyan/40 text-brand-cyan text-[11px] font-black tracking-wider uppercase backdrop-blur-md shadow-xs">
-                      <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse" />
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[11px] font-black tracking-wider uppercase backdrop-blur-md shadow-xs">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       4K UHD 60FPS
                     </span>
 
                     {/* Play/Pause Button */}
                     <button
                       onClick={() => setIsPlaying(!isPlaying)}
-                      className="p-1.5 sm:p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-white/90 border border-white/15 backdrop-blur-md transition-all hover:scale-105"
+                      className="p-1.5 sm:p-2 rounded-lg bg-slate-900/75 hover:bg-slate-800 text-white/90 border border-white/15 backdrop-blur-md transition-all hover:scale-105"
                       title={isPlaying ? "Pause Video Slides" : "Play Video Slides"}
                       aria-label="Toggle play pause"
                     >
@@ -317,7 +317,7 @@ export default function BusinessProblems() {
                     {/* Mute/Unmute Audio Toggle */}
                     <button
                       onClick={() => setIsMuted(!isMuted)}
-                      className="p-1.5 sm:p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-white/90 border border-white/15 backdrop-blur-md transition-all hover:scale-105"
+                      className="p-1.5 sm:p-2 rounded-lg bg-slate-900/75 hover:bg-slate-800 text-white/90 border border-white/15 backdrop-blur-md transition-all hover:scale-105"
                       title={isMuted ? "Unmute audio" : "Mute audio"}
                       aria-label="Toggle mute"
                     >
@@ -327,7 +327,7 @@ export default function BusinessProblems() {
                     {/* Fullscreen Toggle */}
                     <button
                       onClick={toggleFullscreen}
-                      className="hidden sm:inline-flex p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-white/90 border border-white/15 backdrop-blur-md transition-all hover:scale-105"
+                      className="hidden sm:inline-flex p-2 rounded-lg bg-slate-900/75 hover:bg-slate-800 text-white/90 border border-white/15 backdrop-blur-md transition-all hover:scale-105"
                       title="Toggle Fullscreen"
                       aria-label="Toggle fullscreen"
                     >
@@ -342,7 +342,7 @@ export default function BusinessProblems() {
                     e.stopPropagation();
                     prevSlide();
                   }}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-slate-900/80 hover:bg-white hover:text-slate-950 text-white flex items-center justify-center backdrop-blur-lg border border-white/20 shadow-2xl opacity-75 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-slate-900/75 hover:bg-white hover:text-slate-950 text-white flex items-center justify-center backdrop-blur-lg border border-white/20 shadow-2xl opacity-75 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
                   aria-label="Previous trouble video"
                 >
                   <ChevronLeft className="w-6 h-6" />
@@ -353,7 +353,7 @@ export default function BusinessProblems() {
                     e.stopPropagation();
                     nextSlide();
                   }}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-slate-900/80 hover:bg-white hover:text-slate-950 text-white flex items-center justify-center backdrop-blur-lg border border-white/20 shadow-2xl opacity-75 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-slate-900/75 hover:bg-white hover:text-slate-950 text-white flex items-center justify-center backdrop-blur-lg border border-white/20 shadow-2xl opacity-75 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
                   aria-label="Next trouble video"
                 >
                   <ChevronRight className="w-6 h-6" />
@@ -361,28 +361,28 @@ export default function BusinessProblems() {
 
                 {/* Bottom Overlay: Trouble vs Digital Replacement Card */}
                 <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-20">
-                  <div className="bg-slate-950/92 backdrop-blur-xl p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-white/15 shadow-2xl space-y-2.5">
+                  <div className="bg-slate-900/80 backdrop-blur-xl p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-white/20 shadow-2xl space-y-2.5">
                     
                     {/* Top Row: Before vs After */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                       {/* Left: Trouble (Before) */}
-                      <div className="flex items-start gap-2.5 bg-red-950/40 p-2 sm:p-2.5 rounded-lg border border-red-500/25">
-                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-red-400 bg-red-500/20 border border-red-500/30 px-2 py-0.5 rounded shrink-0 flex items-center gap-1 mt-0.5">
-                          <XCircle className="w-3 h-3 text-red-400" />
+                      <div className="flex items-start gap-2.5 bg-rose-950/30 p-2 sm:p-2.5 rounded-lg border border-rose-500/30">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-rose-300 bg-rose-500/20 border border-rose-500/35 px-2 py-0.5 rounded shrink-0 flex items-center gap-1 mt-0.5">
+                          <XCircle className="w-3 h-3 text-rose-400" />
                           Bottleneck
                         </span>
-                        <span className="text-xs text-red-200/90 font-medium leading-relaxed">
+                        <span className="text-xs text-white/95 font-medium leading-relaxed">
                           {manualTroubles[currentSlide].troubleDesc}
                         </span>
                       </div>
 
                       {/* Right: Solution (Software Replaces This) */}
-                      <div className="flex items-start gap-2.5 bg-emerald-950/40 p-2 sm:p-2.5 rounded-lg border border-emerald-500/30">
-                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-300 bg-emerald-500/20 border border-emerald-500/35 px-2 py-0.5 rounded shrink-0 flex items-center gap-1 mt-0.5">
+                      <div className="flex items-start gap-2.5 bg-emerald-950/30 p-2 sm:p-2.5 rounded-lg border border-emerald-500/35">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-300 bg-emerald-500/25 border border-emerald-500/40 px-2 py-0.5 rounded shrink-0 flex items-center gap-1 mt-0.5">
                           <CheckCircle2 className="w-3 h-3 text-emerald-400" />
                           Our ERP Fix
                         </span>
-                        <span className="text-xs text-emerald-100 font-bold leading-relaxed">
+                        <span className="text-xs text-white font-bold leading-relaxed">
                           {manualTroubles[currentSlide].solutionDesc}
                         </span>
                       </div>
@@ -394,11 +394,11 @@ export default function BusinessProblems() {
                       <div className="w-full sm:w-auto flex-1 flex items-center gap-2">
                         <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
                           <div 
-                            className="h-full bg-gradient-to-r from-brand-cyan to-blue-500 transition-all duration-75 ease-linear rounded-full"
+                            className="h-full bg-gradient-to-r from-emerald-400 to-teal-400 transition-all duration-75 ease-linear rounded-full"
                             style={{ width: `${progress}%` }}
                           />
                         </div>
-                        <span className="text-[10px] font-mono text-white/60 shrink-0">
+                        <span className="text-[10px] font-mono text-white/70 shrink-0">
                           {String(currentSlide + 1).padStart(2, "0")} / {String(manualTroubles.length).padStart(2, "0")}
                         </span>
                       </div>
@@ -414,8 +414,8 @@ export default function BusinessProblems() {
                             }}
                             className={`px-2 py-0.5 text-[10px] font-bold rounded-md transition-all duration-200 ${
                               idx === currentSlide
-                                ? "bg-brand-cyan text-slate-950 shadow-[0_0_12px_rgba(0,180,216,0.5)] scale-105"
-                                : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
+                                ? "bg-emerald-400 text-slate-950 shadow-[0_0_12px_rgba(52,211,153,0.6)] font-extrabold scale-105"
+                                : "bg-white/10 text-white/80 hover:bg-white/20 hover:text-white"
                             }`}
                             aria-label={`Go to slide ${idx + 1}`}
                           >
@@ -424,10 +424,8 @@ export default function BusinessProblems() {
                         ))}
                       </div>
                     </div>
-
                   </div>
                 </div>
-
               </div>
 
               {/* Floating Success Metric Badge (Bottom Left) */}

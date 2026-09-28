@@ -7,7 +7,7 @@ import { useState, useEffect, useRef } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, Activity, ShieldCheck, Cpu } from "lucide-react";
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 🎬 HERO IMAGE SLIDES — Cinematic Ken Burns Animation (Video Feel)
+// 🎬 HERO IMAGE SLIDES — High-Quality Brilliantly Lit Enterprise Visuals
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const heroSlides = [
   {
@@ -30,13 +30,6 @@ const heroSlides = [
     title: "Supply Chain Command Center",
     subtitle: "Live stock tracking & automated purchase pipelines",
     kenBurns: "kenBurnsZoomOut",   // zoom out
-  },
-  {
-    url: "/hero-slide4.jpg",
-    badge: "Full-Stack Scalable Architecture",
-    title: "High-Performance Cloud Systems",
-    subtitle: "Microservices, secure APIs & 99.9% uptime reliability",
-    kenBurns: "kenBurnsPanRight",  // pan right
   },
 ];
 
@@ -187,30 +180,31 @@ export default function Hero() {
 
               {/* Main Laptop / Studio Glass Chassis */}
               <div 
-                className="relative rounded-[28px] bg-slate-900/95 border border-slate-700/60 shadow-2xl overflow-hidden group select-none backdrop-blur-xl"
+                className="relative rounded-[28px] bg-slate-900 border border-slate-700/60 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] overflow-hidden group select-none backdrop-blur-xl"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
               >
                 {/* Top macOS Style Window Header */}
-                <div className="px-5 py-3.5 bg-slate-950/90 border-b border-slate-800/80 flex items-center justify-between">
+                <div className="px-5 py-3.5 bg-slate-900/95 border-b border-slate-800/80 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="w-3 h-3 rounded-full bg-rose-500/80" />
                     <span className="w-3 h-3 rounded-full bg-amber-500/80" />
                     <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
                   </div>
 
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-400">
-                    <Activity className="w-3 h-3 text-brand-cyan animate-pulse" />
+                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/90 border border-slate-700/60 text-[11px] font-mono text-emerald-300">
+                    <Activity className="w-3 h-3 text-emerald-400 animate-pulse" />
                     <span>{heroSlides[currentSlide].badge}</span>
                   </div>
 
-                  <div className="text-[11px] font-mono text-slate-500 hidden sm:block">
-                    node: v2.4 • live
+                  <div className="text-[11px] font-mono text-emerald-400/90 hidden sm:flex items-center gap-1.5">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    live • 4K UHD
                   </div>
                 </div>
 
                 {/* 🎬 Cinematic Image Viewport with Ken Burns Animation */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-950">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-900">
                   {heroSlides.map((slide, index) => (
                     <div
                       key={slide.url}
@@ -233,8 +227,8 @@ export default function Hero() {
                           transformOrigin: "center center",
                         }}
                       />
-                      {/* Cinematic Gradient Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                      {/* Subtle Bottom Ambient Gradient for caption legibility without dimming the scene */}
+                      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-950/70 via-slate-950/15 to-transparent pointer-events-none" />
                     </div>
                   ))}
 
@@ -244,7 +238,7 @@ export default function Hero() {
                       e.stopPropagation();
                       prevSlide();
                     }}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md border border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center backdrop-blur-md border border-white/20 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 shadow-lg"
                     aria-label="Previous slide"
                   >
                     <ChevronLeft className="w-5 h-5" />
@@ -255,32 +249,32 @@ export default function Hero() {
                       e.stopPropagation();
                       nextSlide();
                     }}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md border border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center backdrop-blur-md border border-white/20 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 shadow-lg"
                     aria-label="Next slide"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>
 
-                  {/* Slide Title & Subtitle Overlay */}
-                  <div className="absolute bottom-4 left-5 right-5 z-20 flex items-end justify-between gap-4">
-                    <div>
-                      <h4 className="text-white text-base sm:text-lg font-bold drop-shadow-md">
+                  {/* Slide Title & Subtitle Floating Card */}
+                  <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 z-20 flex items-center justify-between gap-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-950/60 backdrop-blur-md border border-white/15 shadow-xl">
+                    <div className="min-w-0">
+                      <h4 className="text-white text-sm sm:text-base font-bold drop-shadow-md truncate">
                         {heroSlides[currentSlide].title}
                       </h4>
-                      <p className="text-slate-300 text-xs sm:text-sm font-medium drop-shadow-sm">
+                      <p className="text-emerald-300 text-xs sm:text-sm font-medium drop-shadow-sm truncate">
                         {heroSlides[currentSlide].subtitle}
                       </p>
                     </div>
 
                     {/* Pagination Indicators */}
-                    <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 shrink-0">
+                    <div className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-2.5 py-1.5 rounded-full border border-white/10 shrink-0">
                       {heroSlides.map((_, idx) => (
                         <button
                           key={idx}
                           onClick={() => setCurrentSlide(idx)}
                           className={`transition-all duration-300 rounded-full ${
                             idx === currentSlide 
-                              ? "w-6 h-1.5 bg-brand-cyan" 
+                              ? "w-6 h-1.5 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" 
                               : "w-1.5 h-1.5 bg-white/40 hover:bg-white"
                           }`}
                           aria-label={`Go to slide ${idx + 1}`}
