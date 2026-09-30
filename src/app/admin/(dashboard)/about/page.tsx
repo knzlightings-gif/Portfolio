@@ -1,16 +1,14 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import defaultAbout from "@/data/about.json";
 import { 
-  Upload, 
   Trash2, 
   Save, 
   Loader2, 
   CheckCircle2, 
   Sparkles, 
   User, 
-  Image as ImageIcon,
   Plus,
   Layers,
   Wrench,
@@ -21,10 +19,8 @@ import Link from "next/link";
 export default function AboutSettingsAdmin() {
   const [data, setData] = useState(defaultAbout);
   const [isLoading, setIsLoading] = useState(true);
-  const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Load from API on mount
   useEffect(() => {
@@ -38,33 +34,6 @@ export default function AboutSettingsAdmin() {
       .catch((err) => console.error("Error loading about data:", err))
       .finally(() => setIsLoading(false));
   }, []);
-
-  // Handle local file upload
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setIsUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const resData = await res.json();
-      if (res.ok && resData.url) {
-        setData((prev) => ({ ...prev, photoUrl: resData.url }));
-      } else {
-        alert("Upload failed: " + (resData.error || "Unknown error"));
-      }
-    } catch (err: any) {
-      alert("Upload error: " + err.message);
-    } finally {
-      setIsUploading(false);
-    }
-  };
 
   // Paragraph handlers
   const handleParagraphChange = (index: number, text: string) => {
@@ -141,11 +110,11 @@ export default function AboutSettingsAdmin() {
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full badge-brand-subtle text-xs font-bold uppercase tracking-wider mb-2">
             <User className="w-3.5 h-3.5" />
-            About Section & Picture Studio
+            About Section Manager
           </div>
-          <h1 className="text-3xl font-black text-brand-text tracking-tight">Edit About Me & Portrait</h1>
+          <h1 className="text-3xl font-black text-brand-text tracking-tight">Edit About Information</h1>
           <p className="text-brand-text-muted mt-1 text-sm md:text-base">
-            Upload your professional photo and customize your bio story, stats, and technologies.
+            Customize your bio story, stats, and technologies.
           </p>
         </div>
 
@@ -193,139 +162,7 @@ export default function AboutSettingsAdmin() {
         </div>
       )}
 
-      {/* 1. Developer Picture & Portrait Card */}
-      <div className="p-6 md:p-8 bg-brand-card border border-brand-border rounded-3xl shadow-sm space-y-6">
-        <div className="flex items-center gap-3 pb-4 border-b border-brand-border/60">
-          <ImageIcon className="w-6 h-6 text-brand-cyan" />
-          <div>
-            <h2 className="text-xl font-bold text-brand-text">Developer Profile Picture / Portrait</h2>
-            <p className="text-xs text-brand-text-muted">Upload your real photo from your computer or paste an online image URL</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          
-          {/* Controls Column */}
-          <div className="space-y-5">
-            {/* File Upload Button */}
-            <div>
-              <label className="block text-sm font-bold text-brand-text mb-2">Option A: Upload From Computer</label>
-              <input 
-                type="file" 
-                ref={fileInputRef} 
-                onChange={handleFileUpload} 
-                accept="image/*" 
-                className="hidden" 
-              />
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isUploading}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-2xl border-2 border-dashed border-brand-border hover:border-brand-cyan bg-brand-bg text-brand-text font-bold text-sm transition-all hover:bg-brand-cyan/5"
-              >
-                {isUploading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin text-brand-cyan" />
-                    Uploading image...
-                  </>
-                ) : (
-                  <>
-                    <Upload className="w-5 h-5 text-brand-cyan" />
-                    Click to Choose Picture (JPG, PNG, WebP)
-                  </>
-                )}
-              </button>
-            </div>
-
-            {/* URL Input */}
-            <div>
-              <label className="block text-sm font-bold text-brand-text mb-2">Option B: Or Enter Image URL</label>
-              <input
-                type="url"
-                value={data.photoUrl}
-                onChange={(e) => setData((prev) => ({ ...prev, photoUrl: e.target.value }))}
-                placeholder="https://example.com/my-photo.jpg"
-                className="w-full px-4 py-3 bg-brand-bg border border-brand-border rounded-xl text-brand-text focus:outline-none focus:border-brand-cyan font-mono text-xs"
-              />
-            </div>
-
-            {/* Photo Caption / Subtitle */}
-            <div>
-              <label className="block text-sm font-bold text-brand-text mb-2">Portrait Title / Caption</label>
-              <input
-                type="text"
-                value={data.photoCaption}
-                onChange={(e) => setData((prev) => ({ ...prev, photoCaption: e.target.value }))}
-                placeholder="Muhammad Kashif • Full-Stack ERP Developer"
-                className="w-full px-4 py-3 bg-brand-bg border border-brand-border rounded-xl text-brand-text focus:outline-none focus:border-brand-cyan text-sm font-medium"
-              />
-            </div>
-
-            {/* Floating Experience Badge */}
-            <div>
-              <label className="block text-sm font-bold text-brand-text mb-2">Corner Floating Badge Text</label>
-              <input
-                type="text"
-                value={data.experienceBadge}
-                onChange={(e) => setData((prev) => ({ ...prev, experienceBadge: e.target.value }))}
-                placeholder="8+ Years in Business Operations & Tech"
-                className="w-full px-4 py-3 bg-brand-bg border border-brand-border rounded-xl text-brand-text focus:outline-none focus:border-brand-cyan text-sm"
-              />
-            </div>
-
-            {data.photoUrl && (
-              <button
-                type="button"
-                onClick={() => setData((prev) => ({ ...prev, photoUrl: "" }))}
-                className="inline-flex items-center gap-2 text-xs font-bold text-red-500 hover:text-red-600 transition-colors"
-              >
-                <Trash2 className="w-4 h-4" />
-                Remove Photo (Return to Default Avatar)
-              </button>
-            )}
-          </div>
-
-          {/* Live Preview Column */}
-          <div className="flex flex-col items-center justify-center p-6 bg-brand-bg rounded-2xl border border-brand-border">
-            <p className="text-xs uppercase font-bold text-brand-text-muted tracking-wider mb-4">Portrait Live Preview</p>
-            
-            <div className="relative w-full max-w-sm aspect-[4/3] rounded-3xl overflow-hidden border-2 border-brand-cyan/40 shadow-xl bg-slate-900 group">
-              {data.photoUrl ? (
-                <>
-                  <img
-                    src={data.photoUrl}
-                    alt={data.photoCaption || "Developer"}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent" />
-                </>
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-brand-cyan/10 to-brand-purple/10">
-                  <div className="w-20 h-20 rounded-full bg-brand-card border border-brand-border flex items-center justify-center text-4xl mb-3 shadow-inner">
-                    👨‍💻
-                  </div>
-                  <p className="text-sm font-bold text-brand-text">No Custom Photo Yet</p>
-                  <p className="text-xs text-brand-text-muted mt-1">Upload a photo to see your real portrait here</p>
-                </div>
-              )}
-
-              {/* Caption Overlay */}
-              <div className="absolute bottom-4 left-4 right-4 z-10">
-                <p className="text-white text-xs font-bold truncate drop-shadow-md">
-                  {data.photoCaption || "Full-Stack ERP Developer"}
-                </p>
-                <p className="text-emerald-400 text-[11px] font-semibold mt-0.5 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  {data.experienceBadge || "Verified Developer"}
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      {/* 2. Headline & Bio Story Editor */}
+      {/* 1. Headline & Bio Story Editor */}
       <div className="p-6 md:p-8 bg-brand-card border border-brand-border rounded-3xl shadow-sm space-y-6">
         <div className="flex items-center gap-3 pb-4 border-b border-brand-border/60">
           <Layers className="w-6 h-6 text-brand-cyan" />
@@ -410,7 +247,7 @@ export default function AboutSettingsAdmin() {
         </div>
       </div>
 
-      {/* 3. Stats Editor */}
+      {/* 2. Stats Editor */}
       <div className="p-6 md:p-8 bg-brand-card border border-brand-border rounded-3xl shadow-sm space-y-6">
         <div className="flex items-center gap-3 pb-4 border-b border-brand-border/60">
           <Sparkles className="w-6 h-6 text-brand-cyan" />
@@ -452,7 +289,7 @@ export default function AboutSettingsAdmin() {
         </div>
       </div>
 
-      {/* 4. Tools & Technologies Editor */}
+      {/* 3. Tools & Technologies Editor */}
       <div className="p-6 md:p-8 bg-brand-card border border-brand-border rounded-3xl shadow-sm space-y-6">
         <div className="flex items-center gap-3 pb-4 border-b border-brand-border/60">
           <Wrench className="w-6 h-6 text-brand-cyan" />
@@ -503,7 +340,7 @@ export default function AboutSettingsAdmin() {
           className="flex items-center gap-2 px-8 py-3.5 rounded-xl btn-brand-gradient text-base font-bold shadow-lg hover:brightness-110 disabled:opacity-60 transition-all"
         >
           {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-          Save About Section & Picture
+          Save About Section
         </button>
       </div>
 
