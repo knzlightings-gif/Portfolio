@@ -12,25 +12,20 @@ export default function Footer() {
 
   useEffect(() => {
     // Load personal info
-    fetch("/api/personal-info")
+    fetch("/api/personal-info", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data && typeof data === "object") {
           setPersonalInfo((prev) => ({
             ...prev,
             ...data,
-            contact: {
-              email: data.contact?.email ?? data.email ?? prev.contact?.email ?? "",
-              whatsapp: data.contact?.whatsapp ?? data.whatsapp ?? prev.contact?.whatsapp ?? "",
-              linkedin: data.contact?.linkedin ?? data.linkedin ?? prev.contact?.linkedin ?? "",
-            },
           }));
         }
       })
       .catch(() => {});
 
     // Load footer content
-    fetch("/api/footer")
+    fetch("/api/footer", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data && typeof data === "object") {
@@ -95,10 +90,16 @@ export default function Footer() {
                 </div>
               )}
               <div>
-                <span className="text-xl font-bold tracking-tight text-brand-text">
+                <span 
+                  className="text-xl font-bold tracking-tight text-brand-text"
+                  style={{ color: personalInfo?.nameColor || undefined }}
+                >
                   {personalInfo?.name || "Developer"}
                 </span>
-                <div className="text-[11px] font-semibold text-brand-cyan tracking-widest uppercase mt-0.5">
+                <div 
+                  className="text-[11px] font-semibold text-brand-cyan tracking-widest uppercase mt-0.5"
+                  style={{ color: personalInfo?.roleDescriptorColor || undefined }}
+                >
                   {personalInfo?.roleDescriptor || "ERP & Web Developer"}
                 </div>
               </div>

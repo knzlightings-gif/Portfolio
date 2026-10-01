@@ -19,7 +19,11 @@ const defaultPersonalInfo = {
 
 export async function GET() {
   try {
-    const headers = { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" };
+    const headers = { 
+      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+      "Pragma": "no-cache",
+      "Expires": "0",
+    };
     const db = getServerDb();
     if (!db) return NextResponse.json(defaultPersonalInfo, { headers });
 
@@ -31,7 +35,7 @@ export async function GET() {
   } catch (error) {
     console.error("Error reading personal-info from Firestore:", error);
     return NextResponse.json(defaultPersonalInfo, {
-      headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" },
+      headers: { "Cache-Control": "no-store, no-cache, must-revalidate" },
     });
   }
 }

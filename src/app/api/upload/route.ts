@@ -7,9 +7,19 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
+    // Detect if local filesystem uploads are available (e.g. local dev)
+    let isFsWritable = false;
     const uploadsDir = path.join(process.cwd(), "public", "uploads");
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
+
+    if (!process.env.VERCEL) {
+      try {
+        if (!fs.existsSync(uploadsDir)) {
+          fs.mkdirSync(uploadsDir, { recursive: true });
+        }
+        isFsWritable = true;
+      } catch {
+        isFsWritable = false;
+      }
     }
 
     // Support multiple files under "files" or "file"
@@ -29,13 +39,25 @@ export async function POST(request: Request) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
-      const ext = path.extname(file.name) || ".jpg";
-      const randomId = Math.random().toString(36).substring(2, 8);
-      const filename = `upload-${Date.now()}-${randomId}${ext}`;
-      const filepath = path.join(uploadsDir, filename);
+      if (isFsWritable) {
+        try {
+          const ext = path.extname(file.name) || ".png";
+          const randomId = Math.random().toString(36).substring(2, 8);
+          const filename = `upload-${Date.now()}-${randomId}${ext}`;
+          const filepath = path.join(uploadsDir, filename);
 
-      fs.writeFileSync(filepath, buffer);
-      uploadedUrls.push(`/uploads/${filename}`);
+          fs.writeFileSync(filepath, buffer);
+          uploadedUrls.push(`/uploads/${filename}`);
+          continue;
+        } catch {
+          // Fall back to data URL if writing fails
+        }
+      }
+
+      // Safe Serverless Fallback (Vercel): Return Base64 Data URL
+      const mimeType = file.type || "image/png";
+      const base64 = buffer.toString("base64");
+      uploadedUrls.push(`data:${mimeType};base64,${base64}`);
     }
 
     return NextResponse.json({

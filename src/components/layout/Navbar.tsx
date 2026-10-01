@@ -31,7 +31,7 @@ export default function Navbar() {
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
 
-    fetch("/api/personal-info")
+    fetch("/api/personal-info", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data && data.name) {
@@ -80,10 +80,16 @@ export default function Navbar() {
             </div>
           )}
           <div className="flex flex-col min-w-0">
-            <span className="text-lg sm:text-xl font-bold tracking-tight text-brand-text group-hover:text-brand-cyan transition-colors truncate">
+            <span 
+              className="text-lg sm:text-xl font-bold tracking-tight text-brand-text group-hover:text-brand-cyan transition-colors truncate"
+              style={{ color: personalInfo?.nameColor || undefined }}
+            >
               {personalInfo.name}
             </span>
-            <span className="text-[10px] sm:text-xs font-semibold text-brand-text-muted tracking-wider sm:tracking-widest uppercase mt-0.5 truncate max-w-[150px] xs:max-w-[210px] sm:max-w-none">
+            <span 
+              className="text-[10px] sm:text-xs font-semibold text-brand-text-muted tracking-wider sm:tracking-widest uppercase mt-0.5 truncate max-w-[150px] xs:max-w-[210px] sm:max-w-none"
+              style={{ color: personalInfo?.roleDescriptorColor || undefined }}
+            >
               {personalInfo.roleDescriptor}
             </span>
           </div>

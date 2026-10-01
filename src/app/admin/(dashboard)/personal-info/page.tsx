@@ -111,7 +111,7 @@ export default function PersonalInfoAdmin() {
 
   // Load from Firestore via API
   useEffect(() => {
-    fetch("/api/personal-info")
+    fetch("/api/personal-info", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data) {
@@ -153,20 +153,85 @@ export default function PersonalInfoAdmin() {
     if (!file) return;
 
     setIsUploading(true);
-    const body = new FormData();
-    body.append("file", file);
 
     try {
-      const res = await fetch("/api/upload", { method: "POST", body });
-      const data = await res.json();
-      if (data.url) {
-        setFormData((prev) => ({ ...prev, logoUrl: data.url }));
-      } else {
-        alert(data.error || "Failed to upload logo image.");
-      }
-    } catch (err) {
-      alert("Error uploading file.");
-    } finally {
+      // 1. Direct client-side optimization using Canvas for instant preview & serverless safety
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        const rawResult = event.target?.result as string;
+        if (!rawResult) {
+          setIsUploading(false);
+          return;
+        }
+
+        // SVG files can be used directly without canvas rasterization
+        if (file.type === "image/svg+xml" || file.name.toLowerCase().endsWith(".svg")) {
+          setFormData((prev) => ({ ...prev, logoUrl: rawResult }));
+          setIsUploading(false);
+          return;
+        }
+
+        // Bitmap images (PNG, JPG, WebP): Scale down to optimal crisp header dimensions
+        const img = new Image();
+        img.onload = async () => {
+          const maxW = 400;
+          const maxH = 200;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxW || height > maxH) {
+            const ratio = Math.min(maxW / width, maxH / height);
+            width = Math.round(width * ratio);
+            height = Math.round(height * ratio);
+          }
+
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+
+          let optimizedUrl = rawResult;
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            optimizedUrl = canvas.toDataURL("image/png", 0.95);
+          }
+
+          setFormData((prev) => ({ ...prev, logoUrl: optimizedUrl }));
+
+          // 2. Also try server upload if available
+          try {
+            const body = new FormData();
+            body.append("file", file);
+            const res = await fetch("/api/upload", { method: "POST", body });
+            if (res.ok) {
+              const data = await res.json();
+              if (data.url && !data.url.startsWith("data:")) {
+                setFormData((prev) => ({ ...prev, logoUrl: data.url }));
+              }
+            }
+          } catch {
+            // Keep optimizedUrl
+          } finally {
+            setIsUploading(false);
+          }
+        };
+
+        img.onerror = () => {
+          setFormData((prev) => ({ ...prev, logoUrl: rawResult }));
+          setIsUploading(false);
+        };
+        img.src = rawResult;
+      };
+
+      reader.onerror = () => {
+        alert("Failed to read image file.");
+        setIsUploading(false);
+      };
+
+      reader.readAsDataURL(file);
+    } catch (err: any) {
+      console.error("Upload error:", err);
+      alert("Error uploading file: " + (err?.message || "Unknown error"));
       setIsUploading(false);
     }
   };
