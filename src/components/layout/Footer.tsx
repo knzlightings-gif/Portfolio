@@ -100,16 +100,27 @@ export default function Footer() {
           {/* Column 1: Brand Info */}
           <div className="xs:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-2.5 mb-3">
-              {personalInfo?.logoUrl && (
-                <div className="h-8 max-w-[140px] px-1 py-0.5 rounded-lg bg-brand-bg border border-brand-border flex items-center justify-center shrink-0 overflow-hidden">
-                  <img 
-                    src={personalInfo.logoUrl} 
-                    alt={personalInfo.name} 
-                    loading="eager"
-                    className="max-h-full max-w-full w-auto h-auto object-contain" 
-                  />
-                </div>
-              )}
+              {personalInfo?.logoUrl && (() => {
+                const footerLogoSize = Math.min(Number(personalInfo?.logoSize) || 48, 52);
+                return (
+                  <div 
+                    className="px-1 py-0.5 rounded-lg bg-brand-bg border border-brand-border flex items-center justify-center shrink-0 overflow-hidden"
+                    style={{
+                      height: `${footerLogoSize}px`,
+                      width: "auto",
+                      maxWidth: `${Math.round(footerLogoSize * 2.5)}px`,
+                    }}
+                  >
+                    <img 
+                      src={personalInfo.logoUrl} 
+                      alt={personalInfo.name} 
+                      loading="eager"
+                      className="max-h-full max-w-full w-auto h-auto object-contain" 
+                      style={{ height: "100%" }}
+                    />
+                  </div>
+                );
+              })()}
               <div>
                 <span 
                   className="text-xl font-bold tracking-tight text-brand-text"

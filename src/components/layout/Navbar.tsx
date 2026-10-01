@@ -86,17 +86,30 @@ export default function Navbar() {
       <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] flex items-center justify-between">
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group min-w-0">
-          {personalInfo.logoUrl && (
-            <div className="h-8 sm:h-9 max-w-[140px] sm:max-w-[180px] px-1.5 py-1 rounded-xl bg-brand-card/90 border border-brand-border/80 flex items-center justify-center shrink-0 shadow-sm group-hover:border-brand-cyan/60 group-hover:scale-105 transition-all overflow-hidden">
-              <img
-                src={personalInfo.logoUrl}
-                alt={personalInfo.name}
-                loading="eager"
-                decoding="sync"
-                className="max-h-full max-w-full w-auto h-auto object-contain"
-              />
-            </div>
-          )}
+          {personalInfo.logoUrl && (() => {
+            const logoSize = Number(personalInfo?.logoSize) || 48;
+            return (
+              <div 
+                className="px-1.5 py-1 rounded-xl bg-brand-card/90 border border-brand-border/80 flex items-center justify-center shrink-0 shadow-sm group-hover:border-brand-cyan/60 group-hover:scale-105 transition-all overflow-hidden"
+                style={{
+                  height: `clamp(34px, 8vw, ${logoSize}px)`,
+                  width: "auto",
+                  maxWidth: `${Math.round(logoSize * 2.8)}px`,
+                }}
+              >
+                <img
+                  src={personalInfo.logoUrl}
+                  alt={personalInfo.name}
+                  loading="eager"
+                  decoding="sync"
+                  className="max-h-full max-w-full w-auto h-auto object-contain"
+                  style={{
+                    height: "100%",
+                  }}
+                />
+              </div>
+            );
+          })()}
           <div className="flex flex-col min-w-0">
             <span 
               className="text-lg sm:text-xl font-bold tracking-tight text-brand-text group-hover:text-brand-cyan transition-colors truncate"

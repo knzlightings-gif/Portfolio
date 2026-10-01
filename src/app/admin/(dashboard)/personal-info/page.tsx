@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Save, Loader2, CheckCircle2, Upload, Trash2, Image as ImageIcon, Palette, Type } from "lucide-react";
+import { Save, Loader2, CheckCircle2, Upload, Trash2, Image as ImageIcon, Palette, Type, Sliders } from "lucide-react";
 
 // Preset color options for quick selection
 const TEXT_COLOR_PRESETS = [
@@ -20,6 +20,7 @@ const TEXT_COLOR_PRESETS = [
 const defaultData = {
   name: "",
   logoUrl: "",
+  logoSize: 48,
   roleDescriptor: "",
   tagline: "",
   description: "",
@@ -118,6 +119,7 @@ export default function PersonalInfoAdmin() {
           setFormData({
             name: data.name || "",
             logoUrl: data.logoUrl || "",
+            logoSize: data.logoSize ? Number(data.logoSize) : 48,
             roleDescriptor: data.roleDescriptor || "",
             tagline: data.tagline || "",
             description: data.description || "",
@@ -244,6 +246,7 @@ export default function PersonalInfoAdmin() {
     const payload = {
       name: formData.name,
       logoUrl: formData.logoUrl,
+      logoSize: Number(formData.logoSize) || 48,
       roleDescriptor: formData.roleDescriptor,
       tagline: formData.tagline,
       description: formData.description,
@@ -352,25 +355,43 @@ export default function PersonalInfoAdmin() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           {/* Logo Live Preview */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-brand-text-muted">Header Logo Preview</label>
-            <div className="p-4 rounded-xl bg-brand-bg border border-brand-border flex items-center gap-3">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-semibold text-brand-text-muted">Header Logo Preview (Live Scale)</label>
+              <span className="text-xs font-mono font-bold text-brand-cyan bg-brand-cyan/10 px-2 py-0.5 rounded-full border border-brand-cyan/20">
+                {formData.logoSize || 48}px
+              </span>
+            </div>
+            <div className="p-4 rounded-xl bg-brand-bg border border-brand-border flex items-center gap-3 min-h-[96px] overflow-hidden">
               {formData.logoUrl ? (
-                <div className="w-12 h-12 rounded-xl bg-brand-card border border-brand-border p-1.5 flex items-center justify-center shrink-0 shadow-sm">
+                <div 
+                  className="rounded-xl bg-brand-card border border-brand-border p-1.5 flex items-center justify-center shrink-0 shadow-sm transition-all duration-200"
+                  style={{
+                    height: `${formData.logoSize || 48}px`,
+                    width: `${formData.logoSize || 48}px`,
+                    maxWidth: "120px",
+                  }}
+                >
                   <img src={formData.logoUrl} alt="Header Logo Preview" className="w-full h-full object-contain" />
                 </div>
               ) : (
-                <div className="w-12 h-12 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 text-brand-cyan flex items-center justify-center font-bold text-xs shrink-0">
+                <div 
+                  className="rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 text-brand-cyan flex items-center justify-center font-bold text-xs shrink-0 transition-all duration-200"
+                  style={{
+                    height: `${formData.logoSize || 48}px`,
+                    width: `${formData.logoSize || 48}px`,
+                  }}
+                >
                   ERP
                 </div>
               )}
-              <div>
-                <p className="text-sm font-bold" style={{ color: formData.nameColor || undefined }}>
+              <div className="min-w-0">
+                <p className="text-sm font-bold truncate" style={{ color: formData.nameColor || undefined }}>
                   {formData.name || "[YOUR NAME]"}
                 </p>
-                <p className="text-xs text-brand-text-muted tracking-wider uppercase"
+                <p className="text-xs text-brand-text-muted tracking-wider uppercase truncate"
                   style={{ color: formData.roleDescriptorColor || undefined }}>
                   {formData.roleDescriptor || "Developer"}
                 </p>
@@ -403,6 +424,87 @@ export default function PersonalInfoAdmin() {
               />
             </div>
           </div>
+        </div>
+
+        {/* Logo Size Control (Plus / Minus / Slider / Presets) */}
+        <div className="pt-5 border-t border-brand-border/60 space-y-3.5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-brand-cyan" />
+              <label className="text-sm font-bold text-brand-text">Header Logo Display Size (Plus / Minus)</label>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-brand-text-muted">Current:</span>
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30">
+                {formData.logoSize || 48}px
+              </span>
+              <span className="text-xs text-brand-text-muted">
+                ({(formData.logoSize || 48) <= 36 ? "Small" : (formData.logoSize || 48) >= 64 ? "Extra Large" : (formData.logoSize || 48) >= 54 ? "Large" : "Medium"})
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            {/* Minus & Plus Stepper Buttons + Range Slider */}
+            <div className="flex items-center gap-2.5 bg-brand-bg/80 border border-brand-border p-2 rounded-xl">
+              <button
+                type="button"
+                onClick={() => setFormData((prev) => ({ ...prev, logoSize: Math.max(28, (Number(prev.logoSize) || 48) - 4) }))}
+                className="w-9 h-9 rounded-lg bg-brand-card hover:bg-brand-cyan/15 border border-brand-border hover:border-brand-cyan/40 text-brand-text font-black text-lg flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95 select-none"
+                title="Decrease size (-4px)"
+              >
+                −
+              </button>
+
+              <div className="flex-1 sm:w-44 px-2">
+                <input
+                  type="range"
+                  min="28"
+                  max="80"
+                  step="2"
+                  value={formData.logoSize || 48}
+                  onChange={(e) => setFormData({ ...formData, logoSize: Number(e.target.value) })}
+                  className="w-full accent-brand-cyan cursor-pointer h-2 bg-brand-card rounded-lg"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setFormData((prev) => ({ ...prev, logoSize: Math.min(80, (Number(prev.logoSize) || 48) + 4) }))}
+                className="w-9 h-9 rounded-lg bg-brand-card hover:bg-brand-cyan/15 border border-brand-border hover:border-brand-cyan/40 text-brand-text font-black text-lg flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95 select-none"
+                title="Increase size (+4px)"
+              >
+                +
+              </button>
+            </div>
+
+            {/* Quick Preset Buttons */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {[
+                { label: "Small", size: 36 },
+                { label: "Medium", size: 48 },
+                { label: "Large", size: 60 },
+                { label: "Extra Large", size: 72 },
+              ].map((preset) => (
+                <button
+                  key={preset.size}
+                  type="button"
+                  onClick={() => setFormData({ ...formData, logoSize: preset.size })}
+                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+                    (formData.logoSize || 48) === preset.size
+                      ? "bg-brand-cyan text-slate-950 font-bold shadow-xs"
+                      : "bg-brand-bg hover:bg-brand-card border border-brand-border text-brand-text-muted hover:text-brand-text"
+                  }`}
+                >
+                  {preset.label} ({preset.size}px)
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <p className="text-[11px] text-brand-text-muted">
+            Aap <strong>+</strong> ya <strong>−</strong> button daba kar logo ka size 28px se 80px tak adjust kar sakte hain. Upar preview mein foran check karein aur &quot;Save Changes&quot; click karein.
+          </p>
         </div>
       </div>
 

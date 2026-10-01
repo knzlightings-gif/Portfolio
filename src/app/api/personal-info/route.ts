@@ -4,6 +4,7 @@ import { getServerDb, doc, getDoc, setDoc } from "@/lib/firebase-server";
 const defaultPersonalInfo = {
   name: "E For ERP",
   logoUrl: "/logo.png",
+  logoSize: 48,
   nameColor: "#f43f5e",
   tagline: "We Build Smart Business Software That Actually Works.",
   description:

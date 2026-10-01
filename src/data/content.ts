@@ -1,6 +1,7 @@
 export const personalInfo = {
   name: "E For ERP",
   logoUrl: "/logo.png",
+  logoSize: 48,
   tagline: "We Build Smart Business Software That Actually Works.",
   description:
     "We build practical ERP systems, business web applications and custom digital solutions for small and growing businesses — combining real-world business understanding with modern development technologies.",
