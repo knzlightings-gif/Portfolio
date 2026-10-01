@@ -46,20 +46,32 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
   return (
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out border-b border-brand-border/60 bg-brand-card/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,77,64,0.06)]",
         isScrolled
           ? "py-3 shadow-[0_6px_25px_rgba(0,77,64,0.1)] bg-brand-card/98"
-          : "py-4.5"
+          : "py-3.5 sm:py-4.5"
       )}
     >
-      <div className="container mx-auto px-6 max-w-[1600px] flex items-center justify-between">
+      <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] flex items-center justify-between">
         {/* Brand */}
-        <Link href="/" className="flex items-center gap-3 group">
+        <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group min-w-0">
           {personalInfo.logoUrl && (
-            <div className="h-9 max-w-[180px] px-1.5 py-1 rounded-xl bg-brand-card/90 border border-brand-border/80 flex items-center justify-center shrink-0 shadow-sm group-hover:border-brand-cyan/60 group-hover:scale-105 transition-all overflow-hidden">
+            <div className="h-8 sm:h-9 max-w-[140px] sm:max-w-[180px] px-1.5 py-1 rounded-xl bg-brand-card/90 border border-brand-border/80 flex items-center justify-center shrink-0 shadow-sm group-hover:border-brand-cyan/60 group-hover:scale-105 transition-all overflow-hidden">
               <img
                 src={personalInfo.logoUrl}
                 alt={personalInfo.name}
@@ -67,17 +79,17 @@ export default function Navbar() {
               />
             </div>
           )}
-          <div className="flex flex-col">
-            <span className="text-xl font-bold tracking-tight text-brand-text group-hover:text-brand-cyan transition-colors">
+          <div className="flex flex-col min-w-0">
+            <span className="text-lg sm:text-xl font-bold tracking-tight text-brand-text group-hover:text-brand-cyan transition-colors truncate">
               {personalInfo.name}
             </span>
-            <span className="text-xs font-semibold text-brand-text-muted tracking-widest uppercase mt-0.5">
+            <span className="text-[10px] sm:text-xs font-semibold text-brand-text-muted tracking-wider sm:tracking-widest uppercase mt-0.5 truncate max-w-[150px] xs:max-w-[210px] sm:max-w-none">
               {personalInfo.roleDescriptor}
             </span>
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation (100% UNCHANGED ON DESKTOP) */}
         <nav className="hidden md:flex items-center gap-2">
           <ul className="flex items-center gap-1.5">
             {navLinks.map((link) => {
@@ -132,25 +144,28 @@ export default function Navbar() {
         </nav>
 
         {/* Mobile Menu Toggle & Theme Switcher */}
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-1.5 sm:gap-2 md:hidden">
           <ThemeSwitcher />
           <button
-            className="p-2 text-brand-text"
+            type="button"
+            aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            className="p-2 sm:p-2.5 rounded-xl text-brand-text hover:bg-brand-card/80 active:scale-95 transition-all cursor-pointer"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <X /> : <Menu />}
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Enhanced Mobile Menu Drawer */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-brand-bg/95 border-b border-brand-border px-6 py-4 flex flex-col gap-4"
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="md:hidden bg-brand-card/98 backdrop-blur-2xl border-b border-brand-border/80 px-4 sm:px-6 py-5 flex flex-col gap-2.5 shadow-2xl overflow-y-auto max-h-[calc(100vh-75px)]"
           >
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
@@ -160,21 +175,27 @@ export default function Navbar() {
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={cn(
-                    "font-medium py-2 transition-colors",
-                    isActive ? "text-brand-cyan font-bold" : "text-brand-text hover:text-brand-cyan"
+                    "flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-base transition-all",
+                    isActive
+                      ? "bg-gradient-to-r from-brand-cyan to-brand-purple text-white shadow-md font-bold"
+                      : "text-brand-text hover:bg-brand-bg/60 hover:text-brand-cyan active:bg-brand-bg"
                   )}
                 >
-                  {link.name}
+                  <span>{link.name}</span>
+                  {isActive && <span className="w-2 h-2 rounded-full bg-white animate-pulse" />}
                 </Link>
               );
             })}
-            <Link
-              href="/contact"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="px-5 py-2.5 rounded-full font-bold text-sm text-center text-white bg-gradient-to-r from-brand-cyan to-brand-purple"
-            >
-              Let&apos;s Work Together
-            </Link>
+            <div className="pt-2">
+              <Link
+                href="/contact"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-full font-bold text-sm text-center text-white bg-gradient-to-r from-brand-cyan to-brand-purple shadow-md active:scale-98 transition-all"
+              >
+                <span>Let&apos;s Work Together</span>
+                <span>→</span>
+              </Link>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

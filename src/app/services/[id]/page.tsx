@@ -80,12 +80,12 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
     <main className="min-h-screen bg-transparent text-brand-text selection:bg-brand-cyan selection:text-slate-950 flex flex-col justify-between">
       <Navbar />
 
-      <div className="pt-32 pb-24 relative overflow-hidden">
+      <div className="pt-28 sm:pt-32 pb-16 sm:pb-24 relative overflow-hidden">
         {/* Background Ambient Orbs */}
         <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-brand-cyan/10 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute bottom-1/3 left-0 w-[500px] h-[500px] bg-brand-purple/10 rounded-full blur-[140px] pointer-events-none" />
 
-        <div className="container mx-auto px-6 max-w-5xl relative z-10 space-y-16">
+        <div className="container mx-auto px-4 sm:px-6 max-w-5xl relative z-10 space-y-10 sm:space-y-16">
           {/* Top Breadcrumb / Back Link */}
           <div>
             <Link
@@ -98,27 +98,27 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           </div>
 
           {/* Hero Header */}
-          <div className="bg-brand-card/95 border border-brand-border/80 rounded-3xl p-8 md:p-12 shadow-xl backdrop-blur-md relative overflow-hidden">
+          <div className="bg-brand-card/95 border border-brand-border/80 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-12 shadow-xl backdrop-blur-md relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]" />
             
-            <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+            <div className="flex flex-col-reverse sm:flex-row sm:items-start justify-between gap-6">
               <div className="space-y-4 max-w-2xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full badge-brand-subtle text-xs font-bold tracking-wider uppercase shadow-xs">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   {service.status || "Available for projects"}
                 </div>
 
-                <h1 className="text-3xl md:text-5xl font-black text-brand-text tracking-tight leading-tight">
+                <h1 className="text-2xl xs:text-3xl md:text-5xl font-black text-brand-text tracking-tight leading-tight">
                   {service.title}
                 </h1>
 
-                <p className="text-lg md:text-xl font-medium text-brand-cyan/90 leading-relaxed">
+                <p className="text-base sm:text-lg md:text-xl font-medium text-brand-cyan/90 leading-relaxed">
                   {service.tagline || service.description}
                 </p>
               </div>
 
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-cyan/20 to-brand-purple/20 border border-brand-cyan/40 text-brand-cyan flex items-center justify-center shadow-lg shrink-0">
-                <IconComp className="w-10 h-10 stroke-[2.2]" />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-brand-cyan/20 to-brand-purple/20 border border-brand-cyan/40 text-brand-cyan flex items-center justify-center shadow-lg shrink-0">
+                <IconComp className="w-8 h-8 sm:w-10 sm:h-10 stroke-[2.2]" />
               </div>
             </div>
           </div>
@@ -127,10 +127,10 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           <div className="space-y-6">
             <div className="flex items-center gap-3">
               <div className="w-2 h-8 rounded-full bg-brand-cyan" />
-              <h2 className="text-2xl font-bold text-brand-text">Overview & Value</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-brand-text">Overview & Value</h2>
             </div>
 
-            <div className="bg-brand-card/70 border border-brand-border/60 rounded-2xl p-8 leading-relaxed text-brand-text-muted text-base md:text-lg">
+            <div className="bg-brand-card/70 border border-brand-border/60 rounded-2xl p-5 sm:p-8 leading-relaxed text-brand-text-muted text-sm sm:text-base md:text-lg">
               <p className="whitespace-pre-line">
                 {service.fullDescription || service.description}
               </p>
@@ -171,9 +171,9 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                 <h2 className="text-2xl font-bold text-brand-text">What You Will Receive</h2>
               </div>
 
-              <div className="bg-brand-card border border-brand-border/80 rounded-2xl p-8 space-y-4 shadow-sm">
+              <div className="bg-brand-card border border-brand-border/80 rounded-2xl p-5 sm:p-8 space-y-4 shadow-sm">
                 {service.deliverables.map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-3 text-brand-text font-semibold text-base">
+                  <div key={idx} className="flex items-center gap-3 text-brand-text font-semibold text-sm sm:text-base">
                     <PackageCheck className="w-5 h-5 text-brand-cyan shrink-0" />
                     <span>{item}</span>
                   </div>
@@ -183,24 +183,24 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           )}
 
           {/* CTA Banner */}
-          <div className="bg-gradient-to-r from-brand-cyan/20 via-brand-card to-brand-purple/20 border border-brand-cyan/40 rounded-3xl p-8 md:p-12 text-center space-y-6 shadow-2xl relative overflow-hidden">
+          <div className="bg-gradient-to-r from-brand-cyan/20 via-brand-card to-brand-purple/20 border border-brand-cyan/40 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 text-center space-y-6 shadow-2xl relative overflow-hidden">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-cyan/20 text-brand-cyan text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-4 h-4" />
               Ready to build this for your business?
             </div>
 
-            <h3 className="text-3xl md:text-4xl font-black text-brand-text max-w-xl mx-auto">
+            <h3 className="text-2xl xs:text-3xl md:text-4xl font-black text-brand-text max-w-xl mx-auto">
               Let's Discuss Your {service.title} Project
             </h3>
 
-            <p className="text-brand-text-muted max-w-lg mx-auto text-base">
+            <p className="text-brand-text-muted max-w-lg mx-auto text-sm sm:text-base">
               Get a tailored technical plan, timeline estimation, and fixed price quote for your specific business requirements.
             </p>
 
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/contact"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-brand-cyan text-slate-950 font-bold hover:bg-brand-cyan/90 transition-all shadow-lg text-base"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-brand-cyan text-slate-950 font-bold hover:bg-brand-cyan/90 transition-all shadow-lg text-sm sm:text-base"
               >
                 <MessageSquare className="w-5 h-5" />
                 Get Free Consultation
@@ -208,7 +208,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               
               <Link
                 href="/projects"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-brand-border hover:border-brand-cyan text-brand-text font-bold transition-all text-base"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-brand-border hover:border-brand-cyan text-brand-text font-bold transition-all text-sm sm:text-base"
               >
                 View Live Demo Projects
                 <ArrowRight className="w-5 h-5" />

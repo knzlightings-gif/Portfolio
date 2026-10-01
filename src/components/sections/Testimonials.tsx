@@ -246,15 +246,15 @@ export default function Testimonials() {
       <div className="relative w-full overflow-hidden py-6 marquee-container">
         
         {/* Left & Right Smooth Fade Gradients */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 md:w-48 bg-gradient-to-r from-brand-bg via-brand-bg/80 to-transparent z-20" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 md:w-48 bg-gradient-to-l from-brand-bg via-brand-bg/80 to-transparent z-20" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 md:w-48 bg-gradient-to-r from-brand-bg via-brand-bg/80 to-transparent z-20" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 md:w-48 bg-gradient-to-l from-brand-bg via-brand-bg/80 to-transparent z-20" />
 
         {/* Animated Marquee Container */}
-        <div className="marquee-track flex gap-6">
+        <div className="marquee-track flex gap-4 sm:gap-6">
           {duplicatedTestimonials.map((testimonial, idx) => (
             <div
               key={`${testimonial.id}-${idx}`}
-              className="w-[340px] md:w-[420px] p-6 md:p-7 rounded-2xl bg-brand-card/95 backdrop-blur-md border border-brand-border/90 shadow-sm relative group transition-all duration-300 hover:scale-102 hover:-translate-y-1.5 hover:shadow-xl hover:border-brand-cyan/70 hover:z-30 shrink-0 flex flex-col justify-between select-none cursor-pointer"
+              className="w-[280px] xs:w-[310px] sm:w-[360px] md:w-[420px] p-5 sm:p-6 md:p-7 rounded-2xl bg-brand-card/95 backdrop-blur-md border border-brand-border/90 shadow-sm relative group transition-all duration-300 hover:scale-102 hover:-translate-y-1.5 hover:shadow-xl hover:border-brand-cyan/70 hover:z-30 shrink-0 flex flex-col justify-between select-none cursor-pointer"
             >
               {/* Top Accent Gradient Line on Hover */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan to-brand-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-2xl" />

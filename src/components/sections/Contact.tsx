@@ -71,18 +71,18 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-24 bg-transparent relative overflow-hidden">
+    <section id="contact" className="py-14 sm:py-20 lg:py-24 bg-transparent relative overflow-hidden">
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-cyan/5 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/3" />
       
-      <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
-        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
+      <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] relative z-10">
+        <div className="flex flex-col lg:flex-row gap-10 sm:gap-16 lg:gap-24">
           
           <div className="w-full lg:w-5/12 flex flex-col justify-center">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl md:text-5xl font-bold text-brand-text mb-6 leading-tight"
+              className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-brand-text mb-4 sm:mb-6 leading-tight"
             >
               {contactContent.heading}
             </motion.h2>
@@ -91,7 +91,7 @@ export default function Contact() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-lg text-brand-text-muted mb-12"
+              className="text-base sm:text-lg text-brand-text-muted mb-8 sm:mb-12"
             >
               {contactContent.subtext}
             </motion.p>
@@ -101,42 +101,42 @@ export default function Contact() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="space-y-6"
+              className="space-y-4 sm:space-y-6"
             >
               {/* Email */}
-              <div className="flex items-center gap-6 group">
-                <div className="w-12 h-12 rounded-full bg-brand-card border border-brand-border flex items-center justify-center group-hover:scale-110 group-hover:border-brand-cyan transition-all duration-300">
+              <div className="flex items-center gap-4 sm:gap-6 group">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 shrink-0 rounded-full bg-brand-card border border-brand-border flex items-center justify-center group-hover:scale-110 group-hover:border-brand-cyan transition-all duration-300">
                   <Mail className="w-5 h-5 text-brand-text group-hover:text-brand-cyan transition-colors" />
                 </div>
-                <div>
-                  <p className="text-sm text-brand-text-muted mb-1">{contactContent.emailLabel}</p>
-                  <a href={`mailto:${personalInfo.contact.email}`} className="text-lg font-medium text-brand-text hover:text-brand-cyan transition-colors">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm text-brand-text-muted mb-0.5 sm:mb-1">{contactContent.emailLabel}</p>
+                  <a href={`mailto:${personalInfo.contact.email}`} className="text-sm xs:text-base sm:text-lg font-medium text-brand-text hover:text-brand-cyan transition-colors break-all">
                     {personalInfo.contact.email}
                   </a>
                 </div>
               </div>
 
               {/* WhatsApp */}
-              <div className="flex items-center gap-6 group">
-                <div className="w-12 h-12 rounded-full bg-brand-card border border-brand-border flex items-center justify-center group-hover:scale-110 group-hover:border-brand-cyan transition-all duration-300">
+              <div className="flex items-center gap-4 sm:gap-6 group">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 shrink-0 rounded-full bg-brand-card border border-brand-border flex items-center justify-center group-hover:scale-110 group-hover:border-brand-cyan transition-all duration-300">
                   <MessageCircle className="w-5 h-5 text-brand-text group-hover:text-brand-cyan transition-colors" />
                 </div>
-                <div>
-                  <p className="text-sm text-brand-text-muted mb-1">{contactContent.phoneLabel}</p>
-                  <a href={`https://wa.me/${personalInfo.contact.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-lg font-medium text-brand-text hover:text-brand-cyan transition-colors">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm text-brand-text-muted mb-0.5 sm:mb-1">{contactContent.phoneLabel}</p>
+                  <a href={`https://wa.me/${personalInfo.contact.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-sm xs:text-base sm:text-lg font-medium text-brand-text hover:text-brand-cyan transition-colors">
                     {personalInfo.contact.whatsapp}
                   </a>
                 </div>
               </div>
 
               {/* LinkedIn */}
-              <div className="flex items-center gap-6 group">
-                <div className="w-12 h-12 rounded-full bg-brand-card border border-brand-border flex items-center justify-center group-hover:scale-110 group-hover:border-brand-cyan transition-all duration-300">
+              <div className="flex items-center gap-4 sm:gap-6 group">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 shrink-0 rounded-full bg-brand-card border border-brand-border flex items-center justify-center group-hover:scale-110 group-hover:border-brand-cyan transition-all duration-300">
                   <Globe className="w-5 h-5 text-brand-text group-hover:text-brand-cyan transition-colors" />
                 </div>
-                <div>
-                  <p className="text-sm text-brand-text-muted mb-1">{contactContent.linkedinLabel}</p>
-                  <a href={personalInfo.contact.linkedin} target="_blank" rel="noopener noreferrer" className="text-lg font-medium text-brand-text hover:text-brand-cyan transition-colors">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm text-brand-text-muted mb-0.5 sm:mb-1">{contactContent.linkedinLabel}</p>
+                  <a href={personalInfo.contact.linkedin} target="_blank" rel="noopener noreferrer" className="text-sm xs:text-base sm:text-lg font-medium text-brand-text hover:text-brand-cyan transition-colors">
                     Connect on LinkedIn
                   </a>
                 </div>
@@ -152,8 +152,8 @@ export default function Contact() {
             transition={{ duration: 0.5 }}
             className="w-full lg:w-7/12"
           >
-            <div className="p-8 md:p-10 rounded-3xl bg-brand-card border border-brand-border shadow-2xl relative group">
-              <div className="absolute inset-0 bg-gradient-to-br from-brand-cyan/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+            <div className="p-5 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl bg-brand-card border border-brand-border shadow-2xl relative group">
+              <div className="absolute inset-0 bg-gradient-to-br from-brand-cyan/5 to-transparent rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               
               {isSuccess ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center h-full">
@@ -164,7 +164,7 @@ export default function Contact() {
                   <p className="text-brand-text-muted">Thank you for reaching out. I&apos;ll get back to you within 24 hours.</p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 relative z-10">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-brand-text-muted mb-2">Name</label>

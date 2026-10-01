@@ -145,7 +145,7 @@ export default function BusinessProblems() {
   };
 
   return (
-    <section className="py-20 lg:py-28 bg-transparent relative overflow-hidden">
+    <section className="py-12 sm:py-20 lg:py-28 bg-transparent relative overflow-hidden">
       
       {/* Background ambient gradient glow */}
       <div className="absolute top-1/3 right-0 w-[550px] h-[550px] bg-brand-cyan/15 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/4 pointer-events-none" />
@@ -165,7 +165,7 @@ export default function BusinessProblems() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl sm:text-4xl xl:text-5xl font-black text-brand-text mb-6 leading-tight tracking-tight"
+              className="text-2xl xs:text-3xl sm:text-4xl xl:text-5xl font-black text-brand-text mb-6 leading-tight tracking-tight"
             >
               Still Running Your Business on{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]">
@@ -198,18 +198,18 @@ export default function BusinessProblems() {
               transition={{ delay: 0.2 }}
               className="space-y-6"
             >
-              <p className="text-base sm:text-lg font-medium text-brand-text/90 leading-relaxed">
+              <p className="text-sm xs:text-base sm:text-lg font-medium text-brand-text/90 leading-relaxed">
                 Let&apos;s eliminate these everyday bottlenecks with a fast, modern and automated ERP software customized for your business.
               </p>
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-4">
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-2.5 px-8 py-4 btn-brand-gradient text-base font-bold rounded-full shadow-lg hover:shadow-brand-cyan/25 hover:scale-105 transition-all"
+                  className="inline-flex items-center justify-center gap-2.5 px-8 py-4 btn-brand-gradient text-base font-bold rounded-full shadow-lg hover:shadow-brand-cyan/25 hover:scale-105 transition-all text-center"
                 >
                   Discuss Your Business
                   <ArrowRight className="w-5 h-5" />
                 </Link>
-                <div className="flex items-center gap-2 text-xs font-semibold text-brand-text-muted">
+                <div className="flex items-center justify-center xs:justify-start gap-2 text-xs font-semibold text-brand-text-muted">
                   <ShieldCheck className="w-4 h-4 text-emerald-500" />
                   Custom Engineered • Cloud Hosted
                 </div>
@@ -218,7 +218,7 @@ export default function BusinessProblems() {
           </div>
 
           {/* Right Column: High-End HD 4K Video Showcase (Takes 7 columns - large and prominent) */}
-          <div className="lg:col-span-7 w-full flex justify-center">
+          <div className="lg:col-span-7 w-full flex justify-center pb-8 sm:pb-0">
             <motion.div
               initial={{ opacity: 0, scale: 0.96, y: 24 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -234,7 +234,7 @@ export default function BusinessProblems() {
               {/* Main Video Showcase Box */}
               <div 
                 ref={containerRef}
-                className="relative rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-emerald-500/40 bg-slate-900 shadow-[0_20px_50px_rgba(0,121,107,0.22)] group select-none aspect-[16/10] sm:aspect-[16/9.5]"
+                className="relative rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-emerald-500/40 bg-slate-900 shadow-[0_20px_50px_rgba(0,121,107,0.22)] group select-none aspect-[16/14] xs:aspect-[16/12] sm:aspect-[16/9.5]"
               >
                 
                 {/* 4K Video Slides */}
@@ -393,12 +393,12 @@ export default function BusinessProblems() {
                       </div>
 
                       {/* Slide Thumbnail Tabs */}
-                      <div className="flex items-center gap-1.5 self-end sm:self-center">
+                      <div className="flex items-center gap-1.5 self-end sm:self-center overflow-x-auto max-w-full pb-1 sm:pb-0 scrollbar-none">
                         {manualTroubles.map((slide, idx) => (
                           <button
                             key={idx}
                             onClick={() => setCurrentSlide(idx)}
-                            className={`px-2 py-0.5 text-[10px] font-bold rounded-md transition-all duration-200 ${
+                            className={`px-2 py-0.5 text-[10px] font-bold rounded-md shrink-0 transition-all duration-200 ${
                               idx === currentSlide
                                 ? "bg-emerald-400 text-slate-950 shadow-[0_0_12px_rgba(52,211,153,0.6)] font-extrabold scale-105"
                                 : "bg-white/10 text-white/80 hover:bg-white/20 hover:text-white"
@@ -418,14 +418,14 @@ export default function BusinessProblems() {
               <motion.div
                 animate={{ y: [0, -6, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -bottom-6 -left-3 sm:-left-6 bg-brand-card/95 backdrop-blur-xl border border-brand-border/80 p-3 sm:p-4 rounded-2xl shadow-2xl z-30 flex items-center gap-3"
+                className="absolute -bottom-5 sm:-bottom-6 left-2 sm:-left-6 max-w-[calc(100%-1rem)] sm:max-w-none bg-brand-card/95 backdrop-blur-xl border border-brand-border/80 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl shadow-2xl z-30 flex items-center gap-2.5 sm:gap-3"
               >
-                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center font-bold">
-                  <CheckCircle2 className="w-6 h-6 sm:w-7 sm:h-7" />
+                <div className="w-9 h-9 sm:w-11 sm:h-11 shrink-0 rounded-lg sm:rounded-xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center font-bold">
+                  <CheckCircle2 className="w-5 h-5 sm:w-7 sm:h-7" />
                 </div>
-                <div>
-                  <p className="text-xs sm:text-sm font-black text-brand-text">Zero Manual Errors</p>
-                  <p className="text-[11px] sm:text-xs text-brand-text-muted">100% Automated Business Clarity</p>
+                <div className="min-w-0">
+                  <p className="text-xs sm:text-sm font-black text-brand-text truncate">Zero Manual Errors</p>
+                  <p className="text-[10px] sm:text-xs text-brand-text-muted truncate">100% Automated Business Clarity</p>
                 </div>
               </motion.div>
 

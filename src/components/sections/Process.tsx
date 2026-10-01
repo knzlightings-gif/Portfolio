@@ -89,16 +89,16 @@ const processSteps: ProcessStepDetail[] = [
 
 export default function Process() {
   return (
-    <section id="process" className="py-24 bg-transparent relative overflow-hidden">
+    <section id="process" className="py-14 sm:py-20 lg:py-24 bg-transparent relative overflow-hidden">
       
       {/* Background Ambient Glows */}
       <div className="absolute top-1/3 left-0 w-[600px] h-[600px] bg-brand-cyan/10 rounded-full blur-[160px] -translate-x-1/2 pointer-events-none" />
       <div className="absolute bottom-10 right-0 w-[600px] h-[600px] bg-brand-purple/10 rounded-full blur-[160px] translate-x-1/3 pointer-events-none" />
 
-      <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] relative z-10">
         
         {/* Section Header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-10 sm:mb-16 lg:mb-20">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full badge-brand-subtle text-xs font-bold uppercase tracking-wider mb-4 shadow-xs">
             <Sparkles className="w-3.5 h-3.5" />
             Predictable 6-Step Methodology
@@ -108,7 +108,7 @@ export default function Process() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl lg:text-6xl font-black text-brand-text mb-5 tracking-tight"
+            className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-brand-text mb-4 sm:mb-5 tracking-tight"
           >
             From Problem to{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]">
@@ -121,14 +121,14 @@ export default function Process() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-base md:text-lg text-brand-text-muted max-w-2xl mx-auto leading-relaxed"
+            className="text-sm sm:text-base md:text-lg text-brand-text-muted max-w-2xl mx-auto leading-relaxed"
           >
             A transparent, sprint-driven engineering process designed to eliminate business chaos and guarantee reliable software delivery.
           </motion.p>
         </div>
 
         {/* Process Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 relative">
           
           {processSteps.map((item, index) => {
             const Icon = item.icon;
@@ -140,7 +140,7 @@ export default function Process() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl bg-gradient-to-b from-white via-white to-slate-50/80 border border-slate-200/80 shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06),0_2px_6px_-2px_rgba(15,23,42,0.04)] hover:shadow-[0_24px_45px_-12px_var(--theme-primary-glow,rgba(0,112,243,0.22))] hover:border-brand-cyan/50 transition-all duration-500 hover:-translate-y-2 p-8"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-b from-white via-white to-slate-50/80 border border-slate-200/80 shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06),0_2px_6px_-2px_rgba(15,23,42,0.04)] hover:shadow-[0_24px_45px_-12px_var(--theme-primary-glow,rgba(0,112,243,0.22))] hover:border-brand-cyan/50 transition-all duration-500 hover:-translate-y-2 p-5 sm:p-7 md:p-8"
               >
                 {/* Top Glowing Gradient Accent Line */}
                 <div className="absolute top-0 left-0 right-0 h-[3.5px] bg-gradient-to-r from-brand-cyan via-brand-cyan to-brand-purple opacity-0 group-hover:opacity-100 transition-opacity duration-400" />

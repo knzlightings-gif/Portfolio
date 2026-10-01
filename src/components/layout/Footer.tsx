@@ -59,7 +59,7 @@ export default function Footer() {
       {/* Background Accent */}
       <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-brand-cyan/5 rounded-full blur-[120px] pointer-events-none -translate-y-1/2" />
       
-      <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] relative z-10">
         
         {/* Top Section - Compact CTA */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-8 mb-8 border-b border-brand-border/40">
@@ -84,10 +84,10 @@ export default function Footer() {
         </div>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-8">
           
           {/* Column 1: Brand Info */}
-          <div className="lg:col-span-1">
+          <div className="xs:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-2.5 mb-3">
               {personalInfo?.logoUrl && (
                 <div className="h-8 max-w-[140px] px-1 py-0.5 rounded-lg bg-brand-bg border border-brand-border flex items-center justify-center shrink-0 overflow-hidden">
@@ -166,12 +166,12 @@ export default function Footer() {
           </div>
 
           {/* Column 4: Contact */}
-          <div>
+          <div className="xs:col-span-2 lg:col-span-1">
             <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider mb-3">Get In Touch</h4>
             <ul className="space-y-2.5 text-xs text-brand-text-muted">
               <li>
                 <span className="block text-[10px] text-brand-text-muted/70 uppercase tracking-wider mb-0.5">Email</span>
-                <a href={`mailto:${emailVal}`} className="text-brand-text hover:text-brand-cyan transition-colors">
+                <a href={`mailto:${emailVal}`} className="text-brand-text hover:text-brand-cyan transition-colors break-all">
                   {emailVal}
                 </a>
               </li>
@@ -194,7 +194,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-4 border-t border-brand-border/50 flex flex-col md:flex-row justify-between items-center gap-2 text-[11px] text-brand-text-muted">
+        <div className="pt-4 border-t border-brand-border/50 flex flex-col sm:flex-row justify-between items-center gap-2 text-[11px] text-brand-text-muted text-center sm:text-left">
           <p>&copy; {currentYear} {personalInfo?.name || "Developer"}. All rights reserved.</p>
           <div className="flex gap-4">
             <Link href="/" className="hover:text-brand-cyan transition-colors">Privacy Policy</Link>

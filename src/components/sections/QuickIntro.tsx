@@ -41,7 +41,7 @@ const services = [
 export default function QuickIntro() {
   return (
     <section className="py-10 md:py-12 bg-transparent relative overflow-hidden">
-      <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] relative z-10">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 pb-4 border-b border-brand-border/60">
@@ -49,7 +49,7 @@ export default function QuickIntro() {
             <span className="text-xs font-bold uppercase tracking-widest text-brand-cyan block mb-2">
               Architecture & Capabilities
             </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-brand-text tracking-tight">
+            <h2 className="text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-extrabold text-brand-text tracking-tight">
               Software Solutions <br className="hidden sm:block" />
               <span className="text-brand-text-muted font-normal">Engineered For Modern Business.</span>
             </h2>

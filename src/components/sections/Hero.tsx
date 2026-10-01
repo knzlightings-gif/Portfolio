@@ -78,8 +78,8 @@ export default function Hero() {
       <div className="absolute top-1/4 left-1/4 w-[600px] h-[500px] bg-brand-cyan/5 rounded-full blur-[160px] pointer-events-none -z-10" />
       <div className="absolute top-1/3 right-10 w-[600px] h-[500px] bg-brand-purple/5 rounded-full blur-[160px] pointer-events-none -z-10" />
 
-      <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-14">
+      <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] relative z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-14">
           
           {/* Left Column - Content */}
           <div className="w-full lg:w-[50%] flex flex-col items-start">
@@ -101,7 +101,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] mb-6"
+              className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.15] sm:leading-[1.1] mb-5 sm:mb-6"
               style={{ color: personalInfo?.taglineColor || undefined }}
             >
               {(() => {
@@ -132,7 +132,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-lg md:text-xl mb-10 max-w-lg leading-relaxed"
+              className="text-base sm:text-lg md:text-xl mb-8 sm:mb-10 max-w-lg leading-relaxed"
               style={{ color: personalInfo?.descriptionColor || undefined }}
             >
               {personalInfo?.description || defaultPersonalInfo.description}
@@ -142,17 +142,17 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex items-center gap-6"
+              className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 w-full sm:w-auto"
             >
               <Link
                 href="/projects"
-                className="px-8 py-4 bg-gradient-to-r from-brand-cyan to-brand-purple hover:brightness-110 text-white text-base md:text-lg font-bold rounded-full transition-all flex items-center gap-2 shadow-[0_4px_20px_var(--theme-primary-glow,rgba(0,112,243,0.35))] hover:shadow-[0_6px_30px_var(--theme-primary-glow,rgba(0,112,243,0.5))] group"
+                className="w-full sm:w-auto px-7 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-brand-cyan to-brand-purple hover:brightness-110 text-white text-base md:text-lg font-bold rounded-full transition-all flex items-center justify-center gap-2 shadow-[0_4px_20px_var(--theme-primary-glow,rgba(0,112,243,0.35))] hover:shadow-[0_6px_30px_var(--theme-primary-glow,rgba(0,112,243,0.5))] group text-center"
               >
-                View Selected Work
+                <span>View Selected Work</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               
-              <div className="hidden sm:flex items-center gap-2">
+              <div className="flex sm:flex items-center gap-2">
                 <div className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
@@ -173,7 +173,7 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="relative w-full max-w-2xl z-10 my-8 sm:my-12"
+              className="relative w-full max-w-2xl z-10 my-6 sm:my-8 lg:my-12 pb-16 sm:pb-0"
             >
               {/* Outer Ambient Glow Aura */}
               <div className="absolute -inset-2 bg-gradient-to-r from-brand-cyan/20 via-emerald-600/15 to-[#004D40]/20 rounded-[32px] blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 -z-10" />

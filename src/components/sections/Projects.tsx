@@ -97,13 +97,13 @@ export default function Projects() {
   };
 
   return (
-    <section id="projects" className="py-24 bg-transparent relative overflow-hidden">
+    <section id="projects" className="py-12 sm:py-20 lg:py-24 bg-transparent relative overflow-hidden">
       {/* Background ambient glow */}
       <div className="absolute top-1/4 -left-64 w-96 h-96 bg-brand-cyan/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-1/4 -right-64 w-96 h-96 bg-brand-purple/5 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
-        <div className="mb-10">
+      <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] relative z-10">
+        <div className="mb-8 sm:mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan text-xs font-semibold uppercase tracking-wider mb-3">
             <Sparkles className="w-3.5 h-3.5" />
             Tested & Proven Systems
@@ -112,7 +112,7 @@ export default function Projects() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-4xl lg:text-5xl font-bold text-brand-text mb-4"
+            className="text-2xl sm:text-4xl lg:text-5xl font-bold text-brand-text mb-3 sm:mb-4"
           >
             Featured ERPs & Live Applications
           </motion.h2>
@@ -412,11 +412,11 @@ export default function Projects() {
                   </div>
 
                   {/* Demo Action Bar & Gallery Launch */}
-                  <div className="w-full pt-4 border-t border-brand-border/50 flex flex-wrap items-center gap-3">
+                  <div className="w-full pt-4 border-t border-brand-border/50 flex flex-wrap items-center gap-2.5 sm:gap-3">
                     <button
                       type="button"
                       onClick={() => setActiveLightbox({ project, index: 0 })}
-                      className="px-5 py-2.5 bg-brand-card border border-brand-border hover:border-brand-cyan text-brand-text font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm hover:text-brand-cyan"
+                      className="w-full sm:w-auto px-5 py-2.5 bg-brand-card border border-brand-border hover:border-brand-cyan text-brand-text font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm hover:text-brand-cyan"
                     >
                       <Images className="w-4 h-4 text-brand-cyan" />
                       <span>Interface Gallery ({projectImages.length || 1})</span>
@@ -425,26 +425,26 @@ export default function Projects() {
                     <button
                       type="button"
                       onClick={() => setActiveVideo({ project, embedUrl: videoEmbedUrl || "request" })}
-                      className="px-5 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-md shadow-rose-600/30 hover:scale-105"
+                      className="w-full sm:w-auto px-5 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-md shadow-rose-600/30 hover:scale-105"
                     >
                       <Play className="w-4 h-4 fill-white" />
                       <span>▶ Watch Demo Video</span>
                     </button>
 
                     {project.demoUrl ? (
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-3 flex-1">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full sm:flex-1">
                         <a
                           href={project.demoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-6 py-2.5 btn-brand-gradient font-bold rounded-xl hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all flex items-center justify-center gap-2 group text-sm flex-1"
+                          className="w-full sm:w-auto px-6 py-2.5 btn-brand-gradient font-bold rounded-xl hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all flex items-center justify-center gap-2 group text-sm flex-1 text-center"
                         >
                           <span>🚀 Explore Live System</span>
                           <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                         </a>
 
                         {project.demoCredentials && (
-                          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-brand-card/80 border border-brand-border/80 text-xs text-brand-text font-mono">
+                          <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-brand-card/80 border border-brand-border/80 text-xs text-brand-text font-mono truncate">
                             <KeyRound className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
                             <span className="truncate">{project.demoCredentials}</span>
                           </div>
@@ -453,7 +453,7 @@ export default function Projects() {
                     ) : (
                       <Link
                         href="/contact"
-                        className="px-6 py-2.5 rounded-xl bg-brand-card border border-brand-border/80 hover:border-brand-cyan/60 text-brand-text font-semibold hover:text-brand-cyan transition-all flex items-center justify-center gap-2 text-sm group flex-1"
+                        className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-brand-card border border-brand-border/80 hover:border-brand-cyan/60 text-brand-text font-semibold hover:text-brand-cyan transition-all flex items-center justify-center gap-2 text-sm group flex-1 text-center"
                       >
                         <span>Request Walkthrough</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-brand-cyan" />
@@ -543,11 +543,11 @@ export default function Projects() {
               )}
 
               {/* Main Interface Preview */}
-              <div className="max-w-full max-h-[72vh] flex items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-brand-card/50 shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+              <div className="max-w-full max-h-[56vh] sm:max-h-[72vh] flex items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-brand-card/50 shadow-[0_0_50px_rgba(0,0,0,0.8)]">
                 <img
                   src={getProjectImages(activeLightbox.project)[activeLightbox.index]}
                   alt={`${activeLightbox.project.title} Interface ${activeLightbox.index + 1}`}
-                  className="max-w-full max-h-[72vh] object-contain rounded-xl"
+                  className="max-w-full max-h-[56vh] sm:max-h-[72vh] object-contain rounded-xl"
                 />
               </div>
 
@@ -572,7 +572,7 @@ export default function Projects() {
 
             {/* Bottom Filmstrip Thumbnails */}
             <div
-              className="z-10 w-full max-w-4xl mx-auto overflow-x-auto py-2 flex items-center justify-center gap-2 sm:gap-3 no-scrollbar"
+              className="z-10 w-full max-w-4xl mx-auto overflow-x-auto py-2 flex items-center justify-start sm:justify-center gap-2 sm:gap-3 no-scrollbar px-2"
               onClick={(e) => e.stopPropagation()}
             >
               {getProjectImages(activeLightbox.project).map((imgUrl, thumbIdx) => (

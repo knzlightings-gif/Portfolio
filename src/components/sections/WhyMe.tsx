@@ -129,15 +129,15 @@ export default function WhyMe() {
   const principles = data?.principles || defaultPhilosophy.principles;
 
   return (
-    <section className="py-28 bg-transparent relative overflow-hidden">
+    <section className="py-14 sm:py-20 lg:py-28 bg-transparent relative overflow-hidden">
       {/* Dynamic Ambient Background Lights */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-brand-cyan/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-[400px] h-[400px] bg-brand-purple/5 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] relative z-10">
         
         {/* Header Section */}
-        <div className="flex flex-col items-start mb-20 max-w-3xl">
+        <div className="flex flex-col items-start mb-10 sm:mb-16 lg:mb-20 max-w-3xl">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -153,7 +153,7 @@ export default function WhyMe() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-3xl md:text-5xl lg:text-6xl font-black text-brand-text mb-6 leading-[1.15] tracking-tight"
+            className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-brand-text mb-4 sm:mb-6 leading-[1.15] tracking-tight"
           >
             {headingPart1}{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]">
@@ -166,14 +166,14 @@ export default function WhyMe() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-lg md:text-xl text-brand-text-muted leading-relaxed"
+            className="text-sm xs:text-base sm:text-lg md:text-xl text-brand-text-muted leading-relaxed"
           >
             {description}
           </motion.p>
         </div>
 
         {/* Dynamic Principle Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
           {principles.map((item, index) => {
             const style = cardStyles[index % cardStyles.length];
             const Icon = style.icon;
@@ -188,7 +188,7 @@ export default function WhyMe() {
                   delay: index * 0.08, 
                   ease: [0.21, 0.47, 0.32, 0.98] 
                 }}
-                className={`group relative p-8 md:p-9 rounded-[28px] bg-brand-card/90 backdrop-blur-md border border-brand-border/80 transition-all duration-500 hover:-translate-y-2.5 hover:shadow-2xl z-10 ${style.borderHover} overflow-hidden flex flex-col justify-between`}
+                className={`group relative p-5 sm:p-7 md:p-9 rounded-[24px] sm:rounded-[28px] bg-brand-card/90 backdrop-blur-md border border-brand-border/80 transition-all duration-500 hover:-translate-y-2.5 hover:shadow-2xl z-10 ${style.borderHover} overflow-hidden flex flex-col justify-between`}
               >
                 {/* Ambient Card Glow on Hover */}
                 <div 

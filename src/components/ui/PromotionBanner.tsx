@@ -89,7 +89,7 @@ export default function PromotionBanner() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.4 }}
-        className={`w-full fixed top-[68px] left-0 right-0 z-40 bg-gradient-to-r ${gradientClass} border-b backdrop-blur-md overflow-hidden group py-3`}
+        className={`w-full fixed top-[64px] sm:top-[68px] left-0 right-0 z-40 bg-gradient-to-r ${gradientClass} border-b backdrop-blur-md overflow-hidden group py-2 sm:py-3`}
       >
         {/* Left & Right gradient fade masks for smooth transition */}
         <div className="absolute top-0 bottom-0 left-0 w-12 bg-gradient-to-r from-rose-600/80 to-transparent z-20 pointer-events-none" />

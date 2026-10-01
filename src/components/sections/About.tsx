@@ -37,12 +37,12 @@ export default function About() {
   const techStack = data?.techStack || defaultAbout.techStack;
 
   return (
-    <section id="about" className="py-24 bg-transparent border-t border-brand-border relative overflow-hidden">
+    <section id="about" className="py-14 sm:py-20 lg:py-24 bg-transparent border-t border-brand-border relative overflow-hidden">
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 -left-48 w-96 h-96 rounded-full bg-brand-cyan/5 blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 -right-48 w-96 h-96 rounded-full bg-brand-purple/5 blur-3xl pointer-events-none" />
 
-      <div className="container mx-auto px-6 max-w-[1600px] relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] relative z-10">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
           
           {/* Left Column: About & Stats */}
@@ -63,7 +63,7 @@ export default function About() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl md:text-5xl font-extrabold text-brand-text mb-8 tracking-tight leading-tight"
+              className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-brand-text mb-6 sm:mb-8 tracking-tight leading-tight"
             >
               {data?.headline || defaultAbout.headline}
             </motion.h2>
@@ -98,7 +98,7 @@ export default function About() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.3 + index * 0.1 }}
-                    className="p-6 rounded-2xl bg-brand-card/95 backdrop-blur-xl border border-brand-border hover:border-brand-cyan/60 transition-all duration-300 shadow-xs hover:shadow-lg group relative overflow-hidden"
+                    className="p-4 sm:p-6 rounded-2xl bg-brand-card/95 backdrop-blur-xl border border-brand-border hover:border-brand-cyan/60 transition-all duration-300 shadow-xs hover:shadow-lg group relative overflow-hidden"
                   >
                     <div className="flex items-center justify-between mb-3">
                       <div className="w-8 h-8 rounded-lg bg-brand-cyan/10 border border-brand-cyan/25 flex items-center justify-center text-brand-cyan group-hover:scale-110 transition-transform">
@@ -125,7 +125,7 @@ export default function About() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="p-7 sm:p-8 rounded-3xl bg-brand-card/90 border border-brand-border backdrop-blur-sm relative overflow-hidden"
+              className="p-5 sm:p-7 md:p-8 rounded-2xl sm:rounded-3xl bg-brand-card/90 border border-brand-border backdrop-blur-sm relative overflow-hidden"
             >
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-8 h-8 rounded-xl bg-brand-cyan/10 border border-brand-cyan/25 flex items-center justify-center text-brand-cyan">
@@ -165,7 +165,7 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="p-7 sm:p-8 rounded-3xl bg-brand-card/90 border border-brand-border backdrop-blur-sm"
+              className="p-5 sm:p-7 md:p-8 rounded-2xl sm:rounded-3xl bg-brand-card/90 border border-brand-border backdrop-blur-sm"
             >
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-8 h-8 rounded-xl bg-brand-cyan/10 border border-brand-cyan/25 flex items-center justify-center text-brand-cyan">
