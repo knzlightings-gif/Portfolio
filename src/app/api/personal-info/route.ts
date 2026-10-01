@@ -3,7 +3,8 @@ import { getServerDb, doc, getDoc, setDoc } from "@/lib/firebase-server";
 
 const defaultPersonalInfo = {
   name: "E For ERP",
-  logoUrl: "",
+  logoUrl: "/logo.png",
+  nameColor: "#f43f5e",
   tagline: "We Build Smart Business Software That Actually Works.",
   description:
     "We build practical ERP systems, business web applications and custom digital solutions for small and growing businesses — combining real-world business understanding with modern development technologies.",

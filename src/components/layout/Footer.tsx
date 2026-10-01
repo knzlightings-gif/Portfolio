@@ -7,7 +7,20 @@ import { useState, useEffect } from "react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const [personalInfo, setPersonalInfo] = useState(defaultPersonalInfo);
+  const [personalInfo, setPersonalInfo] = useState<any>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const cached = localStorage.getItem("app_personal_info");
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed && parsed.name) {
+            return { ...defaultPersonalInfo, ...parsed };
+          }
+        }
+      } catch {}
+    }
+    return defaultPersonalInfo;
+  });
   const [footerContent, setFooterContent] = useState(defaultFooter);
 
   useEffect(() => {
@@ -16,10 +29,13 @@ export default function Footer() {
       .then((res) => res.json())
       .then((data) => {
         if (data && typeof data === "object") {
-          setPersonalInfo((prev) => ({
+          setPersonalInfo((prev: any) => ({
             ...prev,
             ...data,
           }));
+          try {
+            localStorage.setItem("app_personal_info", JSON.stringify(data));
+          } catch {}
         }
       })
       .catch(() => {});
@@ -86,7 +102,12 @@ export default function Footer() {
             <Link href="/" className="inline-flex items-center gap-2.5 mb-3">
               {personalInfo?.logoUrl && (
                 <div className="h-8 max-w-[140px] px-1 py-0.5 rounded-lg bg-brand-bg border border-brand-border flex items-center justify-center shrink-0 overflow-hidden">
-                  <img src={personalInfo.logoUrl} alt={personalInfo.name} className="max-h-full max-w-full w-auto h-auto object-contain" />
+                  <img 
+                    src={personalInfo.logoUrl} 
+                    alt={personalInfo.name} 
+                    loading="eager"
+                    className="max-h-full max-w-full w-auto h-auto object-contain" 
+                  />
                 </div>
               )}
               <div>

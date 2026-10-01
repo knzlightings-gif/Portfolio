@@ -23,7 +23,20 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [personalInfo, setPersonalInfo] = useState(defaultPersonalInfo);
+  const [personalInfo, setPersonalInfo] = useState<any>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const cached = localStorage.getItem("app_personal_info");
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed && parsed.name) {
+            return { ...defaultPersonalInfo, ...parsed };
+          }
+        }
+      } catch {}
+    }
+    return defaultPersonalInfo;
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,10 +48,13 @@ export default function Navbar() {
       .then((res) => res.json())
       .then((data) => {
         if (data && data.name) {
-          setPersonalInfo((prev) => ({
+          setPersonalInfo((prev: any) => ({
             ...prev,
             ...data,
           }));
+          try {
+            localStorage.setItem("app_personal_info", JSON.stringify(data));
+          } catch {}
         }
       })
       .catch(() => {});
@@ -75,6 +91,8 @@ export default function Navbar() {
               <img
                 src={personalInfo.logoUrl}
                 alt={personalInfo.name}
+                loading="eager"
+                decoding="sync"
                 className="max-h-full max-w-full w-auto h-auto object-contain"
               />
             </div>
