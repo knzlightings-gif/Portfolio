@@ -145,7 +145,7 @@ export default function Hero() {
               className="flex items-center gap-6"
             >
               <Link
-                href="#projects"
+                href="/projects"
                 className="px-8 py-4 bg-gradient-to-r from-brand-cyan to-brand-purple hover:brightness-110 text-white text-base md:text-lg font-bold rounded-full transition-all flex items-center gap-2 shadow-[0_4px_20px_var(--theme-primary-glow,rgba(0,112,243,0.35))] hover:shadow-[0_6px_30px_var(--theme-primary-glow,rgba(0,112,243,0.5))] group"
               >
                 View Selected Work

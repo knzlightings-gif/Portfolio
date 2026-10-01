@@ -4,20 +4,23 @@ import { footerContent as defaultFooter } from "@/data/content";
 
 export async function GET() {
   try {
+    const headers = { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" };
     const db = getServerDb();
-    if (!db) return NextResponse.json(defaultFooter);
+    if (!db) return NextResponse.json(defaultFooter, { headers });
 
     const snap = await getDoc(doc(db, "settings", "footer"));
     if (snap.exists()) {
       return NextResponse.json({
         ...defaultFooter,
         ...snap.data(),
-      });
+      }, { headers });
     }
-    return NextResponse.json(defaultFooter);
+    return NextResponse.json(defaultFooter, { headers });
   } catch (error) {
     console.error("Error reading footer from Firestore:", error);
-    return NextResponse.json(defaultFooter);
+    return NextResponse.json(defaultFooter, {
+      headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" },
+    });
   }
 }
 

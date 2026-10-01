@@ -138,9 +138,10 @@ body {
   background-size: 36px 36px;
   font-family: var(--font-sans);
 }
-
-html {
-  scroll-behavior: smooth;
+/* Progress bar animation for video slides */
+@keyframes progress-fill {
+  0%   { width: 0%; }
+  100% { width: 100%; }
 }
 
 /* ─── Marquee / Ticker ──────────────────────────────────────── */

@@ -75,7 +75,7 @@ export default function Footer() {
             </p>
           </div>
           <Link
-            href="#contact"
+            href="/contact"
             className="group inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-cyan/10 to-brand-purple/10 hover:from-brand-cyan hover:to-brand-purple text-brand-text hover:text-white border border-brand-cyan/30 rounded-full transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_var(--theme-primary-glow,rgba(0,112,243,0.3))] shrink-0 font-medium text-sm"
           >
             <span>{footerContent?.ctaButtonText || "Start"}</span>
@@ -88,7 +88,7 @@ export default function Footer() {
           
           {/* Column 1: Brand Info */}
           <div className="lg:col-span-1">
-            <Link href="#home" className="inline-flex items-center gap-2.5 mb-3">
+            <Link href="/" className="inline-flex items-center gap-2.5 mb-3">
               {personalInfo?.logoUrl && (
                 <div className="h-8 max-w-[140px] px-1 py-0.5 rounded-lg bg-brand-bg border border-brand-border flex items-center justify-center shrink-0 overflow-hidden">
                   <img src={personalInfo.logoUrl} alt={personalInfo.name} className="max-h-full max-w-full w-auto h-auto object-contain" />
@@ -197,8 +197,8 @@ export default function Footer() {
         <div className="pt-4 border-t border-brand-border/50 flex flex-col md:flex-row justify-between items-center gap-2 text-[11px] text-brand-text-muted">
           <p>&copy; {currentYear} {personalInfo?.name || "Developer"}. All rights reserved.</p>
           <div className="flex gap-4">
-            <Link href="#home" className="hover:text-brand-cyan transition-colors">Privacy Policy</Link>
-            <Link href="#home" className="hover:text-brand-cyan transition-colors">Terms of Service</Link>
+            <Link href="/" className="hover:text-brand-cyan transition-colors">Privacy Policy</Link>
+            <Link href="/" className="hover:text-brand-cyan transition-colors">Terms of Service</Link>
           </div>
         </div>
 

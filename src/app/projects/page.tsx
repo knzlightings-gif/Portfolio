@@ -12,7 +12,7 @@ export default function ProjectsPage() {
   return (
     <>
       <Navbar />
-      <main className="flex-grow pt-20">
+      <main className="flex-grow pt-28 sm:pt-32">
         <Projects />
       </main>
       <Footer />

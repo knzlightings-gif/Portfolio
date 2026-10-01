@@ -41,13 +41,27 @@ export default function AnimatedBackground() {
     resize();
     window.addEventListener("resize", resize);
 
-    // Dynamic Theme Color Reader
-    const getThemeColors = () => {
-      const docStyle = getComputedStyle(document.documentElement);
-      const primary = docStyle.getPropertyValue("--theme-primary-rgb").trim() || "0, 77, 64";
-      const secondary = docStyle.getPropertyValue("--theme-secondary-rgb").trim() || "0, 172, 193";
-      return { primary, secondary };
+    // Dynamic Theme Color Reader (Cached with MutationObserver to avoid 60fps forced layout thrashing)
+    let cachedColors = { primary: "0, 77, 64", secondary: "0, 172, 193" };
+    const updateThemeColors = () => {
+      try {
+        const docStyle = getComputedStyle(document.documentElement);
+        const primary = docStyle.getPropertyValue("--theme-primary-rgb").trim() || "0, 77, 64";
+        const secondary = docStyle.getPropertyValue("--theme-secondary-rgb").trim() || "0, 172, 193";
+        cachedColors = { primary, secondary };
+      } catch {
+        // Fallback default colors
+      }
     };
+    updateThemeColors();
+
+    const observer = new MutationObserver(() => {
+      updateThemeColors();
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme", "class"],
+    });
 
     // Soft Mouse Tracking
     const onMouseMove = (e: MouseEvent) => {
@@ -57,8 +71,8 @@ export default function AnimatedBackground() {
       mouseRef.current = { x: -9999, y: -9999, isActive: false };
     };
 
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseleave", onMouseLeave);
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    window.addEventListener("mouseleave", onMouseLeave, { passive: true });
 
     // Whisper-subtle micro particles
     const particles: MicroParticle[] = Array.from({ length: PARTICLE_COUNT }, () => ({
@@ -75,7 +89,7 @@ export default function AnimatedBackground() {
     // Render Loop
     const draw = () => {
       ctx.clearRect(0, 0, W, H);
-      const { primary, secondary } = getThemeColors();
+      const { primary, secondary } = cachedColors;
       const mouse = mouseRef.current;
 
       // 1. Subtle, gentle cursor ambient illumination (whisper quiet: 3% opacity)
@@ -127,6 +141,7 @@ export default function AnimatedBackground() {
 
     return () => {
       cancelAnimationFrame(animFrameId);
+      observer.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseleave", onMouseLeave);

@@ -89,31 +89,18 @@ export default function BusinessProblems() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
-  const [progress, setProgress] = useState(0);
 
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const slideDuration = 6000; // 6 seconds per video slide
 
-  // Cycle slide and sync timer progress bar
+  // Cycle slide with slideDuration timer
   useEffect(() => {
     if (!isPlaying) return;
 
-    const intervalStep = 50; // update progress every 50ms
-    const totalSteps = slideDuration / intervalStep;
-    let stepCount = 0;
-
     const timer = setInterval(() => {
-      stepCount++;
-      const currentProgress = (stepCount / totalSteps) * 100;
-      setProgress(currentProgress);
-
-      if (stepCount >= totalSteps) {
-        stepCount = 0;
-        setProgress(0);
-        setCurrentSlide((prev) => (prev + 1) % manualTroubles.length);
-      }
-    }, intervalStep);
+      setCurrentSlide((prev) => (prev + 1) % manualTroubles.length);
+    }, slideDuration);
 
     return () => clearInterval(timer);
   }, [isPlaying, currentSlide]);
@@ -141,12 +128,10 @@ export default function BusinessProblems() {
   }, [isMuted]);
 
   const nextSlide = () => {
-    setProgress(0);
     setCurrentSlide((prev) => (prev + 1) % manualTroubles.length);
   };
 
   const prevSlide = () => {
-    setProgress(0);
     setCurrentSlide((prev) => (prev - 1 + manualTroubles.length) % manualTroubles.length);
   };
 
@@ -272,7 +257,7 @@ export default function BusinessProblems() {
                         loop
                         muted={isMuted}
                         playsInline
-                        preload="auto"
+                        preload={isActive ? "auto" : "none"}
                         className="w-full h-full object-cover brightness-[1.20] contrast-[1.08] saturate-[1.12]"
                       />
                       
@@ -394,8 +379,12 @@ export default function BusinessProblems() {
                       <div className="w-full sm:w-auto flex-1 flex items-center gap-2">
                         <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
                           <div 
-                            className="h-full bg-gradient-to-r from-emerald-400 to-teal-400 transition-all duration-75 ease-linear rounded-full"
-                            style={{ width: `${progress}%` }}
+                            key={`${currentSlide}-${isPlaying}`}
+                            className="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full"
+                            style={{
+                              animation: isPlaying ? `progress-fill ${slideDuration}ms linear forwards` : "none",
+                              width: isPlaying ? undefined : "100%",
+                            }}
                           />
                         </div>
                         <span className="text-[10px] font-mono text-white/70 shrink-0">
@@ -408,10 +397,7 @@ export default function BusinessProblems() {
                         {manualTroubles.map((slide, idx) => (
                           <button
                             key={idx}
-                            onClick={() => {
-                              setProgress(0);
-                              setCurrentSlide(idx);
-                            }}
+                            onClick={() => setCurrentSlide(idx)}
                             className={`px-2 py-0.5 text-[10px] font-bold rounded-md transition-all duration-200 ${
                               idx === currentSlide
                                 ? "bg-emerald-400 text-slate-950 shadow-[0_0_12px_rgba(52,211,153,0.6)] font-extrabold scale-105"

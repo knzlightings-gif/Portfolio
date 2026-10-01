@@ -19,17 +19,20 @@ const defaultPersonalInfo = {
 
 export async function GET() {
   try {
+    const headers = { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" };
     const db = getServerDb();
-    if (!db) return NextResponse.json(defaultPersonalInfo);
+    if (!db) return NextResponse.json(defaultPersonalInfo, { headers });
 
     const snap = await getDoc(doc(db, "settings", "personal-info"));
     if (snap.exists()) {
-      return NextResponse.json(snap.data());
+      return NextResponse.json(snap.data(), { headers });
     }
-    return NextResponse.json(defaultPersonalInfo);
+    return NextResponse.json(defaultPersonalInfo, { headers });
   } catch (error) {
     console.error("Error reading personal-info from Firestore:", error);
-    return NextResponse.json(defaultPersonalInfo);
+    return NextResponse.json(defaultPersonalInfo, {
+      headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" },
+    });
   }
 }
 

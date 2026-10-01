@@ -13,7 +13,7 @@ export default function AboutPage() {
   return (
     <>
       <Navbar />
-      <main className="flex-grow pt-20">
+      <main className="flex-grow pt-28 sm:pt-32">
         <About />
         <Testimonials />
       </main>

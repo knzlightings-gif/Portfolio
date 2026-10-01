@@ -451,13 +451,13 @@ export default function Projects() {
                         )}
                       </div>
                     ) : (
-                      <a
-                        href="#contact"
+                      <Link
+                        href="/contact"
                         className="px-6 py-2.5 rounded-xl bg-brand-card border border-brand-border/80 hover:border-brand-cyan/60 text-brand-text font-semibold hover:text-brand-cyan transition-all flex items-center justify-center gap-2 text-sm group flex-1"
                       >
                         <span>Request Walkthrough</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-brand-cyan" />
-                      </a>
+                      </Link>
                     )}
                   </div>
                 </div>
@@ -653,7 +653,7 @@ export default function Projects() {
                   </div>
                   <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
                     <Link
-                      href="#contact"
+                      href="/contact"
                       onClick={() => setActiveVideo(null)}
                       className="px-6 py-3 bg-gradient-to-r from-brand-cyan to-brand-purple hover:brightness-110 text-white font-bold rounded-full transition-all flex items-center gap-2 shadow-lg"
                     >

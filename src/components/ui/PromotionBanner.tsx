@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Tag, X, ArrowRight, Copy, Check, Clock } from "lucide-react";
 import { Promotion } from "@/types/promotion";
@@ -15,6 +16,7 @@ const themeGradients: Record<string, string> = {
 };
 
 export default function PromotionBanner() {
+  const pathname = usePathname();
   const [promotion, setPromotion] = useState<Promotion | null>(null);
   const [dismissed, setDismissed] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -74,7 +76,7 @@ export default function PromotionBanner() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  if (dismissed || !promotion) return null;
+  if (dismissed || !promotion || pathname?.startsWith("/admin")) return null;
 
   const promoItems = [1, 2, 3, 4]; // Duplicate items for seamless continuous ticker
   const gradientClass = themeGradients[promotion.themeColor] || themeGradients.rose;
@@ -93,18 +95,9 @@ export default function PromotionBanner() {
         <div className="absolute top-0 bottom-0 left-0 w-12 bg-gradient-to-r from-rose-600/80 to-transparent z-20 pointer-events-none" />
         <div className="absolute top-0 bottom-0 right-14 w-12 bg-gradient-to-l from-rose-600/80 to-transparent z-20 pointer-events-none" />
 
-        {/* Continuous Marquee Ticker moving Left to Right */}
+        {/* Continuous Marquee Ticker using GPU CSS animation */}
         <div className="flex overflow-hidden relative w-full items-center">
-          <motion.div
-            className="flex items-center gap-12 whitespace-nowrap group-hover:[animation-play-state:paused]"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{
-              repeat: Infinity,
-              repeatType: "loop",
-              duration: 25,
-              ease: "linear",
-            }}
-          >
+          <div className="marquee-track flex items-center gap-12 whitespace-nowrap group-hover:[animation-play-state:paused]">
             {promoItems.map((item, idx) => (
               <div key={idx} className="flex items-center gap-6 shrink-0">
                 {/* Prominent High-Contrast Offer Badge */}
@@ -161,7 +154,7 @@ export default function PromotionBanner() {
                 <span className="text-amber-200/80 font-bold mx-2">★</span>
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
 
         {/* Fixed Close (X) Button on Far Right */}

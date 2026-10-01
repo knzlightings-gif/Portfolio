@@ -27,7 +27,7 @@ export default function FloatingButtons() {
       .catch(() => {});
 
     const onScroll = () => setShowTop(window.scrollY > 400);
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 

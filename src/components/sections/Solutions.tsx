@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { solutionsByBusiness as defaultSolutionsByBusiness } from "@/data/content";
 import { 
@@ -58,13 +59,13 @@ function SolutionCard({ solution, index }: { solution: any; index: number }) {
         </div>
 
         {/* Centered Pill Button */}
-        <a 
+        <Link 
           href="/contact"
           className="inline-flex items-center gap-1.5 px-5 py-1.5 rounded-full text-xs font-bold bg-[#004D40] hover:bg-[#00382E] text-white shadow-xs group-hover:shadow-lg group-hover:scale-105 transition-all relative z-10"
         >
           View Solution
           <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-        </a>
+        </Link>
       </div>
     </motion.div>
   );
