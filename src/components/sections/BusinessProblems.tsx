@@ -145,7 +145,7 @@ export default function BusinessProblems() {
   };
 
   return (
-    <section className="py-12 sm:py-20 lg:py-28 bg-transparent relative overflow-hidden">
+    <section className="pt-24 sm:pt-28 pb-12 sm:pb-20 lg:pb-24 bg-transparent relative overflow-hidden">
       
       {/* Background ambient gradient glow */}
       <div className="absolute top-1/3 right-0 w-[550px] h-[550px] bg-brand-cyan/15 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/4 pointer-events-none" />

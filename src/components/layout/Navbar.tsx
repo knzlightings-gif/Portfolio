@@ -79,8 +79,8 @@ export default function Navbar() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out border-b border-brand-border/60 bg-brand-card/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,77,64,0.06)]",
         isScrolled
-          ? "py-3 shadow-[0_6px_25px_rgba(0,77,64,0.1)] bg-brand-card/98"
-          : "py-3.5 sm:py-4.5"
+          ? "py-2.5 shadow-[0_6px_25px_rgba(0,77,64,0.1)] bg-brand-card/98"
+          : "py-3 sm:py-3.5"
       )}
     >
       <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] flex items-center justify-between">

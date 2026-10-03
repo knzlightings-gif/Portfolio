@@ -71,7 +71,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-14 sm:py-20 lg:py-24 bg-transparent relative overflow-hidden">
+    <section id="contact" className="pt-24 sm:pt-28 pb-14 sm:pb-20 lg:pb-24 bg-transparent relative overflow-hidden">
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-cyan/5 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/3" />
       
       <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] relative z-10">

@@ -12,7 +12,7 @@ export default function ContactPage() {
   return (
     <>
       <Navbar />
-      <main className="flex-grow pt-28 sm:pt-32">
+      <main className="flex-grow">
         <Contact />
       </main>
       <Footer />

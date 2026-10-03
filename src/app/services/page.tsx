@@ -13,7 +13,7 @@ export default function ServicesPage() {
   return (
     <>
       <Navbar />
-      <main className="flex-grow pt-28 sm:pt-32">
+      <main className="flex-grow">
         <BusinessProblems />
         <Solutions />
       </main>

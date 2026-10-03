@@ -80,7 +80,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
     <main className="min-h-screen bg-transparent text-brand-text selection:bg-brand-cyan selection:text-slate-950 flex flex-col justify-between">
       <Navbar />
 
-      <div className="pt-28 sm:pt-32 pb-16 sm:pb-24 relative overflow-hidden">
+      <div className="pt-24 sm:pt-28 pb-16 sm:pb-24 relative overflow-hidden">
         {/* Background Ambient Orbs */}
         <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-brand-cyan/10 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute bottom-1/3 left-0 w-[500px] h-[500px] bg-brand-purple/10 rounded-full blur-[140px] pointer-events-none" />
