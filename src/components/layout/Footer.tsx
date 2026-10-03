@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { personalInfo as defaultPersonalInfo, footerContent as defaultFooter } from "@/data/content";
-import { Mail, Phone, ArrowUpRight } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function Footer() {
@@ -65,38 +65,28 @@ export default function Footer() {
   const servicesLinks = footerContent?.servicesLinks || defaultFooter.servicesLinks;
 
   return (
-    <footer className="bg-brand-card/85 backdrop-blur-md border-t border-brand-border relative overflow-hidden pt-10 pb-6">
+    <footer className="bg-brand-card/85 backdrop-blur-md border-t border-brand-border relative overflow-hidden pt-6 pb-4">
       
       {/* Background Accent */}
-      <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-brand-cyan/5 rounded-full blur-[120px] pointer-events-none -translate-y-1/2" />
+      <div className="absolute top-0 right-1/4 w-[350px] h-[350px] bg-brand-cyan/5 rounded-full blur-[100px] pointer-events-none -translate-y-1/2" />
       
       <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] relative z-10">
         
-        {/* Top Section - Centered High-Impact CTA */}
-        <div className="flex flex-col items-center text-center max-w-2xl mx-auto pb-10 mb-10 border-b border-brand-border/40">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-brand-text tracking-tight">
+        {/* Top Section - Sleek Centered Heading (Compact, No Button) */}
+        <div className="flex flex-col items-center text-center max-w-2xl mx-auto pb-4 mb-6 border-b border-brand-border/40">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-brand-text tracking-tight">
             {footerContent?.ctaHeading1 || "Let's build something"}{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-[#00796B] to-brand-purple">
               {footerContent?.ctaHeading2 || "extraordinary."}
             </span>
           </h2>
-          <p className="text-brand-text-muted text-sm sm:text-base mt-2.5 max-w-lg mx-auto leading-relaxed">
+          <p className="text-brand-text-muted text-xs sm:text-sm mt-1 max-w-lg mx-auto leading-relaxed">
             {footerContent?.ctaSubtext || "Ready to transform your business with custom software tailored to your workflow?"}
           </p>
-          <div className="mt-5 sm:mt-6">
-            <Link
-              href="/contact"
-              className="group relative inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-bold text-sm text-white overflow-hidden shadow-md hover:shadow-[0_0_25px_var(--theme-primary-glow,rgba(0,77,64,0.45))] transition-all duration-300 hover:scale-105"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-brand-cyan to-brand-purple group-hover:from-brand-purple group-hover:to-brand-cyan transition-all duration-500" />
-              <span className="relative z-10">{footerContent?.ctaButtonText || "Start a Project"}</span>
-              <ArrowUpRight className="w-4 h-4 relative z-10 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-          </div>
         </div>
 
         {/* Main 4-Column Grid: Balanced, Proportional & Spanned Across Screen */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-12 mb-10 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-12 mb-7 items-start">
           
           {/* Column 1: Brand Info (4 of 12 columns) */}
           <div className="md:col-span-1 lg:col-span-4 pr-0 lg:pr-4">
