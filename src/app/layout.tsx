@@ -17,6 +17,14 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Professional ERP & Web Developer Portfolio",
   description: "I build practical ERP systems, business web applications and custom digital solutions for small and growing businesses.",
+  icons: {
+    icon: [
+      { url: "/logo.png", type: "image/png" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({
