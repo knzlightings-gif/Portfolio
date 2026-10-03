@@ -204,36 +204,14 @@ export const techStack = {
   development: ["GitHub", "Vercel", "AI Development Tools"]
 };
 
-export const testimonials = [
-  {
-    id: "testimonial-1",
-    name: "[Client Name]",
-    role: "CEO, [Company Name]",
-    text: "Real client testimonial will be added here. This is a placeholder demonstrating the design and structure. Update this with actual feedback once available.",
-    image: "/assets/placeholders/avatar-1.jpg"
-  },
-  {
-    id: "testimonial-2",
-    name: "[Client Name]",
-    role: "Director, [Company Name]",
-    text: "Real client testimonial will be added here. This is a placeholder demonstrating the design and structure. Update this with actual feedback once available.",
-    image: "/assets/placeholders/avatar-2.jpg"
-  },
-  {
-    id: "testimonial-3",
-    name: "[Client Name]",
-    role: "Founder, [Company Name]",
-    text: "Real client testimonial will be added here. This is a placeholder demonstrating the design and structure. Update this with actual feedback once available.",
-    image: "/assets/placeholders/avatar-3.jpg"
-  },
-  {
-    id: "testimonial-4",
-    name: "[Client Name]",
-    role: "Manager, [Company Name]",
-    text: "Real client testimonial will be added here. This is a placeholder demonstrating the design and structure. Update this with actual feedback once available.",
-    image: "/assets/placeholders/avatar-4.jpg"
-  }
-];
+export const testimonials: Array<{
+  id: string;
+  name: string;
+  role: string;
+  text: string;
+  rating?: number;
+  image?: string;
+}> = [];
 
 export const footerContent = {
   ctaHeading1: "Let's build something",

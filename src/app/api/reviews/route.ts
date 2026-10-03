@@ -1,15 +1,14 @@
 import { NextResponse } from "next/server";
 import { getServerDb, collection, getDocs, addDoc } from "@/lib/firebase-server";
-import { testimonials as defaultTestimonials } from "@/data/content";
 
 export async function GET() {
   try {
     const db = getServerDb();
-    if (!db) return NextResponse.json(defaultTestimonials);
+    if (!db) return NextResponse.json([]);
 
     const snapshot = await getDocs(collection(db, "reviews"));
     if (snapshot.empty) {
-      return NextResponse.json(defaultTestimonials);
+      return NextResponse.json([]);
     }
 
     const firestoreReviews = snapshot.docs.map((doc) => {
@@ -24,11 +23,11 @@ export async function GET() {
       };
     });
 
-    // Merge custom firestore reviews first, followed by default placeholders
-    return NextResponse.json([...firestoreReviews, ...defaultTestimonials]);
+    // Return only actual posted reviews
+    return NextResponse.json(firestoreReviews);
   } catch (error) {
     console.error("Error fetching reviews from Firestore:", error);
-    return NextResponse.json(defaultTestimonials);
+    return NextResponse.json([]);
   }
 }
 

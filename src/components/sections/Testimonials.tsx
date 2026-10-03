@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { testimonials as defaultTestimonials } from "@/data/content";
 import { Quote, Star, Loader2, CheckCircle2, MessageSquarePlus, Sparkles } from "lucide-react";
 
 type Testimonial = {
@@ -12,10 +11,12 @@ type Testimonial = {
   text: string;
   rating?: number;
   image?: string;
+  createdAt?: string;
 };
 
 export default function Testimonials() {
-  const [items, setItems] = useState<Testimonial[]>(defaultTestimonials);
+  const [items, setItems] = useState<Testimonial[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [rating, setRating] = useState(5);
@@ -24,14 +25,15 @@ export default function Testimonials() {
 
   // Fetch live reviews from Firestore API
   useEffect(() => {
-    fetch("/api/reviews")
+    fetch("/api/reviews", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           setItems(data);
         }
       })
-      .catch((err) => console.error("Error loading reviews:", err));
+      .catch((err) => console.error("Error loading reviews:", err))
+      .finally(() => setIsLoading(false));
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -72,7 +74,13 @@ export default function Testimonials() {
   };
 
   // Duplicate items for seamless continuous infinite ticker
-  const duplicatedTestimonials = items.length > 0 ? [...items, ...items, ...items] : [];
+  const duplicatedTestimonials = (() => {
+    if (items.length === 0) return [];
+    if (items.length === 1) return Array(8).fill(items[0]);
+    if (items.length === 2) return [...items, ...items, ...items, ...items];
+    if (items.length < 5) return [...items, ...items, ...items];
+    return [...items, ...items];
+  })();
 
   return (
     <section id="testimonials" className="py-10 md:py-14 bg-transparent relative overflow-hidden">
@@ -242,63 +250,82 @@ export default function Testimonials() {
 
       </div>
 
-      {/* Infinite Animated Marquee Slider with Pause-On-Hover and Zoom */}
-      <div className="relative w-full overflow-hidden py-6 marquee-container">
-        
-        {/* Left & Right Smooth Fade Gradients */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 md:w-48 bg-gradient-to-r from-brand-bg via-brand-bg/80 to-transparent z-20" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 md:w-48 bg-gradient-to-l from-brand-bg via-brand-bg/80 to-transparent z-20" />
+      {/* Marquee or Empty State */}
+      {isLoading ? (
+        <div className="py-12 flex justify-center items-center text-brand-text-muted gap-2.5 text-sm">
+          <Loader2 className="w-5 h-5 animate-spin text-brand-cyan" />
+          <span>Loading client reviews...</span>
+        </div>
+      ) : items.length > 0 ? (
+        <div className="relative w-full overflow-hidden py-6 marquee-container">
+          {/* Left & Right Smooth Fade Gradients */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 md:w-48 bg-gradient-to-r from-brand-bg via-brand-bg/80 to-transparent z-20" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 md:w-48 bg-gradient-to-l from-brand-bg via-brand-bg/80 to-transparent z-20" />
 
-        {/* Animated Marquee Container */}
-        <div className="marquee-track flex gap-4 sm:gap-6">
-          {duplicatedTestimonials.map((testimonial, idx) => (
-            <div
-              key={`${testimonial.id}-${idx}`}
-              className="w-[280px] xs:w-[310px] sm:w-[360px] md:w-[420px] p-5 sm:p-6 md:p-7 rounded-2xl bg-brand-card/95 backdrop-blur-md border border-brand-border/90 shadow-sm relative group transition-all duration-300 hover:scale-102 hover:-translate-y-1.5 hover:shadow-xl hover:border-brand-cyan/70 hover:z-30 shrink-0 flex flex-col justify-between select-none cursor-pointer"
-            >
-              {/* Top Accent Gradient Line on Hover */}
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan to-brand-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-2xl" />
-              
-              {/* Subtle Glowing Aura on Hover */}
-              <div className="absolute inset-0 rounded-2xl bg-brand-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none -z-10" />
+          {/* Animated Marquee Container */}
+          <div className="marquee-track flex gap-4 sm:gap-6">
+            {duplicatedTestimonials.map((testimonial, idx) => (
+              <div
+                key={`${testimonial.id}-${idx}`}
+                className="w-[280px] xs:w-[310px] sm:w-[360px] md:w-[420px] p-5 sm:p-6 md:p-7 rounded-2xl bg-brand-card/95 backdrop-blur-md border border-brand-border/90 shadow-sm relative group transition-all duration-300 hover:scale-102 hover:-translate-y-1.5 hover:shadow-xl hover:border-brand-cyan/70 hover:z-30 shrink-0 flex flex-col justify-between select-none cursor-pointer"
+              >
+                {/* Top Accent Gradient Line on Hover */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan to-brand-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-2xl" />
+                
+                {/* Subtle Glowing Aura on Hover */}
+                <div className="absolute inset-0 rounded-2xl bg-brand-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none -z-10" />
 
-              <div>
-                {/* Tech verification header */}
-                <div className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-brand-border/50 text-[10px] font-mono text-brand-text-muted">
-                  <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    Verified Client Log
-                  </span>
-                  {/* Rating Stars */}
-                  <div className="flex gap-1">
-                    {[...Array(testimonial.rating || 5)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                    ))}
+                <div>
+                  {/* Tech verification header */}
+                  <div className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-brand-border/50 text-[10px] font-mono text-brand-text-muted">
+                    <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      Verified Client Log
+                    </span>
+                    {/* Rating Stars */}
+                    <div className="flex gap-1">
+                      {[...Array(testimonial.rating || 5)].map((_, i) => (
+                        <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Review Text */}
+                  <p className="text-brand-text leading-relaxed text-sm italic mb-5 line-clamp-3">
+                    &quot;{testimonial.text}&quot;
+                  </p>
+                </div>
+
+                {/* Author Info */}
+                <div className="flex items-center gap-3 pt-3.5 border-t border-brand-border/50">
+                  <div className="w-9 h-9 rounded-xl bg-brand-cyan/10 border border-brand-cyan/30 flex items-center justify-center text-xs font-bold text-brand-cyan shrink-0 group-hover:scale-105 transition-transform duration-300">
+                    {testimonial.name ? testimonial.name.charAt(0).toUpperCase() : "👤"}
+                  </div>
+                  <div className="overflow-hidden">
+                    <h4 className="font-bold text-sm text-brand-text group-hover:text-brand-cyan transition-colors truncate">
+                      {testimonial.name}
+                    </h4>
+                    <p className="text-[11px] font-mono text-brand-text-muted truncate">{testimonial.role}</p>
                   </div>
                 </div>
-
-                {/* Review Text */}
-                <p className="text-brand-text leading-relaxed text-sm italic mb-5 line-clamp-3">
-                  &quot;{testimonial.text}&quot;
-                </p>
               </div>
-
-              {/* Author Info */}
-              <div className="flex items-center gap-3 pt-3.5 border-t border-brand-border/50">
-                <div className="w-9 h-9 rounded-xl bg-brand-cyan/10 border border-brand-cyan/30 flex items-center justify-center text-xs font-bold text-brand-cyan shrink-0 group-hover:scale-105 transition-transform duration-300">
-                  {testimonial.name.charAt(0) === "[" ? "👤" : testimonial.name.charAt(0)}
-                </div>
-                <div className="overflow-hidden">
-                  <h4 className="font-bold text-sm text-brand-text group-hover:text-brand-cyan transition-colors truncate">
-                    {testimonial.name}
-                  </h4>
-                  <p className="text-[11px] font-mono text-brand-text-muted truncate">{testimonial.role}</p>
-                </div>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="max-w-md mx-auto text-center py-10 px-6 rounded-2xl bg-brand-card/60 backdrop-blur-sm border border-brand-border/70 shadow-xs">
+          <p className="text-sm font-semibold text-brand-text mb-1.5">No reviews published yet</p>
+          <p className="text-xs text-brand-text-muted mb-4">Have you worked with us? Be the first to share your experience!</p>
+          {!showForm && (
+            <button
+              onClick={() => setShowForm(true)}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-purple text-white text-xs font-bold transition-all hover:scale-105 shadow-sm"
+            >
+              Write First Review
+            </button>
+          )}
+        </div>
+      )}
 
     </section>
   );
