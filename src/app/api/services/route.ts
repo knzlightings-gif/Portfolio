@@ -4,12 +4,14 @@ import { defaultServices, ServiceItem } from "@/data/servicesData";
 import { verifyAdminSession } from "@/lib/auth-server";
 
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
 
 export async function GET() {
+  const headers = {
+    "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+  };
   try {
     const db = getServerDb();
-    if (!db) return NextResponse.json(defaultServices);
+    if (!db) return NextResponse.json(defaultServices, { headers });
 
     const metaRef = doc(db, "settings", "services_meta");
     const metaSnap = await getDoc(metaRef);
@@ -46,10 +48,10 @@ export async function GET() {
       }))
       .filter((s: any) => allowedIds.includes(s.id));
 
-    return NextResponse.json(services.length > 0 ? services : defaultServices);
+    return NextResponse.json(services.length > 0 ? services : defaultServices, { headers });
   } catch (error) {
     console.error("Error fetching services from Firestore:", error);
-    return NextResponse.json(defaultServices);
+    return NextResponse.json(defaultServices, { headers });
   }
 }
 

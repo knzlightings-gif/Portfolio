@@ -6,20 +6,23 @@ import { verifyAdminSession } from "@/lib/auth-server";
 const DOC_PATH = { collection: "settings", doc: "about" };
 
 export async function GET() {
+  const headers = {
+    "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+  };
   try {
     const db = getServerDb();
-    if (!db) return NextResponse.json(defaultAbout);
+    if (!db) return NextResponse.json(defaultAbout, { headers });
 
     const docRef = doc(db, DOC_PATH.collection, DOC_PATH.doc);
     const snap = await getDoc(docRef);
 
     if (snap.exists()) {
-      return NextResponse.json(snap.data());
+      return NextResponse.json(snap.data(), { headers });
     }
-    return NextResponse.json(defaultAbout);
+    return NextResponse.json(defaultAbout, { headers });
   } catch (error) {
     console.error("Error reading about from Firestore:", error);
-    return NextResponse.json(defaultAbout);
+    return NextResponse.json(defaultAbout, { headers });
   }
 }
 

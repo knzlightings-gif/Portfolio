@@ -4,12 +4,14 @@ import { featuredProjects } from "@/data/content";
 import { verifyAdminSession } from "@/lib/auth-server";
 
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
 
 export async function GET() {
+  const headers = {
+    "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+  };
   try {
     const db = getServerDb();
-    if (!db) return NextResponse.json(featuredProjects);
+    if (!db) return NextResponse.json(featuredProjects, { headers });
 
     const metaRef = doc(db, "settings", "projects_meta");
     const metaSnap = await getDoc(metaRef);
@@ -28,12 +30,12 @@ export async function GET() {
         seededProjects.push({ ...p });
       }
       await setDoc(metaRef, { seeded: true, initializedAt: new Date().toISOString() });
-      return NextResponse.json(seededProjects);
+      return NextResponse.json(seededProjects, { headers });
     }
 
     // If user has already initialized / modified, return exactly what is in Firestore (even if empty, don't resurrect deleted ones)
     if (snapshot.empty && metaSnap.exists()) {
-      return NextResponse.json([]);
+      return NextResponse.json([], { headers });
     }
 
     const projects = snapshot.docs.map((d) => ({
@@ -41,10 +43,10 @@ export async function GET() {
       ...d.data(),
     }));
 
-    return NextResponse.json(projects);
+    return NextResponse.json(projects, { headers });
   } catch (error) {
     console.error("Error fetching projects from Firestore:", error);
-    return NextResponse.json(featuredProjects);
+    return NextResponse.json(featuredProjects, { headers });
   }
 }
 

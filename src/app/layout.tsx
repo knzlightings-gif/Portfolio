@@ -77,6 +77,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased" data-theme="light" suppressHydrationWarning>
+      <head>
+        <link rel="preload" href="/hero-slide1.jpg" as="image" fetchPriority="high" />
+      </head>
       <body className={`${inter.className} min-h-full flex flex-col`} suppressHydrationWarning>
         <ThemeProvider>
           <PersonalInfoProvider>

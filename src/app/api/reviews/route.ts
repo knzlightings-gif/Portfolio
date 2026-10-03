@@ -2,13 +2,16 @@ import { NextResponse } from "next/server";
 import { getServerDb, collection, getDocs, addDoc } from "@/lib/firebase-server";
 
 export async function GET() {
+  const headers = {
+    "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+  };
   try {
     const db = getServerDb();
-    if (!db) return NextResponse.json([]);
+    if (!db) return NextResponse.json([], { headers });
 
     const snapshot = await getDocs(collection(db, "reviews"));
     if (snapshot.empty) {
-      return NextResponse.json([]);
+      return NextResponse.json([], { headers });
     }
 
     const firestoreReviews = snapshot.docs.map((doc) => {
@@ -24,10 +27,10 @@ export async function GET() {
     });
 
     // Return only actual posted reviews
-    return NextResponse.json(firestoreReviews);
+    return NextResponse.json(firestoreReviews, { headers });
   } catch (error) {
     console.error("Error fetching reviews from Firestore:", error);
-    return NextResponse.json([]);
+    return NextResponse.json([], { headers });
   }
 }
 

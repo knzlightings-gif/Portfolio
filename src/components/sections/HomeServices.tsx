@@ -121,26 +121,29 @@ function ServiceCard({ service, index }: { service: ServiceItem; index: number }
   );
 }
 
+const defaultHomeServices = defaultServices.filter((s: ServiceItem) =>
+  ["automation", "erp", "web-apps"].includes(s.id)
+);
+
 export default function HomeServices() {
-  const [services, setServices] = useState<ServiceItem[]>([]);
+  const [services, setServices] = useState<ServiceItem[]>(defaultHomeServices);
 
   useEffect(() => {
     async function loadServices() {
       try {
-        const res = await fetch("/api/services", { cache: "no-store" });
+        const res = await fetch("/api/services");
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data) && data.length > 0) {
             const targetIds = ["automation", "erp", "web-apps"];
             const filtered = data.filter((s: ServiceItem) => targetIds.includes(s.id));
-            setServices(filtered.length > 0 ? filtered : defaultServices);
+            setServices(filtered.length > 0 ? filtered : defaultHomeServices);
             return;
           }
         }
       } catch (err) {
         console.error("Failed to fetch home services:", err);
       }
-      setServices(defaultServices);
     }
     loadServices();
   }, []);

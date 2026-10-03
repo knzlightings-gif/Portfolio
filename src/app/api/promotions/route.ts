@@ -91,7 +91,8 @@ export async function GET(request: Request) {
       });
     }
 
-    return NextResponse.json(promotions);
+    const headers = isPublic ? { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" } : undefined;
+    return NextResponse.json(promotions, { headers });
   } catch (error) {
     console.error("Error fetching promotions:", error);
     return NextResponse.json(defaultPromotions);

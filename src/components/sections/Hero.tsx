@@ -208,6 +208,9 @@ export default function Hero() {
                       <img 
                         src={slide.url} 
                         alt={slide.title} 
+                        loading={index === 0 ? "eager" : "lazy"}
+                        decoding={index === 0 ? "sync" : "async"}
+                        fetchPriority={index === 0 ? "high" : "low"}
                         className="w-full h-full object-cover"
                         style={{
                           animation: index === currentSlide 

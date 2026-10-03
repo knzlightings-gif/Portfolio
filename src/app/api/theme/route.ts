@@ -8,22 +8,23 @@ import { verifyAdminSession } from "@/lib/auth-server";
 const THEME_DOC = { collection: "settings", id: "theme" };
 
 export async function GET() {
+  const headers = {
+    "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+  };
   try {
     const db = getServerDb();
     if (!db) {
-      // Firebase not configured — return file-based default
-      return NextResponse.json(defaultTheme);
+      return NextResponse.json(defaultTheme, { headers });
     }
 
     const snap = await getDoc(doc(db, THEME_DOC.collection, THEME_DOC.id));
     if (snap.exists()) {
-      return NextResponse.json(snap.data());
+      return NextResponse.json(snap.data(), { headers });
     }
-    // No saved theme yet — return default
-    return NextResponse.json(defaultTheme);
+    return NextResponse.json(defaultTheme, { headers });
   } catch (error) {
     console.error("Error reading theme from Firestore:", error);
-    return NextResponse.json(defaultTheme);
+    return NextResponse.json(defaultTheme, { headers });
   }
 }
 
