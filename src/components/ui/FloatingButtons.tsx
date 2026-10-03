@@ -2,30 +2,14 @@
 
 import { Mail, Phone, MessageCircle, Globe, ArrowUp } from "lucide-react";
 import { personalInfo as defaultPersonalInfo } from "@/data/content";
+import { usePersonalInfo } from "@/components/providers/PersonalInfoProvider";
 import { useState, useEffect } from "react";
 
 export default function FloatingButtons() {
   const [showTop, setShowTop] = useState(false);
-  const [personalInfo, setPersonalInfo] = useState(defaultPersonalInfo);
+  const { personalInfo } = usePersonalInfo();
 
   useEffect(() => {
-    fetch("/api/personal-info")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.name) {
-          setPersonalInfo((prev) => ({
-            ...prev,
-            ...data,
-            contact: {
-              email: data.contact?.email ?? data.email ?? prev.contact?.email ?? "",
-              whatsapp: data.contact?.whatsapp ?? data.whatsapp ?? prev.contact?.whatsapp ?? "",
-              linkedin: data.contact?.linkedin ?? data.linkedin ?? prev.contact?.linkedin ?? "",
-            },
-          }));
-        }
-      })
-      .catch(() => {});
-
     const onScroll = () => setShowTop(window.scrollY > 400);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);

@@ -1,45 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { personalInfo as defaultPersonalInfo, footerContent as defaultFooter } from "@/data/content";
+import { footerContent as defaultFooter } from "@/data/content";
+import { usePersonalInfo } from "@/components/providers/PersonalInfoProvider";
 import { Mail, Phone } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const [personalInfo, setPersonalInfo] = useState<any>(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const cached = localStorage.getItem("app_personal_info");
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (parsed && parsed.name) {
-            return { ...defaultPersonalInfo, ...parsed };
-          }
-        }
-      } catch {}
-    }
-    return defaultPersonalInfo;
-  });
+  const { personalInfo } = usePersonalInfo();
   const [footerContent, setFooterContent] = useState(defaultFooter);
 
   useEffect(() => {
-    // Load personal info
-    fetch("/api/personal-info", { cache: "no-store" })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && typeof data === "object") {
-          setPersonalInfo((prev: any) => ({
-            ...prev,
-            ...data,
-          }));
-          try {
-            localStorage.setItem("app_personal_info", JSON.stringify(data));
-          } catch {}
-        }
-      })
-      .catch(() => {});
-
     // Load footer content
     fetch("/api/footer", { cache: "no-store" })
       .then((res) => res.json())

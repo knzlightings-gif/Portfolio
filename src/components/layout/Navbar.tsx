@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { personalInfo as defaultPersonalInfo } from "@/data/content";
+import { usePersonalInfo } from "@/components/providers/PersonalInfoProvider";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/utils/cn";
@@ -17,47 +17,17 @@ const navLinks = [
   { name: "Contact",  href: "/contact",   gradient: "from-brand-purple to-brand-cyan", glow: "var(--theme-secondary-glow, rgba(0,172,193,0.35))" },
 ];
 
-
 export default function Navbar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [personalInfo, setPersonalInfo] = useState<any>(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const cached = localStorage.getItem("app_personal_info");
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (parsed && parsed.name) {
-            return { ...defaultPersonalInfo, ...parsed };
-          }
-        }
-      } catch {}
-    }
-    return defaultPersonalInfo;
-  });
+  const { personalInfo } = usePersonalInfo();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
-
-    fetch("/api/personal-info", { cache: "no-store" })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.name) {
-          setPersonalInfo((prev: any) => ({
-            ...prev,
-            ...data,
-          }));
-          try {
-            localStorage.setItem("app_personal_info", JSON.stringify(data));
-          } catch {}
-        }
-      })
-      .catch(() => {});
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
