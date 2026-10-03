@@ -11,7 +11,6 @@ export default function DashboardMockup({
 }) {
   const isCyan = themeColor === "cyan";
   const primary = isCyan ? "bg-brand-cyan" : "bg-brand-purple";
-  const primaryText = isCyan ? "text-brand-cyan" : "text-brand-purple";
 
   return (
     <div className="w-full h-full bg-brand-bg rounded-t-xl overflow-hidden border-b border-brand-border/50 flex flex-col font-sans">

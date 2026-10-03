@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Quote, Star, Loader2, CheckCircle2, MessageSquarePlus, Sparkles } from "lucide-react";
+import { Star, Loader2, CheckCircle2, MessageSquarePlus } from "lucide-react";
 
 type Testimonial = {
   id: string;

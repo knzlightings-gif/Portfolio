@@ -4,8 +4,6 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { personalInfo as defaultPersonalInfo, contactContent } from "@/data/content";
 import { Mail, MessageCircle, Globe, Loader2, CheckCircle2, Sparkles } from "lucide-react";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,34 +35,30 @@ export default function Contact() {
     setIsSubmitting(true);
     setError("");
 
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
     try {
-      if (!db) {
-        throw new Error("Service unavailable. Please try WhatsApp or Email.");
-      }
-      // Save message to Firestore "messages" collection
-      await addDoc(collection(db, "messages"), {
-        name: data.name || "",
-        company: data.company || "",
-        email: data.email || "",
-        phone: data.phone || "",
-        projectType: data.projectType || "",
-        budget: data.budget || "",
-        message: data.message || "",
-        read: false,
-        createdAt: serverTimestamp(),
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       });
 
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result.error || "Failed to send message.");
+      }
+
       setIsSuccess(true);
-      (e.target as HTMLFormElement).reset();
+      form.reset();
 
       // Reset success message after 5 seconds
       setTimeout(() => setIsSuccess(false), 5000);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Contact form error:", err);
-      setError("Something went wrong. Please try again or contact via WhatsApp.");
+      setError(err?.message || "Something went wrong. Please try again or contact via WhatsApp.");
     } finally {
       setIsSubmitting(false);
     }
@@ -188,6 +182,9 @@ export default function Contact() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
+                  {/* Anti-spam honeypot (hidden from human users) */}
+                  <input type="text" name="honeypot" className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="name" className="block text-xs font-semibold text-brand-text-muted mb-1.5 uppercase tracking-wider">Name</label>

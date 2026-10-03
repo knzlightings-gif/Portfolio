@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { solutionsByBusiness as defaultSolutionsByBusiness } from "@/data/content";
 import { 
-  ArrowRight, 
   ArrowUpRight, 
   Layers, 
   Cpu, 
