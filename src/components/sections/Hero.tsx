@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { personalInfo as defaultPersonalInfo } from "@/data/content";
+import { usePersonalInfo } from "@/components/providers/PersonalInfoProvider";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, Activity } from "lucide-react";
@@ -37,23 +38,7 @@ export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const [personalInfo, setPersonalInfo] = useState(defaultPersonalInfo);
-
-  // Load personal info from Firestore via API
-  useEffect(() => {
-    fetch("/api/personal-info")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.name) {
-          setPersonalInfo({
-            ...defaultPersonalInfo,
-            ...data,
-            contact: data.contact || defaultPersonalInfo.contact,
-          });
-        }
-      })
-      .catch((err) => console.error("Error loading personal info:", err));
-  }, []);
+  const { personalInfo } = usePersonalInfo();
 
   // Auto slide
   useEffect(() => {

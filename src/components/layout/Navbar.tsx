@@ -43,6 +43,12 @@ export default function Navbar() {
     };
   }, [isMobileMenuOpen]);
 
+  // Always close mobile menu and unlock body scroll on any route navigation
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    document.body.style.overflow = "";
+  }, [pathname]);
+
   return (
     <header
       className={cn(

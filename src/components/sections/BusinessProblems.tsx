@@ -127,6 +127,19 @@ export default function BusinessProblems() {
     });
   }, [isMuted]);
 
+  // Clean up all video decoders on component unmount
+  useEffect(() => {
+    return () => {
+      videoRefs.current.forEach((vid) => {
+        if (vid) {
+          try {
+            vid.pause();
+          } catch (_) {}
+        }
+      });
+    };
+  }, []);
+
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % manualTroubles.length);
   };

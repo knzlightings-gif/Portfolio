@@ -6,18 +6,21 @@ import { usePersonalInfo } from "@/components/providers/PersonalInfoProvider";
 import { Mail, Phone } from "lucide-react";
 import { useState, useEffect } from "react";
 
+let cachedFooterData: any = null;
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const { personalInfo } = usePersonalInfo();
-  const [footerContent, setFooterContent] = useState(defaultFooter);
+  const [footerContent, setFooterContent] = useState(cachedFooterData || defaultFooter);
 
   useEffect(() => {
-    // Load footer content
+    // If we already have cached footer data, don't block; silently refresh
     fetch("/api/footer", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data && typeof data === "object") {
-          setFooterContent((prev) => ({
+          cachedFooterData = data;
+          setFooterContent((prev: any) => ({
             ...prev,
             ...data,
             quickLinks: Array.isArray(data.quickLinks) && data.quickLinks.length > 0 ? data.quickLinks : prev.quickLinks,

@@ -6,6 +6,8 @@ import { PersonalInfoProvider } from "@/components/providers/PersonalInfoProvide
 import BackgroundBlobs from "@/components/ui/BackgroundBlobs";
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
 import PromotionBanner from "@/components/ui/PromotionBanner";
+import NavigationProgressBar from "@/components/providers/NavigationProgressBar";
+import ScrollToTop from "@/components/providers/ScrollToTop";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -78,6 +80,12 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-full flex flex-col`} suppressHydrationWarning>
         <ThemeProvider>
           <PersonalInfoProvider>
+            {/* Top Navigation Instant Progress Bar */}
+            <NavigationProgressBar />
+
+            {/* Global Route Change Scroll-To-Top & Overflow Unlocker */}
+            <ScrollToTop />
+
             {/* Animated ambient blobs — fixed, behind everything */}
             <BackgroundBlobs />
 
