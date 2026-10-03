@@ -2,9 +2,8 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback } from "react";
-import { featuredProjects as defaultProjects } from "@/data/content";
 import DashboardMockup from "@/components/ui/DashboardMockup";
-import { ArrowRight, CheckCircle2, ExternalLink, KeyRound, Sparkles, Eye, Images, ChevronLeft, ChevronRight, X, ZoomIn, Play, Layers } from "lucide-react";
+import { ArrowRight, CheckCircle2, ExternalLink, KeyRound, Sparkles, Images, ChevronLeft, ChevronRight, X, ZoomIn, Play, Layers } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/utils/cn";
 
@@ -54,7 +53,6 @@ export default function Projects() {
   } | null>(null);
 
   useEffect(() => {
-    setIsLoading(true);
     fetch("/api/projects", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {

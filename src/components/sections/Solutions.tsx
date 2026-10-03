@@ -12,10 +12,21 @@ import {
   ShieldCheck, 
   Terminal, 
   Server,
-  Workflow
+  Workflow,
+  LucideIcon
 } from "lucide-react";
 
-const solutionIconMap: Record<string, any> = {
+export interface SolutionItem {
+  id: string;
+  title: string;
+  subtitle?: string;
+  description: string;
+  badge?: string;
+  features?: string[] | string;
+  icon?: string;
+}
+
+const solutionIconMap: Record<string, LucideIcon> = {
   Manufacturing: Cpu,
   Retail: Layers,
   Distribution: Server,
@@ -24,7 +35,7 @@ const solutionIconMap: Record<string, any> = {
   Healthcare: ShieldCheck,
 };
 
-function SolutionCard({ solution, index }: { solution: any; index: number }) {
+function SolutionCard({ solution, index }: { solution: SolutionItem; index: number }) {
   const IconComponent = solutionIconMap[solution.title] || Database;
 
   return (
@@ -71,7 +82,7 @@ function SolutionCard({ solution, index }: { solution: any; index: number }) {
 }
 
 export default function Solutions() {
-  const [solutions, setSolutions] = useState<any[]>([]);
+  const [solutions, setSolutions] = useState<SolutionItem[]>([]);
 
   useEffect(() => {
     async function loadSolutions() {
