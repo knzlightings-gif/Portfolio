@@ -176,7 +176,7 @@ export default function Footer() {
           </div>
 
           {/* Column 2: Quick Links (2 of 12 columns) */}
-          <div className="md:col-span-1 lg:col-span-2 lg:pl-2">
+          <div className="md:col-span-1 lg:col-span-2">
             <div className="flex items-center gap-2 mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan shrink-0" />
               <h4 className="text-xs font-bold text-brand-text uppercase tracking-widest">
@@ -201,7 +201,7 @@ export default function Footer() {
           </div>
 
           {/* Column 3: Services Links (3 of 12 columns) */}
-          <div className="md:col-span-1 lg:col-span-3 lg:pl-2">
+          <div className="md:col-span-1 lg:col-span-3">
             <div className="flex items-center gap-2 mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-brand-purple shrink-0" />
               <h4 className="text-xs font-bold text-brand-text uppercase tracking-widest">
@@ -225,38 +225,36 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Get In Touch (3 of 12 columns, spans to the right border) */}
+          {/* Column 4: Get In Touch (3 of 12 columns, 100% aligned with other columns) */}
           <div className="md:col-span-1 lg:col-span-3">
-            <div className="p-4 sm:p-5 rounded-2xl bg-brand-bg/50 border border-brand-border/70 shadow-xs">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                <h4 className="text-xs font-bold text-brand-text uppercase tracking-widest">
-                  Get In Touch
-                </h4>
-              </div>
-              <ul className="space-y-3 text-xs sm:text-[13px]">
-                <li>
-                  <span className="block text-[10px] font-bold text-brand-text-muted/70 uppercase tracking-widest mb-0.5">Email</span>
-                  <a href={`mailto:${emailVal}`} className="text-brand-text hover:text-brand-cyan transition-colors font-medium break-all flex items-center gap-2">
-                    <Mail className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
-                    <span>{emailVal}</span>
-                  </a>
-                </li>
-                <li>
-                  <span className="block text-[10px] font-bold text-brand-text-muted/70 uppercase tracking-widest mb-0.5">WhatsApp / Phone</span>
-                  <a href={`https://wa.me/${cleanWhatsapp}`} target="_blank" rel="noopener noreferrer" className="text-brand-text hover:text-brand-cyan transition-colors font-medium flex items-center gap-2">
-                    <Phone className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
-                    <span>{rawWhatsapp}</span>
-                  </a>
-                </li>
-                <li className="pt-2 border-t border-brand-border/50">
-                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-800 dark:text-emerald-300 text-[11px] font-semibold">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                    {personalInfo?.availability || "Available for Projects"}
-                  </div>
-                </li>
-              </ul>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+              <h4 className="text-xs font-bold text-brand-text uppercase tracking-widest">
+                Get In Touch
+              </h4>
             </div>
+            <ul className="space-y-3 text-xs sm:text-[13px]">
+              <li>
+                <span className="block text-[10px] font-bold text-brand-text-muted/70 uppercase tracking-widest mb-1">Email</span>
+                <a href={`mailto:${emailVal}`} className="text-brand-text hover:text-brand-cyan transition-colors font-medium break-all flex items-center gap-2 group">
+                  <Mail className="w-3.5 h-3.5 text-brand-cyan shrink-0 group-hover:scale-110 transition-transform" />
+                  <span>{emailVal}</span>
+                </a>
+              </li>
+              <li>
+                <span className="block text-[10px] font-bold text-brand-text-muted/70 uppercase tracking-widest mb-1">WhatsApp / Phone</span>
+                <a href={`https://wa.me/${cleanWhatsapp}`} target="_blank" rel="noopener noreferrer" className="text-brand-text hover:text-brand-cyan transition-colors font-medium flex items-center gap-2 group">
+                  <Phone className="w-3.5 h-3.5 text-brand-cyan shrink-0 group-hover:scale-110 transition-transform" />
+                  <span>{rawWhatsapp}</span>
+                </a>
+              </li>
+              <li className="pt-1.5">
+                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-800 dark:text-emerald-300 text-[11px] font-semibold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                  {personalInfo?.availability || "Available for Projects"}
+                </div>
+              </li>
+            </ul>
           </div>
 
         </div>
