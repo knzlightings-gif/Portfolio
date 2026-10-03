@@ -94,17 +94,17 @@ export default function Footer() {
           </Link>
         </div>
 
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-8">
+        {/* Main 4-Column Grid: Balanced, Proportional & Spanned Across Screen */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-12 mb-10 items-start">
           
-          {/* Column 1: Brand Info */}
-          <div className="xs:col-span-2 lg:col-span-1">
-            <Link href="/" className="inline-flex items-center gap-2.5 mb-3">
+          {/* Column 1: Brand Info (4 of 12 columns) */}
+          <div className="md:col-span-1 lg:col-span-4 pr-0 lg:pr-4">
+            <Link href="/" className="inline-flex items-center gap-3 mb-3.5 group">
               {personalInfo?.logoUrl && (() => {
                 const footerLogoSize = Math.min(Number(personalInfo?.logoSize) || 48, 52);
                 return (
                   <div 
-                    className="px-1 py-0.5 rounded-lg bg-brand-bg border border-brand-border flex items-center justify-center shrink-0 overflow-hidden"
+                    className="px-2 py-1 rounded-xl bg-brand-bg border border-brand-border flex items-center justify-center shrink-0 overflow-hidden group-hover:border-brand-cyan/60 transition-all shadow-xs"
                     style={{
                       height: `${footerLogoSize}px`,
                       width: "auto",
@@ -121,107 +121,142 @@ export default function Footer() {
                   </div>
                 );
               })()}
-              <div>
+              <div className="flex flex-col min-w-0">
                 <span 
-                  className="text-xl font-bold tracking-tight text-brand-text"
+                  className="text-xl font-bold tracking-tight text-brand-text group-hover:text-brand-cyan transition-colors truncate"
                   style={{ color: personalInfo?.nameColor || undefined }}
                 >
                   {personalInfo?.name || "Developer"}
                 </span>
-                <div 
-                  className="text-[11px] font-semibold text-brand-cyan tracking-widest uppercase mt-0.5"
+                <span 
+                  className="text-[10px] sm:text-[11px] font-semibold text-brand-cyan tracking-wider uppercase mt-0.5 truncate"
                   style={{ color: personalInfo?.roleDescriptorColor || undefined }}
                 >
                   {personalInfo?.roleDescriptor || "ERP & Web Developer"}
-                </div>
+                </span>
               </div>
             </Link>
-            <p className="text-xs text-brand-text-muted leading-relaxed mb-4">
-              {footerContent?.brandDescription || "I build practical ERP systems, business web applications and custom digital solutions."}
+            
+            <p className="text-xs sm:text-[13px] text-brand-text-muted leading-relaxed mb-5 max-w-sm">
+              {footerContent?.brandDescription || "We build practical ERP systems, business web applications and custom digital solutions for small and growing businesses."}
             </p>
+
             <div className="flex items-center gap-2.5">
               <a 
                 href={linkedinUrl} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="w-8 h-8 rounded-full bg-brand-bg border border-brand-border flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan transition-colors group font-bold text-xs"
+                className="w-9 h-9 rounded-xl bg-brand-bg/80 border border-brand-border flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan hover:bg-brand-card hover:scale-105 hover:shadow-xs transition-all"
                 aria-label="LinkedIn"
+                title="LinkedIn Profile"
               >
-                in
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24" />
+                </svg>
               </a>
               <a 
                 href={`mailto:${emailVal}`} 
-                className="w-8 h-8 rounded-full bg-brand-bg border border-brand-border flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan transition-colors group"
+                className="w-9 h-9 rounded-xl bg-brand-bg/80 border border-brand-border flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan hover:bg-brand-card hover:scale-105 hover:shadow-xs transition-all"
                 aria-label="Email"
+                title="Send Email"
               >
-                <Mail className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
+                <Mail className="w-4 h-4" />
               </a>
               <a 
                 href={`https://wa.me/${cleanWhatsapp}`} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="w-8 h-8 rounded-full bg-brand-bg border border-brand-border flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan transition-colors group"
+                className="w-9 h-9 rounded-xl bg-brand-bg border border-brand-border flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan hover:bg-brand-card hover:scale-105 hover:shadow-xs transition-all"
                 aria-label="WhatsApp"
+                title="Chat on WhatsApp"
               >
-                <Phone className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
+                <Phone className="w-4 h-4" />
               </a>
             </div>
           </div>
 
-          {/* Column 2: Quick Links */}
-          <div>
-            <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider mb-3">Quick Links</h4>
-            <ul className="space-y-2">
+          {/* Column 2: Quick Links (2 of 12 columns) */}
+          <div className="md:col-span-1 lg:col-span-2 lg:pl-2">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan shrink-0" />
+              <h4 className="text-xs font-bold text-brand-text uppercase tracking-widest">
+                Quick Links
+              </h4>
+            </div>
+            <ul className="space-y-2.5">
               {quickLinks.map((link: any) => (
                 <li key={link.name || link.label || link.href}>
-                  <Link href={link.href || "#"} className="text-xs text-brand-text-muted hover:text-brand-cyan transition-colors flex items-center gap-1.5 group">
-                    <span className="w-1 h-1 rounded-full bg-brand-border group-hover:bg-brand-cyan transition-colors" />
-                    {link.name || link.label}
+                  <Link 
+                    href={link.href || "#"} 
+                    className="text-xs sm:text-[13px] text-brand-text-muted hover:text-brand-cyan transition-all duration-200 flex items-center gap-2 group py-0.5"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-brand-border group-hover:w-2 group-hover:bg-brand-cyan transition-all duration-200 shrink-0" />
+                    <span className="group-hover:translate-x-1 transition-transform duration-200 font-medium">
+                      {link.name || link.label}
+                    </span>
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Column 3: Services */}
-          <div>
-            <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider mb-3">Services</h4>
-            <ul className="space-y-2">
+          {/* Column 3: Services Links (3 of 12 columns) */}
+          <div className="md:col-span-1 lg:col-span-3 lg:pl-2">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-purple shrink-0" />
+              <h4 className="text-xs font-bold text-brand-text uppercase tracking-widest">
+                Services & Solutions
+              </h4>
+            </div>
+            <ul className="space-y-2.5">
               {servicesLinks.map((link: any) => (
                 <li key={link.name || link.label || link.href}>
-                  <Link href={link.href || "#"} className="text-xs text-brand-text-muted hover:text-brand-cyan transition-colors flex items-center gap-1.5 group">
-                    <span className="w-1 h-1 rounded-full bg-brand-border group-hover:bg-brand-cyan transition-colors" />
-                    {link.name || link.label}
+                  <Link 
+                    href={link.href || "#"} 
+                    className="text-xs sm:text-[13px] text-brand-text-muted hover:text-brand-cyan transition-all duration-200 flex items-center gap-2 group py-0.5"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-brand-border group-hover:w-2 group-hover:bg-brand-cyan transition-all duration-200 shrink-0" />
+                    <span className="group-hover:translate-x-1 transition-transform duration-200 font-medium">
+                      {link.name || link.label}
+                    </span>
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Column 4: Contact */}
-          <div className="xs:col-span-2 lg:col-span-1">
-            <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider mb-3">Get In Touch</h4>
-            <ul className="space-y-2.5 text-xs text-brand-text-muted">
-              <li>
-                <span className="block text-[10px] text-brand-text-muted/70 uppercase tracking-wider mb-0.5">Email</span>
-                <a href={`mailto:${emailVal}`} className="text-brand-text hover:text-brand-cyan transition-colors break-all">
-                  {emailVal}
-                </a>
-              </li>
-              <li>
-                <span className="block text-[10px] text-brand-text-muted/70 uppercase tracking-wider mb-0.5">WhatsApp / Phone</span>
-                <a href={`https://wa.me/${cleanWhatsapp}`} className="text-brand-text hover:text-brand-cyan transition-colors">
-                  {rawWhatsapp}
-                </a>
-              </li>
-              <li>
-                <span className="block text-[10px] text-brand-text-muted/70 uppercase tracking-wider mb-0.5">Availability</span>
-                <span className="text-brand-text flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                  {personalInfo?.availability || "Available for Projects"}
-                </span>
-              </li>
-            </ul>
+          {/* Column 4: Get In Touch (3 of 12 columns, spans to the right border) */}
+          <div className="md:col-span-1 lg:col-span-3">
+            <div className="p-4 sm:p-5 rounded-2xl bg-brand-bg/50 border border-brand-border/70 shadow-xs">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                <h4 className="text-xs font-bold text-brand-text uppercase tracking-widest">
+                  Get In Touch
+                </h4>
+              </div>
+              <ul className="space-y-3 text-xs sm:text-[13px]">
+                <li>
+                  <span className="block text-[10px] font-bold text-brand-text-muted/70 uppercase tracking-widest mb-0.5">Email</span>
+                  <a href={`mailto:${emailVal}`} className="text-brand-text hover:text-brand-cyan transition-colors font-medium break-all flex items-center gap-2">
+                    <Mail className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+                    <span>{emailVal}</span>
+                  </a>
+                </li>
+                <li>
+                  <span className="block text-[10px] font-bold text-brand-text-muted/70 uppercase tracking-widest mb-0.5">WhatsApp / Phone</span>
+                  <a href={`https://wa.me/${cleanWhatsapp}`} target="_blank" rel="noopener noreferrer" className="text-brand-text hover:text-brand-cyan transition-colors font-medium flex items-center gap-2">
+                    <Phone className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+                    <span>{rawWhatsapp}</span>
+                  </a>
+                </li>
+                <li className="pt-2 border-t border-brand-border/50">
+                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-800 dark:text-emerald-300 text-[11px] font-semibold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                    {personalInfo?.availability || "Available for Projects"}
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
 
         </div>
