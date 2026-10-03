@@ -165,7 +165,10 @@ export default function BusinessProblems() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-2xl xs:text-3xl sm:text-4xl xl:text-5xl font-black text-brand-text mb-6 leading-tight tracking-tight"
+              className="font-black text-brand-text mb-6 leading-tight tracking-tight"
+              style={{
+                fontSize: "clamp(1.6rem, 4vw, var(--section-heading-size, 38px))",
+              }}
             >
               Still Running Your Business on{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]">

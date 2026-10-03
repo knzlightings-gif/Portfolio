@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import { THEME_PRESETS, ThemeConfig } from "@/lib/themePresets";
 import { 
@@ -16,8 +16,39 @@ import {
   Sun, 
   Moon,
   Layers,
-  Send
+  Send,
+  Type,
+  Minus,
+  Plus
 } from "lucide-react";
+
+// Quick Presets for Page Headings Scaling
+const HEADING_SCALE_PRESETS = [
+  {
+    name: "Sleek & Compact",
+    desc: "Compact, clean typography",
+    hero: 46,
+    section: 32,
+  },
+  {
+    name: "Balanced (Recommended)",
+    desc: "Optimal modern aesthetic",
+    hero: 54,
+    section: 38,
+  },
+  {
+    name: "Bold & Standard",
+    desc: "Prominent, classic titles",
+    hero: 62,
+    section: 44,
+  },
+  {
+    name: "Large & Display",
+    desc: "Big bold punchy presentation",
+    hero: 70,
+    section: 48,
+  },
+];
 
 export default function SettingsAdmin() {
   const { themeConfig, setThemeConfig, saveThemeConfig } = useTheme();
@@ -26,6 +57,28 @@ export default function SettingsAdmin() {
   const [draftTheme, setDraftTheme] = useState<ThemeConfig>(themeConfig);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // Sync draftTheme whenever themeConfig updates from server
+  useEffect(() => {
+    if (themeConfig) {
+      setDraftTheme({
+        ...themeConfig,
+        heroHeadingSize: themeConfig.heroHeadingSize || 54,
+        sectionHeadingSize: themeConfig.sectionHeadingSize || 38,
+      });
+    }
+  }, [themeConfig]);
+
+  // When a heading scale preset is applied
+  const handleApplyHeadingPreset = (hero: number, section: number) => {
+    const updated: ThemeConfig = {
+      ...draftTheme,
+      heroHeadingSize: hero,
+      sectionHeadingSize: section,
+    };
+    setDraftTheme(updated);
+    setThemeConfig(updated); // Instant DOM update!
+  };
 
   // When a preset is selected
   const handleSelectPreset = (preset: ThemeConfig) => {
@@ -429,6 +482,236 @@ export default function SettingsAdmin() {
           </div>
 
         </div>
+      </div>
+
+      {/* Page Headings & Typography Scale (تمام پیجز کی ہیڈنگ سائز) */}
+      <div className="p-6 md:p-8 bg-brand-card border border-brand-border rounded-3xl shadow-sm space-y-8">
+        
+        {/* Card Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-brand-border/60">
+          <div className="flex items-start gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-brand-cyan/10 border border-brand-cyan/25 flex items-center justify-center shrink-0">
+              <Type className="w-5 h-5 text-brand-cyan" />
+            </div>
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full badge-brand-subtle text-xs font-bold uppercase tracking-wider mb-1.5">
+                <Sparkles className="w-3 h-3 text-brand-cyan" />
+                Live Typography Scaling
+              </div>
+              <h2 className="text-xl md:text-2xl font-black text-brand-text tracking-tight">
+                Page Headings & Font Size Control
+              </h2>
+              <p className="text-xs sm:text-sm text-brand-text-muted mt-0.5">
+                Tamam pages ki left-side main headings ka font size live chota ya bara karein.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5 shrink-0">
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={isSaving}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl btn-brand-gradient text-xs sm:text-sm font-bold shadow-md hover:brightness-110 disabled:opacity-60 transition-all"
+            >
+              {isSaving ? "Saving..." : saveSuccess ? (
+                <>
+                  <Check className="w-4 h-4" />
+                  Saved!
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="w-4 h-4" />
+                  Save Heading Sizes
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* 1-Click Scale Presets */}
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-brand-text-muted mb-3">
+            Quick Scaling Presets (1-Click Apply)
+          </label>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {HEADING_SCALE_PRESETS.map((preset) => {
+              const currentHero = draftTheme.heroHeadingSize || 54;
+              const currentSection = draftTheme.sectionHeadingSize || 38;
+              const isSelected = currentHero === preset.hero && currentSection === preset.section;
+              return (
+                <button
+                  key={preset.name}
+                  type="button"
+                  onClick={() => handleApplyHeadingPreset(preset.hero, preset.section)}
+                  className={`p-4 rounded-2xl border text-left transition-all ${
+                    isSelected
+                      ? "bg-brand-cyan/10 border-brand-cyan shadow-sm ring-1 ring-brand-cyan"
+                      : "bg-brand-bg/60 border-brand-border hover:border-brand-cyan/50 hover:bg-brand-bg"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-bold text-brand-text">{preset.name}</span>
+                    {isSelected && <Check className="w-4 h-4 text-brand-cyan" />}
+                  </div>
+                  <p className="text-[11px] text-brand-text-muted">{preset.desc}</p>
+                  <div className="mt-2.5 pt-2 border-t border-brand-border/40 flex items-center gap-2 text-[10px] font-mono font-semibold text-brand-text/80">
+                    <span className="px-1.5 py-0.5 rounded bg-brand-card border border-brand-border/60">Hero: {preset.hero}px</span>
+                    <span className="px-1.5 py-0.5 rounded bg-brand-card border border-brand-border/60">Sections: {preset.section}px</span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Precision Sliders Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
+          
+          {/* Slider 1: Hero Main Heading */}
+          <div className="p-5 rounded-2xl bg-brand-bg/60 border border-brand-border space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-brand-text">Home Hero Main Heading</h3>
+                <p className="text-xs text-brand-text-muted">Home page hero display headline size</p>
+              </div>
+              <span className="px-3 py-1 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 text-brand-cyan font-mono text-sm font-bold shadow-xs">
+                {draftTheme.heroHeadingSize || 54}px
+              </span>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  const current = draftTheme.heroHeadingSize || 54;
+                  const nextVal = Math.max(36, current - 2);
+                  const updated = { ...draftTheme, heroHeadingSize: nextVal };
+                  setDraftTheme(updated);
+                  setThemeConfig(updated);
+                }}
+                className="w-9 h-9 rounded-xl border border-brand-border bg-brand-card flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan transition-all shrink-0 active:scale-95 cursor-pointer"
+                title="Decrease size by 2px"
+              >
+                <Minus className="w-4 h-4" />
+              </button>
+
+              <input
+                type="range"
+                min={36}
+                max={76}
+                step={2}
+                value={draftTheme.heroHeadingSize || 54}
+                onChange={(e) => {
+                  const nextVal = Number(e.target.value);
+                  const updated = { ...draftTheme, heroHeadingSize: nextVal };
+                  setDraftTheme(updated);
+                  setThemeConfig(updated);
+                }}
+                className="flex-1 h-2 bg-brand-border/60 rounded-lg appearance-none cursor-pointer accent-brand-cyan"
+              />
+
+              <button
+                type="button"
+                onClick={() => {
+                  const current = draftTheme.heroHeadingSize || 54;
+                  const nextVal = Math.min(76, current + 2);
+                  const updated = { ...draftTheme, heroHeadingSize: nextVal };
+                  setDraftTheme(updated);
+                  setThemeConfig(updated);
+                }}
+                className="w-9 h-9 rounded-xl border border-brand-border bg-brand-card flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan transition-all shrink-0 active:scale-95 cursor-pointer"
+                title="Increase size by 2px"
+              >
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Live Visual Preview Box */}
+            <div className="p-4 rounded-xl bg-brand-card border border-brand-border/80 overflow-hidden">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-brand-text-muted block mb-2">Live Text Preview:</span>
+              <p
+                className="font-black text-brand-text tracking-tight leading-tight line-clamp-2 transition-all duration-150"
+                style={{ fontSize: `${Math.min(46, (draftTheme.heroHeadingSize || 54) * 0.72)}px` }}
+              >
+                We Build Smart Business Software That Actually Works.
+              </p>
+            </div>
+          </div>
+
+          {/* Slider 2: All Other Pages Left Headings */}
+          <div className="p-5 rounded-2xl bg-brand-bg/60 border border-brand-border space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-brand-text">All Pages Left-Side Headings</h3>
+                <p className="text-xs text-brand-text-muted">Services, Projects, Contact, About & Core Services</p>
+              </div>
+              <span className="px-3 py-1 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 text-brand-cyan font-mono text-sm font-bold shadow-xs">
+                {draftTheme.sectionHeadingSize || 38}px
+              </span>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  const current = draftTheme.sectionHeadingSize || 38;
+                  const nextVal = Math.max(24, current - 2);
+                  const updated = { ...draftTheme, sectionHeadingSize: nextVal };
+                  setDraftTheme(updated);
+                  setThemeConfig(updated);
+                }}
+                className="w-9 h-9 rounded-xl border border-brand-border bg-brand-card flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan transition-all shrink-0 active:scale-95 cursor-pointer"
+                title="Decrease size by 2px"
+              >
+                <Minus className="w-4 h-4" />
+              </button>
+
+              <input
+                type="range"
+                min={24}
+                max={54}
+                step={2}
+                value={draftTheme.sectionHeadingSize || 38}
+                onChange={(e) => {
+                  const nextVal = Number(e.target.value);
+                  const updated = { ...draftTheme, sectionHeadingSize: nextVal };
+                  setDraftTheme(updated);
+                  setThemeConfig(updated);
+                }}
+                className="flex-1 h-2 bg-brand-border/60 rounded-lg appearance-none cursor-pointer accent-brand-cyan"
+              />
+
+              <button
+                type="button"
+                onClick={() => {
+                  const current = draftTheme.sectionHeadingSize || 38;
+                  const nextVal = Math.min(54, current + 2);
+                  const updated = { ...draftTheme, sectionHeadingSize: nextVal };
+                  setDraftTheme(updated);
+                  setThemeConfig(updated);
+                }}
+                className="w-9 h-9 rounded-xl border border-brand-border bg-brand-card flex items-center justify-center text-brand-text hover:border-brand-cyan hover:text-brand-cyan transition-all shrink-0 active:scale-95 cursor-pointer"
+                title="Increase size by 2px"
+              >
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Live Visual Preview Box */}
+            <div className="p-4 rounded-xl bg-brand-card border border-brand-border/80 overflow-hidden">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-brand-text-muted block mb-2">Live Text Preview:</span>
+              <p
+                className="font-bold text-brand-text tracking-tight leading-tight line-clamp-2 transition-all duration-150"
+                style={{ fontSize: `${Math.min(34, draftTheme.sectionHeadingSize || 38)}px` }}
+              >
+                Still Running Your Business on Excel, WhatsApp & Manual Records?
+              </p>
+            </div>
+          </div>
+
+        </div>
+
       </div>
 
       {/* Contact Section Settings (Preserved) */}

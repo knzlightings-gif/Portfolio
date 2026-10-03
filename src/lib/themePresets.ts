@@ -11,6 +11,8 @@ export interface ThemeConfig {
   border?: string;
   text?: string;
   textMuted?: string;
+  heroHeadingSize?: number;      // Home Hero Heading size (px, e.g. 54)
+  sectionHeadingSize?: number;   // Section Headings size (px, e.g. 38)
 }
 
 export const THEME_PRESETS: ThemeConfig[] = [

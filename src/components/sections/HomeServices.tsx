@@ -165,7 +165,12 @@ export default function HomeServices() {
               <Sparkles className="w-3.5 h-3.5" />
               What We Offer
             </div>
-            <h2 className="text-2xl xs:text-3xl md:text-5xl font-black text-brand-text tracking-tight">
+            <h2 
+              className="font-black text-brand-text tracking-tight leading-tight"
+              style={{
+                fontSize: "clamp(1.5rem, 3.8vw, var(--section-heading-size, 38px))",
+              }}
+            >
               Our Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]">Services & Solutions</span>
             </h2>
           </motion.div>

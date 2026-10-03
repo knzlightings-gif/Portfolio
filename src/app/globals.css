@@ -33,6 +33,8 @@
   --theme-accent-subtle: rgba(255, 87, 34, 0.12);
   --theme-text: #0C2822;         /* High-contrast deep pine text */
   --theme-text-muted: #1F453E;   /* Polished dark seafoam text */
+  --hero-heading-size: 54px;     /* Default Home Hero Heading Size */
+  --section-heading-size: 38px;  /* Default Left-side Section Heading Size */
   color-scheme: light;
 }
 

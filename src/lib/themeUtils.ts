@@ -68,4 +68,10 @@ export function applyThemeToDom(config: ThemeConfig) {
     root.style.setProperty("--theme-text-muted", config.textMuted || "#1F453E");
     root.style.colorScheme = "light";
   }
+
+  // Heading Typography Sizes
+  const heroSize = config.heroHeadingSize || 54;
+  const sectionSize = config.sectionHeadingSize || 38;
+  root.style.setProperty("--hero-heading-size", `${heroSize}px`);
+  root.style.setProperty("--section-heading-size", `${sectionSize}px`);
 }

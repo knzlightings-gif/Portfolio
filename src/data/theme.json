@@ -10,5 +10,7 @@
   "card": "#CEE8E3",
   "border": "#9DCBC4",
   "text": "#0C2822",
-  "textMuted": "#1F453E"
+  "textMuted": "#1F453E",
+  "heroHeadingSize": 54,
+  "sectionHeadingSize": 38
 }

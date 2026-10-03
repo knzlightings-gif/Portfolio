@@ -112,7 +112,10 @@ export default function Projects() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-2xl sm:text-4xl lg:text-5xl font-bold text-brand-text mb-3 sm:mb-4"
+            className="font-bold text-brand-text mb-3 sm:mb-4 leading-tight"
+            style={{
+              fontSize: "clamp(1.6rem, 4vw, var(--section-heading-size, 38px))",
+            }}
           >
             Featured ERPs & Live Applications
           </motion.h2>

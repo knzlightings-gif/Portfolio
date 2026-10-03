@@ -82,7 +82,10 @@ export default function Contact() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-brand-text mb-4 sm:mb-6 leading-tight"
+              className="font-bold text-brand-text mb-4 sm:mb-6 leading-tight"
+              style={{
+                fontSize: "clamp(1.6rem, 4vw, var(--section-heading-size, 38px))",
+              }}
             >
               {contactContent.heading}
             </motion.h2>
