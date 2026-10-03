@@ -72,26 +72,27 @@ export default function Footer() {
       
       <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] relative z-10">
         
-        {/* Top Section - Compact CTA */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-8 mb-8 border-b border-brand-border/40">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-brand-text tracking-tight">
-              {footerContent?.ctaHeading1 || "Let's build something"}{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#004D40] via-[#00796B] to-[#059669]">
-                {footerContent?.ctaHeading2 || "extraordinary."}
-              </span>
-            </h2>
-            <p className="text-brand-text-muted text-sm mt-1 max-w-xl">
-              {footerContent?.ctaSubtext || "Ready to transform your business with custom software tailored to your workflow?"}
-            </p>
+        {/* Top Section - Centered High-Impact CTA */}
+        <div className="flex flex-col items-center text-center max-w-2xl mx-auto pb-10 mb-10 border-b border-brand-border/40">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-brand-text tracking-tight">
+            {footerContent?.ctaHeading1 || "Let's build something"}{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-[#00796B] to-brand-purple">
+              {footerContent?.ctaHeading2 || "extraordinary."}
+            </span>
+          </h2>
+          <p className="text-brand-text-muted text-sm sm:text-base mt-2.5 max-w-lg mx-auto leading-relaxed">
+            {footerContent?.ctaSubtext || "Ready to transform your business with custom software tailored to your workflow?"}
+          </p>
+          <div className="mt-5 sm:mt-6">
+            <Link
+              href="/contact"
+              className="group relative inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-bold text-sm text-white overflow-hidden shadow-md hover:shadow-[0_0_25px_var(--theme-primary-glow,rgba(0,77,64,0.45))] transition-all duration-300 hover:scale-105"
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-brand-cyan to-brand-purple group-hover:from-brand-purple group-hover:to-brand-cyan transition-all duration-500" />
+              <span className="relative z-10">{footerContent?.ctaButtonText || "Start a Project"}</span>
+              <ArrowUpRight className="w-4 h-4 relative z-10 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
           </div>
-          <Link
-            href="/contact"
-            className="group inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-cyan/10 to-brand-purple/10 hover:from-brand-cyan hover:to-brand-purple text-brand-text hover:text-white border border-brand-cyan/30 rounded-full transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_var(--theme-primary-glow,rgba(0,112,243,0.3))] shrink-0 font-medium text-sm"
-          >
-            <span>{footerContent?.ctaButtonText || "Start"}</span>
-            <ArrowUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
         </div>
 
         {/* Main 4-Column Grid: Balanced, Proportional & Spanned Across Screen */}
