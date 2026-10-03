@@ -69,9 +69,9 @@ export function applyThemeToDom(config: ThemeConfig) {
     root.style.colorScheme = "light";
   }
 
-  // Heading Typography Sizes
-  const heroSize = config.heroHeadingSize || 54;
-  const sectionSize = config.sectionHeadingSize || 38;
-  root.style.setProperty("--hero-heading-size", `${heroSize}px`);
-  root.style.setProperty("--section-heading-size", `${sectionSize}px`);
+  // Heading Typography Sizes (Pass to responsive CSS engine)
+  const heroSize = config.heroHeadingSize || 50;
+  const sectionSize = config.sectionHeadingSize || 36;
+  root.style.setProperty("--admin-hero-heading-size", `${heroSize}px`);
+  root.style.setProperty("--admin-section-heading-size", `${sectionSize}px`);
 }
