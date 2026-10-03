@@ -37,7 +37,7 @@ export default function About() {
   const techStack = data?.techStack || defaultAbout.techStack;
 
   return (
-    <section id="about" className="pt-24 sm:pt-28 pb-14 sm:pb-20 lg:pb-24 bg-transparent relative overflow-hidden">
+    <section id="about" className="pt-20 sm:pt-24 pb-4 sm:pb-6 bg-transparent relative overflow-hidden">
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 -left-48 w-96 h-96 rounded-full bg-brand-cyan/5 blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 -right-48 w-96 h-96 rounded-full bg-brand-purple/5 blur-3xl pointer-events-none" />
