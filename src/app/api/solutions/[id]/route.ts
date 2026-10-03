@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import { getServerDb, doc, deleteDoc, setDoc } from "@/lib/firebase-server";
+import { verifyAdminSession } from "@/lib/auth-server";
 
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authCheck = await verifyAdminSession();
+    if (!authCheck.isValid && authCheck.response) {
+      return authCheck.response;
+    }
+
     const db = getServerDb();
     if (!db) return NextResponse.json({ error: "Firebase not configured" }, { status: 500 });
 

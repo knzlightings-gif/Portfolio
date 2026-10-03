@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { featuredProjects as defaultProjects } from "@/data/content";
 import DashboardMockup from "@/components/ui/DashboardMockup";
 import { ArrowRight, CheckCircle2, ExternalLink, KeyRound, Sparkles, Eye, Images, ChevronLeft, ChevronRight, X, ZoomIn, Play, Layers } from "lucide-react";
@@ -66,6 +66,13 @@ export default function Projects() {
       .finally(() => setIsLoading(false));
   }, []);
 
+  const getProjectImages = useCallback((p: Project): string[] => {
+    if (Array.isArray(p.gallery) && p.gallery.length > 0) {
+      return p.gallery;
+    }
+    return p.image ? [p.image] : [];
+  }, []);
+
   // Keyboard navigation for Lightbox
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -87,14 +94,7 @@ export default function Projects() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeLightbox]);
-
-  const getProjectImages = (p: Project): string[] => {
-    if (Array.isArray(p.gallery) && p.gallery.length > 0) {
-      return p.gallery;
-    }
-    return p.image ? [p.image] : [];
-  };
+  }, [activeLightbox, getProjectImages]);
 
   return (
     <section id="projects" className="pt-24 sm:pt-28 pb-12 sm:pb-20 lg:pb-24 bg-transparent relative overflow-hidden">

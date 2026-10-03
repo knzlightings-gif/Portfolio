@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerDb, collection, getDocs, doc, setDoc, getDoc } from "@/lib/firebase-server";
 import { defaultServices, ServiceItem } from "@/data/servicesData";
+import { verifyAdminSession } from "@/lib/auth-server";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -54,6 +55,11 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const authCheck = await verifyAdminSession();
+    if (!authCheck.isValid && authCheck.response) {
+      return authCheck.response;
+    }
+
     const db = getServerDb();
     if (!db) {
       return NextResponse.json({ error: "Firebase not configured" }, { status: 500 });

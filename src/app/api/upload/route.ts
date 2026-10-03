@@ -1,11 +1,21 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { verifyAdminSession } from "@/lib/auth-server";
 
 export const dynamic = "force-dynamic";
 
+const ALLOWED_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif", ".ico"]);
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB limit
+
 export async function POST(request: Request) {
   try {
+    // 1. Verify admin session
+    const authCheck = await verifyAdminSession();
+    if (!authCheck.isValid && authCheck.response) {
+      return authCheck.response;
+    }
+
     const formData = await request.formData();
     // Detect if local filesystem uploads are available (e.g. local dev)
     let isFsWritable = false;
@@ -30,6 +40,24 @@ export async function POST(request: Request) {
 
     if (allFiles.length === 0) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
+    }
+
+    // Validate size and file type for all files
+    for (const file of allFiles) {
+      if (!file || typeof file === "string") continue;
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        return NextResponse.json(
+          { error: `File "${file.name}" exceeds the 5MB size limit.` },
+          { status: 400 }
+        );
+      }
+      const ext = (path.extname(file.name) || "").toLowerCase();
+      if (ext && !ALLOWED_EXTENSIONS.has(ext)) {
+        return NextResponse.json(
+          { error: `File type "${ext}" is not permitted. Only images are allowed.` },
+          { status: 400 }
+        );
+      }
     }
 
     const uploadedUrls: string[] = [];

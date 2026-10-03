@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerDb, doc, getDoc, setDoc } from "@/lib/firebase-server";
 import defaultTheme from "@/data/theme.json";
 import { ThemeConfig } from "@/lib/themePresets";
+import { verifyAdminSession } from "@/lib/auth-server";
 
 // Firestore: settings/theme document
 const THEME_DOC = { collection: "settings", id: "theme" };
@@ -28,6 +29,11 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const authCheck = await verifyAdminSession();
+    if (!authCheck.isValid && authCheck.response) {
+      return authCheck.response;
+    }
+
     const db = getServerDb();
     if (!db) {
       return NextResponse.json(

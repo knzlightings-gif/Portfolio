@@ -23,6 +23,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { defaultServices, ServiceItem } from "@/data/servicesData";
 import { featuredProjects } from "@/data/content";
+import { getServerDb, doc, getDoc } from "@/lib/firebase-server";
 
 export const dynamic = "force-dynamic";
 
@@ -41,14 +42,16 @@ const availableIcons: Record<string, any> = {
 
 async function getService(id: string): Promise<ServiceItem | null> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-    const res = await fetch(`${baseUrl}/api/services/${id}`, { cache: "no-store" });
-    if (res.ok) {
-      const data = await res.json();
-      if (data && data.id) return data;
+    const db = getServerDb();
+    if (db) {
+      const docRef = doc(db, "services", id);
+      const snap = await getDoc(docRef);
+      if (snap.exists()) {
+        return { id: snap.id, ...snap.data() } as ServiceItem;
+      }
     }
   } catch (err) {
-    console.error("Error fetching service detail:", err);
+    console.error("Error fetching service detail from Firestore:", err);
   }
 
   // Fallback to local default data

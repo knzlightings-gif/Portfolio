@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerDb, doc, getDoc, deleteDoc } from "@/lib/firebase-server";
 import { defaultServices } from "@/data/servicesData";
+import { verifyAdminSession } from "@/lib/auth-server";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -40,6 +41,11 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authCheck = await verifyAdminSession();
+    if (!authCheck.isValid && authCheck.response) {
+      return authCheck.response;
+    }
+
     const { id } = await params;
     const db = getServerDb();
     if (!db) {

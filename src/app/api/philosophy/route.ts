@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerDb, doc, getDoc, setDoc } from "@/lib/firebase-server";
+import { verifyAdminSession } from "@/lib/auth-server";
 
 const defaultPhilosophy = {
   badge: "Core Engineering Philosophy",
@@ -71,6 +72,11 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const authCheck = await verifyAdminSession();
+    if (!authCheck.isValid && authCheck.response) {
+      return authCheck.response;
+    }
+
     const db = getServerDb();
     if (!db) {
       return NextResponse.json({ error: "Firebase not configured" }, { status: 500 });
