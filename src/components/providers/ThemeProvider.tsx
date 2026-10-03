@@ -35,7 +35,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
 
     // 2. Fetch server-saved global theme config
-    fetch("/api/theme")
+    fetch("/api/theme", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data && data.primary && data.secondary) {

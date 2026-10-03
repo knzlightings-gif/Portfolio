@@ -7,7 +7,6 @@ import { personalInfo as defaultPersonalInfo } from "@/data/content";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/utils/cn";
-import ThemeSwitcher from "@/components/layout/ThemeSwitcher";
 
 // Navbar with multi-page App Router links
 const navLinks = [
@@ -166,8 +165,6 @@ export default function Navbar() {
             })}
           </ul>
 
-          <ThemeSwitcher />
-
           <Link
             href="/contact"
             className="group relative ml-2 flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm overflow-hidden"
@@ -180,9 +177,8 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* Mobile Menu Toggle & Theme Switcher */}
+        {/* Mobile Menu Toggle */}
         <div className="flex items-center gap-1.5 sm:gap-2 md:hidden">
-          <ThemeSwitcher />
           <button
             type="button"
             aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
