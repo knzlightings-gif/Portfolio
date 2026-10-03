@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { personalInfo as defaultPersonalInfo } from "@/data/content";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, Activity, ShieldCheck, Cpu } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, Activity } from "lucide-react";
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 🎬 HERO IMAGE SLIDES — High-Quality Brilliantly Lit Enterprise Visuals
@@ -172,12 +172,12 @@ export default function Hero() {
           </div>
 
           {/* Right Column - Sleek Studio Display Chassis */}
-          <div className="w-full lg:w-[50%] relative flex justify-end">
+          <div className="w-full lg:w-[50%] relative flex items-center justify-center lg:justify-end">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="relative w-full max-w-2xl z-10 my-6 sm:my-8 lg:my-12 pb-16 sm:pb-0"
+              className="relative w-full max-w-2xl z-10"
             >
               {/* Outer Ambient Glow Aura */}
               <div className="absolute -inset-2 bg-gradient-to-r from-brand-cyan/20 via-emerald-600/15 to-[#004D40]/20 rounded-[32px] blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
@@ -288,43 +288,6 @@ export default function Hero() {
                   </div>
                 </div>
               </div>
-
-              {/* Floating Corporate Metric Badges - Placed Completely Clear of Chassis & Text */}
-              <motion.div 
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-[calc(100%+12px)] left-2 sm:left-6 p-3.5 sm:p-4 rounded-2xl bg-brand-card/95 backdrop-blur-xl border border-brand-border/90 shadow-2xl z-30 flex items-center gap-3.5"
-              >
-                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-400 p-0.5 shrink-0 shadow-md">
-                  <div className="w-full h-full bg-brand-card rounded-[10px] flex items-center justify-center text-emerald-500">
-                    <ShieldCheck className="w-5 h-5" />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <p className="text-brand-text font-black text-xs sm:text-sm">99.9% Uptime</p>
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  </div>
-                  <p className="text-brand-text-muted text-[11px] font-medium">Enterprise Cloud Engine</p>
-                </div>
-              </motion.div>
-
-              <motion.div 
-                animate={{ y: [0, 6, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                className="absolute bottom-[calc(100%+12px)] right-2 sm:right-6 p-3.5 sm:p-4 rounded-2xl bg-brand-card/95 backdrop-blur-xl border border-brand-border/90 shadow-2xl z-30 flex items-center gap-3.5 hidden sm:flex"
-              >
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-cyan to-blue-600 p-0.5 shrink-0 shadow-md">
-                  <div className="w-full h-full bg-brand-card rounded-[10px] flex items-center justify-center text-brand-cyan">
-                    <Cpu className="w-5 h-5" />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-brand-text font-black text-xs sm:text-sm">+40% Efficiency</p>
-                  <p className="text-brand-text-muted text-[11px] font-medium">Automated Workflows</p>
-                </div>
-              </motion.div>
-
             </motion.div>
           </div>
 
