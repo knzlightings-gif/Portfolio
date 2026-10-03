@@ -14,9 +14,49 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://eforerp.com";
+
 export const metadata: Metadata = {
-  title: "Professional ERP & Web Developer Portfolio",
-  description: "I build practical ERP systems, business web applications and custom digital solutions for small and growing businesses.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "E For ERP | Custom ERP Systems & Business Web Applications",
+    template: "%s | E For ERP",
+  },
+  description: "We build practical ERP systems, business web applications and custom digital solutions for small and growing businesses.",
+  keywords: [
+    "ERP Developer",
+    "Custom ERP Systems",
+    "Business Software",
+    "Next.js Developer",
+    "Web Applications",
+    "Business Automation",
+    "Inventory Management",
+    "Point of Sale",
+  ],
+  authors: [{ name: "E For ERP" }],
+  creator: "E For ERP",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteUrl,
+    title: "E For ERP | Custom ERP Systems & Business Web Applications",
+    description: "Practical ERP systems and custom software tailored to simplify business workflows.",
+    siteName: "E For ERP",
+    images: [
+      {
+        url: "/logo.png",
+        width: 512,
+        height: 512,
+        alt: "E For ERP Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "E For ERP | Custom ERP Systems & Business Web Applications",
+    description: "Practical ERP systems and custom software tailored to simplify business workflows.",
+    images: ["/logo.png"],
+  },
   icons: {
     icon: [
       { url: "/logo.png", type: "image/png" },
