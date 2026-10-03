@@ -177,20 +177,48 @@ export default function BusinessProblems() {
             </motion.h2>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-40px" }}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.08,
+                    delayChildren: 0.1,
+                  },
+                },
+              }}
               className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8"
             >
               {problems.map((problem, i) => (
-                <div 
+                <motion.div 
                   key={i} 
-                  className="flex items-start gap-2.5 p-3 rounded-xl bg-brand-card/80 backdrop-blur-md border border-brand-border/70 hover:border-red-400/50 hover:shadow-sm transition-all"
+                  variants={{
+                    hidden: { opacity: 0, y: 16, scale: 0.95 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      scale: 1,
+                      transition: {
+                        type: "spring",
+                        stiffness: 280,
+                        damping: 22,
+                      },
+                    },
+                  }}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  className="group flex items-start gap-2.5 p-3 rounded-xl bg-brand-card/85 backdrop-blur-md border border-brand-border/70 hover:border-rose-400/60 hover:shadow-md hover:bg-brand-card transition-all cursor-default select-none"
                 >
-                  <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
-                  <span className="text-brand-text text-xs sm:text-sm font-medium leading-snug">{problem}</span>
-                </div>
+                  <div className="relative shrink-0 mt-0.5">
+                    <span className="absolute -inset-1 rounded-full bg-rose-500/20 blur-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                    <AlertCircle className="w-4 h-4 text-rose-500 relative transition-transform duration-300 group-hover:scale-115 group-hover:rotate-6" />
+                  </div>
+                  <span className="text-brand-text text-xs sm:text-sm font-medium leading-snug group-hover:text-brand-cyan transition-colors">
+                    {problem}
+                  </span>
+                </motion.div>
               ))}
             </motion.div>
             
