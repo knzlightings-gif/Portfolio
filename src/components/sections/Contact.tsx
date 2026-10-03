@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { personalInfo as defaultPersonalInfo, contactContent } from "@/data/content";
-import { Mail, MessageCircle, Globe, Loader2, CheckCircle2 } from "lucide-react";
+import { Mail, MessageCircle, Globe, Loader2, CheckCircle2, Sparkles } from "lucide-react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
@@ -74,72 +74,92 @@ export default function Contact() {
     <section id="contact" className="pt-24 sm:pt-28 pb-14 sm:pb-20 lg:pb-24 bg-transparent relative overflow-hidden">
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-cyan/5 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/3" />
       
-      <div className="container mx-auto px-4 sm:px-6 max-w-[1600px] relative z-10">
-        <div className="flex flex-col lg:flex-row gap-10 sm:gap-16 lg:gap-24">
+      <div className="container mx-auto px-4 sm:px-6 max-w-[1500px] relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-14 items-start">
           
-          <div className="w-full lg:w-5/12 flex flex-col justify-center">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="font-bold text-brand-text mb-4 sm:mb-6 leading-tight"
-              style={{
-                fontSize: "clamp(1.6rem, 4vw, var(--section-heading-size, 38px))",
-              }}
-            >
-              {contactContent.heading}
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-base sm:text-lg text-brand-text-muted mb-8 sm:mb-12"
-            >
-              {contactContent.subtext}
-            </motion.p>
+          {/* Left Column: Heading, Subtext & Aligned Contact Info Card (5 cols) */}
+          <div className="lg:col-span-5 flex flex-col space-y-6">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full badge-brand-subtle text-xs font-bold uppercase tracking-wider mb-3 shadow-xs">
+                <Sparkles className="w-3.5 h-3.5 text-brand-cyan" />
+                Let&apos;s Connect
+              </div>
 
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="font-bold text-brand-text mb-3 leading-tight tracking-tight"
+                style={{
+                  fontSize: "clamp(1.75rem, 4vw, var(--section-heading-size, 38px))",
+                }}
+              >
+                {contactContent.heading}
+              </motion.h2>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="text-sm sm:text-base text-brand-text-muted leading-relaxed"
+              >
+                {contactContent.subtext}
+              </motion.p>
+            </div>
+
+            {/* Structured Contact Info Box (Aligned with Form) */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="space-y-4 sm:space-y-6"
+              className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl bg-brand-card/90 border border-brand-border/80 shadow-md backdrop-blur-md space-y-3.5"
             >
+              <div className="flex items-center justify-between pb-3 border-b border-brand-border/50">
+                <span className="text-xs font-bold text-brand-text uppercase tracking-widest flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  Direct Channels
+                </span>
+                <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                  {personalInfo?.availability || "Available for Projects"}
+                </span>
+              </div>
+
               {/* Email */}
-              <div className="flex items-center gap-4 sm:gap-6 group">
-                <div className="w-11 h-11 sm:w-12 sm:h-12 shrink-0 rounded-full bg-brand-card border border-brand-border flex items-center justify-center group-hover:scale-110 group-hover:border-brand-cyan transition-all duration-300">
-                  <Mail className="w-5 h-5 text-brand-text group-hover:text-brand-cyan transition-colors" />
+              <div className="flex items-center gap-3.5 group p-2 rounded-xl hover:bg-brand-bg/50 transition-colors">
+                <div className="w-10 h-10 shrink-0 rounded-xl bg-brand-bg border border-brand-border flex items-center justify-center group-hover:scale-105 group-hover:border-brand-cyan transition-all duration-300">
+                  <Mail className="w-4 h-4 text-brand-text group-hover:text-brand-cyan transition-colors" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs sm:text-sm text-brand-text-muted mb-0.5 sm:mb-1">{contactContent.emailLabel}</p>
-                  <a href={`mailto:${personalInfo.contact.email}`} className="text-sm xs:text-base sm:text-lg font-medium text-brand-text hover:text-brand-cyan transition-colors break-all">
+                  <p className="text-[11px] font-semibold text-brand-text-muted uppercase tracking-wider">{contactContent.emailLabel}</p>
+                  <a href={`mailto:${personalInfo.contact.email}`} className="text-sm sm:text-base font-semibold text-brand-text hover:text-brand-cyan transition-colors break-all">
                     {personalInfo.contact.email}
                   </a>
                 </div>
               </div>
 
               {/* WhatsApp */}
-              <div className="flex items-center gap-4 sm:gap-6 group">
-                <div className="w-11 h-11 sm:w-12 sm:h-12 shrink-0 rounded-full bg-brand-card border border-brand-border flex items-center justify-center group-hover:scale-110 group-hover:border-brand-cyan transition-all duration-300">
-                  <MessageCircle className="w-5 h-5 text-brand-text group-hover:text-brand-cyan transition-colors" />
+              <div className="flex items-center gap-3.5 group p-2 rounded-xl hover:bg-brand-bg/50 transition-colors">
+                <div className="w-10 h-10 shrink-0 rounded-xl bg-brand-bg border border-brand-border flex items-center justify-center group-hover:scale-105 group-hover:border-brand-cyan transition-all duration-300">
+                  <MessageCircle className="w-4 h-4 text-brand-text group-hover:text-brand-cyan transition-colors" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs sm:text-sm text-brand-text-muted mb-0.5 sm:mb-1">{contactContent.phoneLabel}</p>
-                  <a href={`https://wa.me/${personalInfo.contact.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-sm xs:text-base sm:text-lg font-medium text-brand-text hover:text-brand-cyan transition-colors">
+                  <p className="text-[11px] font-semibold text-brand-text-muted uppercase tracking-wider">{contactContent.phoneLabel}</p>
+                  <a href={`https://wa.me/${personalInfo.contact.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-sm sm:text-base font-semibold text-brand-text hover:text-brand-cyan transition-colors">
                     {personalInfo.contact.whatsapp}
                   </a>
                 </div>
               </div>
 
               {/* LinkedIn */}
-              <div className="flex items-center gap-4 sm:gap-6 group">
-                <div className="w-11 h-11 sm:w-12 sm:h-12 shrink-0 rounded-full bg-brand-card border border-brand-border flex items-center justify-center group-hover:scale-110 group-hover:border-brand-cyan transition-all duration-300">
-                  <Globe className="w-5 h-5 text-brand-text group-hover:text-brand-cyan transition-colors" />
+              <div className="flex items-center gap-3.5 group p-2 rounded-xl hover:bg-brand-bg/50 transition-colors">
+                <div className="w-10 h-10 shrink-0 rounded-xl bg-brand-bg border border-brand-border flex items-center justify-center group-hover:scale-105 group-hover:border-brand-cyan transition-all duration-300">
+                  <Globe className="w-4 h-4 text-brand-text group-hover:text-brand-cyan transition-colors" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs sm:text-sm text-brand-text-muted mb-0.5 sm:mb-1">{contactContent.linkedinLabel}</p>
-                  <a href={personalInfo.contact.linkedin} target="_blank" rel="noopener noreferrer" className="text-sm xs:text-base sm:text-lg font-medium text-brand-text hover:text-brand-cyan transition-colors">
+                  <p className="text-[11px] font-semibold text-brand-text-muted uppercase tracking-wider">{contactContent.linkedinLabel}</p>
+                  <a href={personalInfo.contact.linkedin} target="_blank" rel="noopener noreferrer" className="text-sm sm:text-base font-semibold text-brand-text hover:text-brand-cyan transition-colors">
                     Connect on LinkedIn
                   </a>
                 </div>
@@ -147,112 +167,112 @@ export default function Contact() {
             </motion.div>
           </div>
 
-          {/* Right Column - Contact Form */}
+          {/* Right Column: Contact Form (7 cols) - Compact & Perfectly Aligned */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="w-full lg:w-7/12"
+            className="lg:col-span-7 w-full"
           >
-            <div className="p-5 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl bg-brand-card border border-brand-border shadow-2xl relative group">
+            <div className="p-6 sm:p-7 md:p-8 rounded-2xl sm:rounded-3xl bg-brand-card border border-brand-border shadow-xl relative group">
               <div className="absolute inset-0 bg-gradient-to-br from-brand-cyan/5 to-transparent rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               
               {isSuccess ? (
-                <div className="flex flex-col items-center justify-center py-16 text-center h-full">
-                  <div className="w-20 h-20 rounded-full bg-brand-cyan/10 flex items-center justify-center mb-6">
-                    <CheckCircle2 className="w-10 h-10 text-brand-cyan" />
+                <div className="flex flex-col items-center justify-center py-12 text-center h-full">
+                  <div className="w-16 h-16 rounded-full bg-brand-cyan/10 flex items-center justify-center mb-4">
+                    <CheckCircle2 className="w-8 h-8 text-brand-cyan" />
                   </div>
-                  <h3 className="text-2xl font-bold text-brand-text mb-4">Message Sent Successfully!</h3>
-                  <p className="text-brand-text-muted">Thank you for reaching out. I&apos;ll get back to you within 24 hours.</p>
+                  <h3 className="text-xl font-bold text-brand-text mb-2">Message Sent Successfully!</h3>
+                  <p className="text-sm text-brand-text-muted">Thank you for reaching out. I&apos;ll get back to you within 24 hours.</p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 relative z-10">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-brand-text-muted mb-2">Name</label>
+                      <label htmlFor="name" className="block text-xs font-semibold text-brand-text-muted mb-1.5 uppercase tracking-wider">Name</label>
                       <input
                         type="text"
                         id="name"
                         name="name"
                         required
                         placeholder="John Doe"
-                        className="w-full px-5 py-3 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder:text-brand-text-muted/50 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all"
+                        className="w-full px-4 py-2.5 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder:text-brand-text-muted/50 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all text-sm"
                       />
                     </div>
                     <div>
-                      <label htmlFor="company" className="block text-sm font-medium text-brand-text-muted mb-2">Business / Company</label>
+                      <label htmlFor="company" className="block text-xs font-semibold text-brand-text-muted mb-1.5 uppercase tracking-wider">Business / Company</label>
                       <input
                         type="text"
                         id="company"
                         name="company"
                         placeholder="Acme Corp"
-                        className="w-full px-5 py-3 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder:text-brand-text-muted/50 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all"
+                        className="w-full px-4 py-2.5 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder:text-brand-text-muted/50 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all text-sm"
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-brand-text-muted mb-2">Email</label>
+                      <label htmlFor="email" className="block text-xs font-semibold text-brand-text-muted mb-1.5 uppercase tracking-wider">Email</label>
                       <input
                         type="email"
                         id="email"
                         name="email"
                         required
                         placeholder="john@example.com"
-                        className="w-full px-5 py-3 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder:text-brand-text-muted/50 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all"
+                        className="w-full px-4 py-2.5 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder:text-brand-text-muted/50 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all text-sm"
                       />
                     </div>
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-brand-text-muted mb-2">WhatsApp</label>
+                      <label htmlFor="phone" className="block text-xs font-semibold text-brand-text-muted mb-1.5 uppercase tracking-wider">WhatsApp</label>
                       <input
                         type="tel"
                         id="phone"
                         name="phone"
                         placeholder="+1 234 567 890"
-                        className="w-full px-5 py-3 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder:text-brand-text-muted/50 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all"
+                        className="w-full px-4 py-2.5 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder:text-brand-text-muted/50 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all text-sm"
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="projectType" className="block text-sm font-medium text-brand-text-muted mb-2">Project Type</label>
+                      <label htmlFor="projectType" className="block text-xs font-semibold text-brand-text-muted mb-1.5 uppercase tracking-wider">Project Type</label>
                       <input
                         type="text"
                         id="projectType"
                         name="projectType"
                         placeholder="ERP"
-                        className="w-full px-5 py-3 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder:text-brand-text-muted/50 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all"
+                        className="w-full px-4 py-2.5 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder:text-brand-text-muted/50 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all text-sm"
                       />
                     </div>
                     <div>
-                      <label htmlFor="budget" className="block text-sm font-medium text-brand-text-muted mb-2">Budget Range (Optional)</label>
+                      <label htmlFor="budget" className="block text-xs font-semibold text-brand-text-muted mb-1.5 uppercase tracking-wider">Budget Range (Optional)</label>
                       <input
                         type="text"
                         id="budget"
                         name="budget"
                         placeholder="Select budget"
-                        className="w-full px-5 py-3 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder:text-brand-text-muted/50 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all"
+                        className="w-full px-4 py-2.5 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder:text-brand-text-muted/50 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all text-sm"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-brand-text-muted mb-2">Message</label>
+                    <label htmlFor="message" className="block text-xs font-semibold text-brand-text-muted mb-1.5 uppercase tracking-wider">Message</label>
                     <textarea
                       id="message"
                       name="message"
                       required
-                      rows={4}
+                      rows={3}
                       placeholder="Tell me about your business and what you need..."
-                      className="w-full px-5 py-3 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder:text-brand-text-muted/50 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all resize-none"
+                      className="w-full px-4 py-2.5 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder:text-brand-text-muted/50 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all resize-none text-sm"
                     />
                   </div>
 
                   {error && (
-                    <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm">
+                    <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-medium">
                       {error}
                     </div>
                   )}
@@ -260,12 +280,12 @@ export default function Contact() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 px-8 rounded-xl btn-brand-gradient text-lg font-bold transition-all disabled:opacity-70 flex items-center justify-center gap-3"
+                    className="w-full py-3.5 px-6 rounded-xl btn-brand-gradient text-base font-bold transition-all disabled:opacity-70 flex items-center justify-center gap-2.5 shadow-md hover:brightness-105 cursor-pointer"
                   >
                     {isSubmitting ? (
                       <>
-                        <Loader2 className="w-6 h-6 animate-spin" />
-                        Sending...
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>Sending...</span>
                       </>
                     ) : (
                       contactContent.formButtonText
